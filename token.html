@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Lisensi Multi-Room</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1015;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .panel {
+      background: #181b26;
+      border: 1px solid #2e354f;
+      padding: 24px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    h2 { color: #00e676; margin-bottom: 16px; text-align: center; font-size: 1.2rem; }
+    label { font-size: 12px; color: #94a3b8; display: block; margin-top: 12px; margin-bottom: 4px; }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      background: #090d16;
+      border: 1px solid #38bdf8;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .btn-gen {
+      background: #00e676;
+      color: #000;
+      font-weight: 900;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .btn-gen:active { transform: scale(0.98); }
+    .hasil-box {
+      margin-top: 16px;
+      background: #090d16;
+      border: 1px dashed #00e676;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .kode-teks {
+      color: #fffa65;
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      word-break: break-all;
+    }
+    .btn-salin {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="panel">
+    <h2>🔑 GENERATOR LISENSI SEWA</h2>
+
+    <label>PILIH RUANGAN (ROOM):</label>
+    <select id="pilihRoom">
+      <option value="1">ROOM 1 (Penyewa A)</option>
+      <option value="2">ROOM 2 (Penyewa B)</option>
+      <option value="3">ROOM 3 (Penyewa C)</option>
+      <option value="4">ROOM 4 (Penyewa D)</option>
+      <option value="5">ROOM 5 (Penyewa E)</option>
+    </select>
+
+    <label>BERLAKU SAMPAI TANGGAL:</label>
+    <input type="date" id="tglExp">
+
+    <button class="btn-gen" onclick="generateLisensi()">BUAT KODE SEWA</button>
+
+    <div class="hasil-box" id="boxHasil" style="display:none;">
+      <div style="font-size:10px; color:#94a3b8; margin-bottom:4px;">KODE LISENSI SIAP KIRIM:</div>
+      <div class="kode-teks" id="teksHasil">-</div>
+      <button class="btn-salin" onclick="salinKode()">📋 Salin Kode</button>
+    </div>
+  </div>
+
+  <script>
+    var KUNCI_RAHASIA = "WAHYU_KOLONG_PEKALONGAN_99";
+
+    var defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() + 30);
+    document.getElementById('tglExp').value = defaultDate.toISOString().split('T')[0];
+
+    function hitungHash(str){
+      var hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash).toString(16).toUpperCase();
+    }
+
+    function generateLisensi(){
+      var room = document.getElementById('pilihRoom').value;
+      var tgl = document.getElementById('tglExp').value;
+      if(!tgl) return alert('Pilih tanggal berlaku!');
+
+      var p = tgl.split('-');
+      var tglStr = p[0] + p[1] + p[2];
+
+      var blok1 = '';
+      var blok2 = '';
+      for(var i = 0; i < 4; i++){
+        blok1 += String.fromCharCode(parseInt(tglStr[i]) + 65);
+      }
+      for(var j = 4; j < 8; j++){
+        blok2 += String.fromCharCode(parseInt(tglStr[j]) + 65);
+      }
+
+      var checksum = hitungHash("KLG" + room + tglStr + KUNCI_RAHASIA).substring(0, 5);
+      var kodeFinal = `KLG${room}-${blok1}-${blok2}-${checksum}`;
+
+      document.getElementById('teksHasil').innerText = kodeFinal;
+      document.getElementById('boxHasil').style.display = 'block';
+    }
+
+    function salinKode(){
+      var teks = document.getElementById('teksHasil').innerText;
+      navigator.clipboard.writeText(teks).then(() => {
+        alert('Kode berhasil disalin!');
+      });
+    }
+  </script>
+</body>
+</html>

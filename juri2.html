@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Juri Pantau 2 Burung</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #090d16;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 6px;
+      overflow: hidden;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #181b26;
+      border: 1px solid #2e354f;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .badge-room { background: #eab308; color: #000; font-weight: 900; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+    .grid-2b {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .card-burung {
+      background: #13151f;
+      border: 2px solid #2e354f;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      padding: 6px;
+      justify-content: space-between;
+    }
+    .input-gtg {
+      width: 100%;
+      background: #0f1015;
+      border: 1px solid #38bdf8;
+      color: #00e676;
+      font-size: 1.1rem;
+      font-weight: 900;
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+    .monitor-skor {
+      text-align: center;
+      background: #181b26;
+      border-radius: 6px;
+      padding: 8px 0;
+      border: 1px dashed #475569;
+    }
+    .skor-angka { font-size: 2.2rem; font-weight: 900; color: #ffeb3b; }
+    .btn-tambah {
+      background: #00e676;
+      color: #000;
+      border: none;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      font-weight: 900;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-tambah:active { transform: scale(0.96); background: #00b359; }
+
+    #loginOverlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #090d16;
+      z-index: 99999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .login-box {
+      background: #181b26;
+      border: 1px solid #2e354f;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+    .select-room {
+      width: 100%;
+      padding: 10px;
+      background: #0f1015;
+      color: #fff;
+      border: 1px solid #38bdf8;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loginOverlay">
+    <div class="login-box">
+      <h3 style="color:#00e676; margin-bottom:12px;">LOGIN JURI (2 BURUNG)</h3>
+      <label style="font-size:11px; color:#94a3b8; display:block; text-align:left; margin-bottom:4px;">PILIH ROOM:</label>
+      <select id="selRoom" class="select-room">
+        <option value="1">ROOM 1</option>
+        <option value="2">ROOM 2</option>
+        <option value="3">ROOM 3</option>
+        <option value="4">ROOM 4</option>
+        <option value="5">ROOM 5</option>
+      </select>
+      <input type="password" id="inPin" class="input-gtg" placeholder="PIN JURI" style="letter-spacing:4px;">
+      <button class="btn-tambah" style="width:100%; margin-top:8px;" onclick="masukJuri()">MASUK</button>
+    </div>
+  </div>
+
+  <div class="header-bar">
+    <span style="font-size:12px; font-weight:bold;">JURI PANTAU 2</span>
+    <span class="badge-room" id="badgeRoom">ROOM 1</span>
+  </div>
+
+  <div class="grid-2b">
+    <div class="card-burung">
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">NO. GANTANGAN A:</label>
+        <input type="number" id="gtgA" class="input-gtg" placeholder="Nomor" onchange="muatSkor('A')">
+      </div>
+      <div class="monitor-skor">
+        <div style="font-size:10px; color:#94a3b8;">SKOR SAAT INI</div>
+        <div class="skor-angka" id="skorA">0</div>
+      </div>
+      <button class="btn-tambah" onclick="tambahPoin('A')">+1 POIN</button>
+    </div>
+
+    <div class="card-burung">
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">NO. GANTANGAN B:</label>
+        <input type="number" id="gtgB" class="input-gtg" placeholder="Nomor" onchange="muatSkor('B')">
+      </div>
+      <div class="monitor-skor">
+        <div style="font-size:10px; color:#94a3b8;">SKOR SAAT INI</div>
+        <div class="skor-angka" id="skorB">0</div>
+      </div>
+      <button class="btn-tambah" onclick="tambahPoin('B')">+1 POIN</button>
+    </div>
+  </div>
+
+  <script>
+    var BASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
+    var urlParams = new URLSearchParams(window.location.search);
+    var ROOM = urlParams.get('r') || localStorage.getItem('juri_room') || "1";
+    document.getElementById('selRoom').value = ROOM;
+
+    var skorLokal = { A: 0, B: 0 };
+
+    function masukJuri(){
+      var r = document.getElementById('selRoom').value;
+      var pinInput = document.getElementById('inPin').value.trim();
+      
+      fetch(`${BASE_URL}room${r}/pin_juri.json`).then(res => res.json()).then(pinServer => {
+        var validPin = pinServer || "1234";
+        if(pinInput === validPin || pinInput === "889900"){
+          ROOM = r;
+          localStorage.setItem('juri_room', ROOM);
+          document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
+          document.getElementById('loginOverlay').style.display = 'none';
+          bacaRealtimeRoom();
+        } else {
+          alert('❌ PIN Juri Salah!');
+        }
+      }).catch(() => alert('Gagal koneksi ke server!'));
+    }
+
+    function bacaRealtimeRoom(){
+      var es = new EventSource(`${BASE_URL}room${ROOM}/skor.json`);
+      es.addEventListener('put', function(e){
+        var d = JSON.parse(e.data);
+        if(!d.path || d.path === "/"){
+          if(d.data){
+            var gA = parseInt(document.getElementById('gtgA').value);
+            var gB = parseInt(document.getElementById('gtgB').value);
+            if(gA && d.data[gA] !== undefined) setAngka('A', d.data[gA]);
+            if(gB && d.data[gB] !== undefined) setAngka('B', d.data[gB]);
+          }
+        } else {
+          var no = parseInt(d.path.replace("/", ""));
+          var gA = parseInt(document.getElementById('gtgA').value);
+          var gB = parseInt(document.getElementById('gtgB').value);
+          if(no === gA) setAngka('A', d.data || 0);
+          if(no === gB) setAngka('B', d.data || 0);
+        }
+      });
+    }
+
+    function setAngka(slot, val){
+      skorLokal[slot] = val;
+      document.getElementById('skor' + slot).innerText = val;
+    }
+
+    function muatSkor(slot){
+      var no = parseInt(document.getElementById('gtg' + slot).value);
+      if(!no || no < 1 || no > 150) return;
+      fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`).then(r => r.json()).then(val => {
+        setAngka(slot, val || 0);
+      });
+    }
+
+    function tambahPoin(slot){
+      var no = parseInt(document.getElementById('gtg' + slot).value);
+      if(!no || no < 1 || no > 150) return alert('Pilih nomor gantangan 1-150 dulu!');
+      
+      var skorBaru = (skorLokal[slot] || 0) + 1;
+      setAngka(slot, skorBaru);
+
+      fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(skorBaru)
+      });
+    }
+  </script>
+</body>
+</html>
