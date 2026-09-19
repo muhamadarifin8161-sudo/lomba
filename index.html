@@ -96,9 +96,11 @@
       color: #000;
       font-size: 9px;
       font-weight: 900;
-      padding: 2px 5px;
+      padding: 3px 6px;
       border-radius: 3px;
       white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 0 4px rgba(234, 179, 8, 0.5);
     }
     .badge-sewa {
       background: #15803d;
@@ -268,7 +270,8 @@
     <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
 
     <div class="grup-kanan">
-      <span class="badge-room" id="badgeRoom">ROOM 1</span>
+      <!-- TOMBOL GANTI ROOM DENGAN PROTEKSI HAK AKSES -->
+      <span class="badge-room" id="badgeRoom" onclick="gantiRoomBebas()" title="Klik untuk ganti room">ROOM 1</span>
       <span class="badge-sewa" id="badgeMasaSewa">Aktif</span>
       <span class="badge-pin" onclick="aturPIN()" title="Klik untuk ubah PIN">🔑 <span id="labelPIN">PIN: 1234</span></span>
       <button class="btn-layar" onclick="toggleLayarPenuh()">⛶ Layar Penuh</button>
@@ -290,8 +293,12 @@
     var PIN_MASTER = "889900";
     var BASE_FIREBASE = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
 
-    var ROOM_AKTIF = localStorage.getItem('nomor_room_sewa') || "1";
-    document.getElementById('badgeRoom').innerText = "ROOM " + ROOM_AKTIF;
+    // BACA PARAMETER DARI URL ATAU LOCALSTORAGE
+    var urlParams = new URLSearchParams(window.location.search);
+    var roomDariURL = urlParams.get('room');
+    var ROOM_AKTIF = roomDariURL || localStorage.getItem('nomor_room_sewa') || "1";
+
+    document.getElementById('badgeRoom').innerText = "ROOM " + ROOM_AKTIF + " ▾";
     var FIREBASE_URL = BASE_FIREBASE + "room" + ROOM_AKTIF + "/";
 
     function hitungHash(str){
@@ -304,8 +311,10 @@
     }
 
     function cekStatusSewa(){
+      var isMaster = localStorage.getItem('akses_master_dev');
       var exp = localStorage.getItem('burung_license_exp');
       var now = new Date().getTime();
+
       if(!exp || now > parseInt(exp)){
         document.getElementById('lockScreenOverlay').style.display = 'flex';
         document.getElementById('badgeMasaSewa').innerText = '🔒 Terkunci';
@@ -314,7 +323,7 @@
       } else {
         document.getElementById('lockScreenOverlay').style.display = 'none';
         var d = new Date(parseInt(exp));
-        document.getElementById('badgeMasaSewa').innerText = `s/d: ${d.toLocaleDateString('id-ID')}`;
+        document.getElementById('badgeMasaSewa').innerText = (isMaster === 'true' ? "👑 Dev: " : "s/d: ") + d.toLocaleDateString('id-ID');
         document.getElementById('badgeMasaSewa').style.background = '#15803d';
         return true;
       }
@@ -324,14 +333,16 @@
       var input = document.getElementById('inKodeSewa').value.trim().toUpperCase();
       if(!input) return alert('Masukkan kode lisensi!');
 
+      // JIKA INPUT PIN MASTER 889900 (HAK PENUH DEVELOPER)
       if(input === PIN_MASTER){
         localStorage.setItem('burung_license_exp', new Date().getTime() + (365*24*60*60*1000));
-        localStorage.setItem('nomor_room_sewa', "1");
-        alert('🔓 Akses Master Pemilik Diterima! Room 1 Aktif 1 Tahun.');
+        localStorage.setItem('akses_master_dev', 'true');
+        alert('🔓 Akses Master Pemilik Diterima! Bebas pantau semua Room.');
         location.reload();
         return;
       }
 
+      // JIKA INPUT KODE LISENSI PENYEWA BIASA (KLG...)
       var parts = input.split('-');
       if(parts.length === 4 && parts[0].startsWith("KLG")){
         var roomNo = parts[0].replace("KLG", "");
@@ -355,8 +366,10 @@
           var expDate = new Date(thn, bln, tgl, 23, 59, 59).getTime();
 
           if(expDate > new Date().getTime()){
+            // KUNCI PENYEWA KE ROOM TERTENTU & HAPUS AKSES MASTER
             localStorage.setItem('nomor_room_sewa', roomNo);
             localStorage.setItem('burung_license_exp', expDate);
+            localStorage.removeItem('akses_master_dev');
             alert('🔓 Sistem Berhasil Diaktifkan untuk ROOM ' + roomNo + '!');
             location.reload();
             return;
@@ -366,6 +379,24 @@
         }
       }
       alert('❌ Kode Lisensi Sewa Tidak Valid!');
+    }
+
+    // FUNGSI GANTI ROOM: HANYA IZINKAN JIKA MEMILIKI AKSES MASTER (PIN 889900)
+    function gantiRoomBebas() {
+      if(!cekStatusSewa()) return;
+
+      var isMaster = localStorage.getItem('akses_master_dev');
+      if (isMaster !== 'true') {
+        alert('❌ Akses Ditolak! Anda hanya memiliki izin monitor untuk ROOM ' + ROOM_AKTIF + '.');
+        return;
+      }
+
+      var target = prompt("👑 Mode Pemilik Sistem: Mau intip Room berapa? (1 - 5):", ROOM_AKTIF);
+      if (target && ["1", "2", "3", "4", "5"].includes(target.trim())) {
+        var roomBaru = target.trim();
+        localStorage.setItem('nomor_room_sewa', roomBaru);
+        window.location.search = "?room=" + roomBaru;
+      }
     }
 
     setInterval(cekStatusSewa, 60000);
