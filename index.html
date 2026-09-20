@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Sistem Monitoring & Juri</title>
+  <!-- Library html2canvas untuk cetak screenshot foto -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
     html, body {
@@ -71,6 +73,7 @@
       width: 100%;
     }
 
+    /* BAR ATAS */
     .bar-kontrol-atas {
       display: flex;
       justify-content: space-between;
@@ -86,19 +89,44 @@
     }
     .bar-kontrol-atas::-webkit-scrollbar { display: none; }
 
+    .grup-kiri {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+
     .btn-reset-utama {
       background: #dc2626 !important;
       border: 1px solid #fca5a5 !important;
       color: #ffffff !important;
-      font-size: 9.5px !important;
+      font-size: 9px !important;
       font-weight: 800 !important;
-      padding: 3px 6px !important;
+      padding: 3px 5px !important;
       border-radius: 3px;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
     }
     .btn-reset-utama:active { transform: scale(0.96); background: #b91c1c !important; }
+
+    /* TOMBOL FOTO / WA */
+    .btn-foto-wa {
+      background: #059669 !important;
+      border: 1px solid #34d399 !important;
+      color: #ffffff !important;
+      font-size: 9px !important;
+      font-weight: 800 !important;
+      padding: 3px 6px !important;
+      border-radius: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .btn-foto-wa:active { transform: scale(0.96); background: #047857 !important; }
 
     .grup-kanan { display: flex; align-items: center; gap: 2.5px; flex-shrink: 0; }
     .btn-link-bar {
@@ -172,6 +200,16 @@
     }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+    /* AREA CETAK FOTO (DIBUNGKUS SUPAYA KELAS & PAPAN IKUT TERCETAK) */
+    #areaCetakFoto {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #0b0f19;
+    }
+
+    /* LEADERBOARD & INPUT KELAS LOMBA */
     .leaderboard-tv {
       background: #131825;
       border: 1px solid #21293e;
@@ -180,13 +218,38 @@
       margin-bottom: 3px;
       flex-shrink: 0;
     }
+    .bar-judul-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+      gap: 4px;
+    }
     .judul-top {
       font-size: 8.5px;
       font-weight: 800;
       color: #00e676;
-      margin-bottom: 2px;
       text-transform: uppercase;
+      white-space: nowrap;
     }
+    .input-kelas-lomba {
+      background: #0f1420;
+      border: 1px solid #38bdf8;
+      color: #facc15;
+      font-size: 8.5px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 3px;
+      outline: none;
+      width: 170px;
+      text-transform: uppercase;
+      text-align: right;
+    }
+    .input-kelas-lomba:focus {
+      border-color: #00e676;
+      background: #182238;
+    }
+
     .grid-top {
       display: grid;
       grid-template-columns: repeat(10, minmax(0, 1fr));
@@ -213,6 +276,7 @@
     .gantangan-teks { font-size: 8.5px; font-weight: 800; white-space: nowrap; }
     .poin-teks { font-size: 11px; font-weight: 900; color: #ffeb3b; line-height: 1; }
 
+    /* 150 GANTANGAN */
     .area-gantangan-wrapper {
       flex: 1;
       display: flex;
@@ -338,13 +402,13 @@
     .btn-m-buka { background: #0284c7; color: #fff; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; }
     .btn-m-tutup { background: #334155; color: #cbd5e1; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-    /* ================= TAMPILAN JURI (WARNA TOMBOL DIBEDAKAN) ================= */
+    /* ================= TAMPILAN JURI ================= */
     #viewJuri {
       display: none;
       flex-direction: column;
       height: 100%;
       width: 100%;
-      padding: 5px;
+      padding: 4px;
       background: #090d16;
     }
     .bar-header-juri {
@@ -355,7 +419,7 @@
       border: 1px solid #1f2937;
       padding: 6px 12px;
       border-radius: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       flex-shrink: 0;
     }
     .status-room-juri { font-size: 13px; font-weight: 900; color: #38bdf8; }
@@ -460,18 +524,16 @@
     .kolom-burung {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
       height: 100%;
       min-height: 0;
     }
-
-    /* KOP NOMOR GANTANGAN */
     .kop-gtg-juri {
       width: 100%;
       background: #111827;
       border: 1.5px solid #374151;
       color: #facc15;
-      padding: 6px 0;
+      padding: 5px 0;
       border-radius: 6px;
       flex-shrink: 0;
       display: flex;
@@ -482,95 +544,73 @@
     .kop-gtg-juri .label-gtg { font-size: 9px; color: #94a3b8; font-weight: bold; letter-spacing: 0.5px; }
     .kop-gtg-juri .no-gtg-val { font-size: 18px; color: #facc15; font-weight: 900; }
 
-    /* TOMBOL TAMBAH POIN UMUM */
     .btn-poin-utama {
       flex: 1;
       color: #ffffff;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
-      transition: background-color 0.05s, transform 0.05s;
-      padding: 10px 4px;
+      padding: 16px 4px;
       position: relative;
+      transition: transform 0.05s ease-out, filter 0.05s, box-shadow 0.05s;
+      outline: none;
     }
-    .btn-poin-utama:active {
-      transform: translateY(3px);
+    .btn-poin-utama:active, .btn-poin-utama.efek-tekan {
+      transform: translateY(6px) scale(0.98) !important;
+      filter: brightness(1.35) contrast(1.1);
     }
     .btn-poin-utama .angka-tambah {
-      font-size: 32px;
+      font-size: 38px;
       font-weight: 900;
       line-height: 1;
+      margin-top: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .btn-poin-utama .label-tambah {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      opacity: 0.9;
-      margin-top: 4px;
+      letter-spacing: 0.6px;
+      opacity: 0.95;
       text-transform: uppercase;
     }
 
-    /* ================= WARNA TOMBOL KHUSUS PER KOLOM ================= */
-    /* KOLOM 1: HIJAU ZAMRUD */
-    .btn-warna-1 {
-      background: #059669;
-      box-shadow: 0 4px 0 #047857;
-    }
-    .btn-warna-1:active {
-      background: #10b981;
-      box-shadow: 0 1px 0 #047857;
-    }
+    .btn-warna-1 { background: #059669; box-shadow: 0 7px 0 #024731, 0 8px 12px rgba(0,0,0,0.4); }
+    .btn-warna-1:active, .btn-warna-1.efek-tekan { box-shadow: 0 1px 0 #024731, 0 2px 4px rgba(0,0,0,0.4) !important; }
 
-    /* KOLOM 2: BIRU SAMUDERA */
-    .btn-warna-2 {
-      background: #0284c7;
-      box-shadow: 0 4px 0 #0369a1;
-    }
-    .btn-warna-2:active {
-      background: #38bdf8;
-      box-shadow: 0 1px 0 #0369a1;
-    }
+    .btn-warna-2 { background: #0284c7; box-shadow: 0 7px 0 #034b73, 0 8px 12px rgba(0,0,0,0.4); }
+    .btn-warna-2:active, .btn-warna-2.efek-tekan { box-shadow: 0 1px 0 #034b73, 0 2px 4px rgba(0,0,0,0.4) !important; }
 
-    /* KOLOM 3: EMAS / AMBER */
-    .btn-warna-3 {
-      background: #d97706;
-      box-shadow: 0 4px 0 #b45309;
-    }
-    .btn-warna-3:active {
-      background: #f59e0b;
-      box-shadow: 0 1px 0 #b45309;
-    }
+    .btn-warna-3 { background: #d97706; box-shadow: 0 7px 0 #783d06, 0 8px 12px rgba(0,0,0,0.4); }
+    .btn-warna-3:active, .btn-warna-3.efek-tekan { box-shadow: 0 1px 0 #783d06, 0 2px 4px rgba(0,0,0,0.4) !important; }
 
-    /* BADGE TOTAL POIN DI DALAM TOMBOL */
     .box-total-poin {
-      margin-top: 15px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
       padding: 6px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 80px;
+      width: 90%;
+      margin-bottom: 4px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
     }
-    .box-total-poin .label-total {
-      font-size: 9px;
-      font-weight: 800;
-      color: #cbd5e1;
-      letter-spacing: 0.5px;
-    }
+    .box-total-poin .label-total { font-size: 9px; font-weight: 800; color: #cbd5e1; letter-spacing: 0.5px; }
     .box-total-poin .nilai-total {
-      font-size: 26px;
+      font-size: 32px;
       font-weight: 900;
       color: #ffeb3b;
       line-height: 1.1;
+      display: inline-block;
+      transition: transform 0.1s ease-out, color 0.1s;
     }
+    .nilai-total.pop { transform: scale(1.3); color: #ffffff !important; }
   </style>
 </head>
 <body>
@@ -600,11 +640,17 @@
       </div>
     </div>
 
+    <!-- BAR ATAS: ADA TOMBOL RESET DAN FOTO / WA -->
     <div class="bar-kontrol-atas">
-      <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
+      <div class="grup-kiri">
+        <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
+        <button class="btn-foto-wa" id="btnCetakFoto" onclick="tangkapLayarDanKirimWA()" title="Ambil Foto Hasil Lomba & Kirim WA">📸 Foto / WA</button>
+      </div>
+
       <div class="badge-live-penonton" id="badgeLivePenonton" style="display:none;">
         <span class="dot-live"></span> MONITOR PENONTON
       </div>
+
       <div class="grup-kanan">
         <button class="btn-link-bar btn-penonton" id="btnLinkPnt" onclick="bukaModalTautan('penonton')">👁️ Penonton</button>
         <button class="btn-link-bar btn-juri-2b" id="btnLinkJuri2B" onclick="bukaModalTautan('juri2b')">🎯 Juri 2B</button>
@@ -616,19 +662,25 @@
       </div>
     </div>
 
-    <div class="leaderboard-tv">
-      <div class="judul-top">🏆 Klasemen 10 Besar</div>
-      <div class="grid-top" id="top10Container"></div>
-    </div>
+    <!-- WRAPPER CETAK FOTO HASIL LOMBA -->
+    <div id="areaCetakFoto">
+      <div class="leaderboard-tv">
+        <div class="bar-judul-top">
+          <div class="judul-top">🏆 Klasemen 10 Besar</div>
+          <!-- INPUT KELAS LOMBA REALTIME -->
+          <input type="text" id="inputKelasLomba" class="input-kelas-lomba" placeholder="KETIK KELAS LOMBA..." onchange="simpanKelasLomba()">
+        </div>
+        <div class="grid-top" id="top10Container"></div>
+      </div>
 
-    <div class="area-gantangan-wrapper">
-      <div class="grid-header">Status 150 Gantangan:</div>
-      <div class="kontainer-150" id="kotak150Container"></div>
+      <div class="area-gantangan-wrapper">
+        <div class="grid-header">Status 150 Gantangan:</div>
+        <div class="kontainer-150" id="kotak150Container"></div>
+      </div>
     </div>
   </div>
 
-
-  <!-- ================= TAMPILAN JURI (WARNA TOMBOL BEDA) ================= -->
+  <!-- ================= TAMPILAN JURI ================= -->
   <div id="viewJuri">
     <div id="overlayPinJuri">
       <div class="box-pin-juri">
@@ -654,7 +706,6 @@
     </div>
     <div class="container-juri-grid" id="areaGridJuri"></div>
   </div>
-
 
   <script>
     var urlParams = new URLSearchParams(window.location.search);
@@ -683,6 +734,47 @@
         inisialisasiMonitor(MODE_URL === "penonton");
       }
     });
+
+    /* ================= SINKRONISASI KELAS LOMBA ================= */
+    function simpanKelasLomba(){
+      var val = document.getElementById('inputKelasLomba').value.trim().toUpperCase();
+      fetch(`${FIREBASE_URL}kelas_lomba.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(val)
+      });
+    }
+
+    /* ================= FITUR CETAK FOTO & KIRIM WA ================= */
+    function tangkapLayarDanKirimWA(){
+      var btn = document.getElementById('btnCetakFoto');
+      var teksLama = btn.innerText;
+      btn.innerText = "⏳ Memproses...";
+
+      var area = document.getElementById('areaCetakFoto');
+      var namaKelas = document.getElementById('inputKelasLomba').value || "HASIL_LOMBA";
+
+      html2canvas(area, {
+        backgroundColor: "#0b0f19",
+        scale: 2, // Kualitas gambar tajam HD
+        useCORS: true
+      }).then(function(canvas){
+        btn.innerText = teksLama;
+
+        // Unduh File Foto JPG Otomatis
+        var link = document.createElement('a');
+        link.download = `Hasil_Room${ROOM_AKTIF}_${namaKelas.replace(/\s+/g, '_')}.jpg`;
+        link.href = canvas.toDataURL('image/jpeg', 0.95);
+        link.click();
+
+        // Siapkan pesan dan buka WhatsApp
+        var teksWA = encodeURIComponent(`*HASIL LOMBA ROOM ${ROOM_AKTIF}*\nKelas: *${namaKelas}*\n\n(Foto papan nilai telah otomatis tersimpan di galeri/unduhan HP, silakan lampirkan fotonya).`);
+        window.open(`https://api.whatsapp.com/send?text=${teksWA}`, '_blank');
+      }).catch(function(err){
+        btn.innerText = teksLama;
+        alert("Gagal mengambil foto hasil lomba!");
+      });
+    }
 
     /* ================= LOGIKA JURI ================= */
     var bufferSkorLokal = {};
@@ -771,7 +863,7 @@
         if(nomorGtg > 150) break;
 
         var skorSaatIni = bufferSkorLokal[nomorGtg] || 0;
-        var warnaKelas = `btn-warna-${s + 1}`; // Kolom 1 = btn-warna-1 (Hijau), Kolom 2 = btn-warna-2 (Biru), Kolom 3 = btn-warna-3 (Amber)
+        var warnaKelas = `btn-warna-${s + 1}`;
 
         var col = document.createElement('div');
         col.className = 'kolom-burung';
@@ -781,8 +873,10 @@
             <span class="no-gtg-val">#${nomorGtg}</span>
           </div>
           <button class="btn-poin-utama ${warnaKelas}" id="btnPlus_${nomorGtg}">
-            <span class="angka-tambah">+1</span>
-            <span class="label-tambah">TAMBAH POIN</span>
+            <div>
+              <div class="angka-tambah">+1</div>
+              <div class="label-tambah">TAMBAH POIN</div>
+            </div>
             <div class="box-total-poin">
               <span class="label-total">TOTAL POIN</span>
               <span class="nilai-total" id="liveSkor_${nomorGtg}">${skorSaatIni}</span>
@@ -796,9 +890,16 @@
 
     function pasangAksiCepatJuri(noGtg){
       var btnPlus = document.getElementById(`btnPlus_${noGtg}`);
+      var elAngka = document.getElementById(`liveSkor_${noGtg}`);
 
       function prosesKlik(){
-        if(navigator.vibrate) navigator.vibrate(20);
+        btnPlus.classList.add('efek-tekan');
+        setTimeout(() => btnPlus.classList.remove('efek-tekan'), 100);
+
+        if(elAngka){
+          elAngka.classList.add('pop');
+          setTimeout(() => elAngka.classList.remove('pop'), 130);
+        }
 
         var nilaiSaatIni = (bufferSkorLokal[noGtg] !== undefined) ? bufferSkorLokal[noGtg] : 0;
         var nilaiBaru = nilaiSaatIni + 1;
@@ -833,11 +934,13 @@
 
       if(isPenonton){
         document.getElementById('btnResetMaster').style.display = 'none';
+        document.getElementById('btnCetakFoto').style.display = 'none';
         document.getElementById('btnLinkPnt').style.display = 'none';
         document.getElementById('btnLinkJuri2B').style.display = 'none';
         document.getElementById('btnLinkJuri3B').style.display = 'none';
         document.getElementById('badgeMasaSewa').style.display = 'none';
         document.getElementById('badgePin').style.display = 'none';
+        document.getElementById('inputKelasLomba').readOnly = true; // Penonton hanya bisa lihat nama kelas
         document.getElementById('badgeLivePenonton').style.display = 'inline-flex';
       } else {
         setInterval(cekStatusSewa, 60000);
@@ -878,8 +981,13 @@
             if(val.pin_juri && !isPenonton){
               document.getElementById('labelPIN').innerText = val.pin_juri;
             }
+            if(val.kelas_lomba){
+              document.getElementById('inputKelasLomba').value = val.kelas_lomba;
+            }
           } else { resetTampilanLokal(); }
           perbaruiTop10();
+        } else if(p === "/kelas_lomba"){
+          document.getElementById('inputKelasLomba').value = val || "";
         } else if(p === "/pin_juri"){
           if(!isPenonton) document.getElementById('labelPIN').innerText = val;
         } else if(p === "/skor"){
