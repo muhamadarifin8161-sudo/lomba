@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Monitoring Penjurian</title>
+  <title>Sistem Monitoring & Juri</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
     html, body {
@@ -18,7 +18,7 @@
       padding: 3px 4px;
     }
 
-    /* VIEW MONITOR */
+    /* ================= TAMPILAN MONITOR UTAMA ================= */
     #viewMonitor {
       display: flex;
       flex-direction: column;
@@ -26,7 +26,6 @@
       min-height: 0;
       width: 100%;
     }
-
     #lockScreenOverlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -173,7 +172,6 @@
     }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-    /* LEADERBOARD TOP 10 */
     .leaderboard-tv {
       background: #131825;
       border: 1px solid #21293e;
@@ -215,7 +213,6 @@
     .gantangan-teks { font-size: 8.5px; font-weight: 800; white-space: nowrap; }
     .poin-teks { font-size: 11px; font-weight: 900; color: #ffeb3b; line-height: 1; }
 
-    /* 150 GANTANGAN (FLEX AMAN) */
     .area-gantangan-wrapper {
       flex: 1;
       display: flex;
@@ -257,8 +254,7 @@
       overflow: visible;
       position: relative;
       transition: transform 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
-      min-width: 0;
-      min-height: 0;
+      min-width: 0; min-height: 0;
     }
     .box-gantangan .header-no {
       background: #232d44;
@@ -307,7 +303,7 @@
     .box-gantangan.hit .header-no { background: #00e676 !important; color: #000 !important; font-weight: 900; }
     .box-gantangan.hit .skor-gtg { color: #fff !important; text-shadow: 0 0 6px #00e676; }
 
-    /* MODAL SALIN LINK */
+    /* MODAL SALIN LINK TANPA DROPDOWN */
     #modalLinkUniversal {
       display: none;
       position: fixed;
@@ -335,7 +331,7 @@
       color: #38bdf8;
       font-size: 11px;
       border-radius: 4px;
-      margin: 8px 0;
+      margin: 10px 0;
       text-align: center;
     }
     .btn-aksi-modal { display: flex; gap: 6px; justify-content: center; }
@@ -343,33 +339,42 @@
     .btn-m-buka { background: #0284c7; color: #fff; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; }
     .btn-m-tutup { background: #334155; color: #cbd5e1; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-    /* VIEW JURI */
+    /* ================= TAMPILAN JURI ================= */
     #viewJuri {
       display: none;
       flex-direction: column;
-      flex: 1;
       height: 100%;
       width: 100%;
-      padding: 4px;
+      padding: 6px;
+      background: #090d16;
     }
     .bar-header-juri {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #151c2c;
-      border: 1px solid #28354f;
-      padding: 6px 10px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      padding: 6px 12px;
       border-radius: 6px;
       margin-bottom: 6px;
       flex-shrink: 0;
     }
     .status-room-juri { font-size: 13px; font-weight: 900; color: #38bdf8; }
-    .badge-mode-juri { font-size: 10px; font-weight: 800; background: #0284c7; padding: 2px 6px; border-radius: 4px; }
+    .badge-juri-info { 
+      font-size: 10px; 
+      font-weight: 800; 
+      background: #eab308; 
+      color: #000; 
+      padding: 2px 6px; 
+      border-radius: 4px; 
+      cursor: pointer;
+    }
 
+    /* OVERLAY PIN JURI */
     #overlayPinJuri {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(9, 13, 22, 0.96);
+      background: rgba(9, 13, 22, 0.98);
       z-index: 999999;
       display: flex;
       flex-direction: column;
@@ -410,90 +415,126 @@
       cursor: pointer;
     }
 
+    /* OVERLAY PILIH NOMOR JURI OLEH PANITIA LAPANGAN */
+    #overlayPilihJuri {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(9, 13, 22, 0.98);
+      z-index: 999998;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .box-pilih-juri {
+      background: #182238;
+      border: 1px solid #00e676;
+      border-radius: 10px;
+      padding: 20px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+    .input-juri-lapangan {
+      width: 100%;
+      padding: 10px;
+      font-size: 22px;
+      font-weight: 900;
+      text-align: center;
+      background: #0c1220;
+      border: 1px solid #38bdf8;
+      color: #facc15;
+      border-radius: 6px;
+      margin: 12px 0;
+    }
+
     .container-juri-grid {
       flex: 1;
       display: grid;
       gap: 6px;
       min-height: 0;
+      height: 100%;
     }
     .mode-2b { grid-template-columns: repeat(2, 1fr); }
     .mode-3b { grid-template-columns: repeat(3, 1fr); }
 
     .kolom-burung {
-      background: #131b2e;
-      border: 2px solid #263556;
-      border-radius: 8px;
       display: flex;
       flex-direction: column;
-      padding: 5px;
+      gap: 6px;
+      height: 100%;
       min-height: 0;
     }
-    .input-nomor-gtg {
+    .kop-gtg-juri {
       width: 100%;
-      background: #0b101d;
-      border: 1px solid #38bdf8;
-      color: #ffeb3b;
-      font-size: 20px;
-      font-weight: 900;
-      text-align: center;
-      padding: 6px;
-      border-radius: 5px;
-      margin-bottom: 5px;
+      background: #111827;
+      border: 1.5px solid #374151;
+      color: #facc15;
+      padding: 6px 0;
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    .area-tombol-poin {
-      flex: 1;
-      display: grid;
-      gap: 5px;
-      grid-template-rows: 2fr 1fr;
-    }
+    .kop-gtg-juri .label-gtg { font-size: 9px; color: #94a3b8; font-weight: bold; }
+    .kop-gtg-juri .no-gtg-val { font-size: 18px; color: #facc15; font-weight: 900; }
+
     .btn-poin-utama {
+      flex: 4;
       background: #059669;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      font-size: 28px;
-      font-weight: 900;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       user-select: none;
-      box-shadow: 0 4px 0 #047857;
-      transition: transform 0.05s;
+      -webkit-user-select: none;
+      transition: background-color 0.05s, transform 0.05s;
     }
     .btn-poin-utama:active {
-      transform: translateY(4px);
-      box-shadow: none;
       background: #10b981;
+      transform: scale(0.98);
     }
-    .btn-poin-utama span { font-size: 10px; font-weight: 600; opacity: 0.8; }
+    .btn-poin-utama .angka-tambah { font-size: 28px; font-weight: 900; line-height: 1.1; }
+    .btn-poin-utama .label-tambah { font-size: 9px; font-weight: 800; letter-spacing: 0.5px; opacity: 0.9; margin-top: 4px; }
+
     .btn-batal-poin {
+      flex: 1;
       background: #dc2626;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 800;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 3px 0 #991b1b;
-      transition: transform 0.05s;
+      user-select: none;
+      -webkit-user-select: none;
+      letter-spacing: 0.5px;
+      transition: background-color 0.05s, transform 0.05s;
     }
     .btn-batal-poin:active {
-      transform: translateY(3px);
-      box-shadow: none;
       background: #ef4444;
+      transform: scale(0.98);
     }
   </style>
 </head>
 <body>
 
-  <!-- VIEW MONITOR -->
+  <!-- ================= TAMPILAN 1: MONITOR UTAMA ================= -->
   <div id="viewMonitor">
     <div id="modalLinkUniversal">
       <div class="box-modal">
         <h4 id="modalJudulTautan" style="color:#38bdf8; font-size:12px; margin-bottom:4px;">🔗 Bagikan Tautan</h4>
-        <p id="modalDescTautan" style="font-size:9.5px; color:#94a3b8; margin-bottom:6px;"></p>
+        <p id="modalDescTautan" style="font-size:9.5px; color:#94a3b8; margin-bottom:4px;"></p>
         <input type="text" id="inputUrlUniversal" class="input-url-box" readonly>
         <div class="btn-aksi-modal">
           <button class="btn-m-salin" onclick="salinUrlUniversal()">📋 Salin Link</button>
@@ -540,8 +581,10 @@
     </div>
   </div>
 
-  <!-- VIEW JURI -->
+
+  <!-- ================= TAMPILAN 2: JURI ================= -->
   <div id="viewJuri">
+    <!-- POPUP PIN JURI -->
     <div id="overlayPinJuri">
       <div class="box-pin-juri">
         <h3 style="color:#38bdf8;">KODE PIN JURI</h3>
@@ -551,12 +594,23 @@
       </div>
     </div>
 
+    <!-- POPUP PEMILIHAN JURI OLEH PANITIA LAPANGAN -->
+    <div id="overlayPilihJuri">
+      <div class="box-pilih-juri">
+        <h3 style="color:#00e676;">PANITIA LAPANGAN</h3>
+        <p style="font-size:11px; color:#94a3b8; margin-top:4px;">Masukkan Nomor Juri untuk HP ini:</p>
+        <input type="number" id="inputNomorJuriLapangan" class="input-juri-lapangan" placeholder="Contoh: 1">
+        <button class="btn-masuk-pin" onclick="simpanNomorJuriLapangan()">KUNCI JURI & MULAI</button>
+      </div>
+    </div>
+
     <div class="bar-header-juri">
       <span class="status-room-juri" id="headerRoomJudulJuri">ROOM 1</span>
-      <span class="badge-mode-juri" id="headerModeJudulJuri">2 BURUNG</span>
+      <span class="badge-juri-info" id="headerModeJudulJuri" onclick="gantiNomorJuriManual()" title="Klik untuk ganti nomor juri">JURI ?</span>
     </div>
     <div class="container-juri-grid" id="areaGridJuri"></div>
   </div>
+
 
   <script>
     var urlParams = new URLSearchParams(window.location.search);
@@ -574,12 +628,11 @@
     var FIREBASE_URL = BASE_FIREBASE + "room" + ROOM_AKTIF + "/";
     var PIN_SEKARANG = "1234";
 
-    // JALANKAN SETELAH HALAMAN SIAP
     window.addEventListener('DOMContentLoaded', function(){
       if(MODE_URL === "juri2b" || MODE_URL === "juri3b"){
         document.getElementById('viewMonitor').style.display = 'none';
         document.getElementById('viewJuri').style.display = 'flex';
-        inisialisasiJuri(MODE_URL === "juri3b" ? 3 : 2);
+        inisialisasiAwalJuri();
       } else {
         document.getElementById('viewMonitor').style.display = 'flex';
         document.getElementById('viewJuri').style.display = 'none';
@@ -587,78 +640,122 @@
       }
     });
 
-    /* ================= JURI ================= */
-    function inisialisasiJuri(jumlahSlot){
-      document.getElementById('headerRoomJudulJuri').innerText = "ROOM " + ROOM_AKTIF;
-      document.getElementById('headerModeJudulJuri').innerText = jumlahSlot + " BURUNG";
-      document.getElementById('pinRoomLabel').innerText = "Verifikasi PIN Room " + ROOM_AKTIF;
+    /* ================= LOGIKA JURI ================= */
+    var bufferSkorLokal = {};
+    var jumlahBurungAktif = 2;
+    var nomorJuriAktif = 1;
 
-      var container = document.getElementById('areaGridJuri');
-      container.className = "container-juri-grid mode-" + (jumlahSlot === 3 ? "3b" : "2b");
-      container.innerHTML = "";
+    function inisialisasiAwalJuri(){
+      jumlahBurungAktif = (MODE_URL === "juri3b") ? 3 : 2;
+      document.getElementById('headerRoomJudulJuri').innerText = "ROOM " + ROOM_AKTIF;
+      document.getElementById('pinRoomLabel').innerText = `Verifikasi PIN Room ${ROOM_AKTIF}`;
 
       fetch(`${FIREBASE_URL}pin_juri.json`)
         .then(res => res.json())
         .then(pin => { if(pin) PIN_SEKARANG = String(pin).trim(); });
 
-      for(var s = 1; s <= jumlahSlot; s++){
-        var col = document.createElement('div');
-        col.className = 'kolom-burung';
-        col.innerHTML = `
-          <input type="number" id="gtgSlot_${s}" class="input-nomor-gtg" placeholder="Gtg ${s}">
-          <div class="area-tombol-poin">
-            <button class="btn-poin-utama" id="btnPlus_${s}">+1<span>TAMBAH POIN</span></button>
-            <button class="btn-batal-poin" id="btnMinus_${s}">-1 BATAL</button>
-          </div>
-        `;
-        container.appendChild(col);
-      }
-
-      for(var k = 1; k <= jumlahSlot; k++){
-        pasangAksiCepatJuri(k);
-      }
+      // Dengarkan skor realtime Firebase
+      var sseJuri = new EventSource(`${FIREBASE_URL}skor.json`);
+      sseJuri.addEventListener('put', function(e){
+        var d = JSON.parse(e.data);
+        if(d.path === "/" || d.path === ""){
+          if(d.data) bufferSkorLokal = d.data;
+        } else {
+          var no = parseInt(d.path.replace("/", ""));
+          if(no) bufferSkorLokal[no] = d.data;
+        }
+      });
     }
 
     function validasiPin(){
       var input = document.getElementById('inputPinJuri').value.trim();
       if(input === PIN_SEKARANG || input === PIN_MASTER){
         document.getElementById('overlayPinJuri').style.display = 'none';
+        // Cek apakah HP ini sudah pernah di-set nomor jurinya
+        var simpananJuri = localStorage.getItem(`juri_no_${ROOM_AKTIF}_${MODE_URL}`);
+        if(simpananJuri){
+          bangunKotakJuri(parseInt(simpananJuri));
+        } else {
+          document.getElementById('overlayPilihJuri').style.display = 'flex';
+        }
       } else {
         alert("❌ PIN Juri Salah!");
       }
     }
 
-    function pasangAksiCepatJuri(slotId){
-      var btnPlus = document.getElementById(`btnPlus_${slotId}`);
-      var btnMinus = document.getElementById(`btnMinus_${slotId}`);
-
-      function eksekusiPoin(delta){
-        var inGtg = document.getElementById(`gtgSlot_${slotId}`);
-        var noGtg = parseInt(inGtg.value);
-        if(!noGtg || noGtg < 1 || noGtg > 150){
-          alert("Isi nomor gantangan (1 - 150) terlebih dahulu!");
-          inGtg.focus();
-          return;
-        }
-        if(navigator.vibrate) navigator.vibrate(25);
-
-        var targetUrl = `${FIREBASE_URL}skor/${noGtg}.json`;
-        fetch(targetUrl)
-          .then(r => r.json())
-          .then(lama => {
-            var baru = Math.max(0, (lama || 0) + delta);
-            fetch(targetUrl, { method: 'PUT', body: JSON.stringify(baru) });
-          });
+    function simpanNomorJuriLapangan(){
+      var inVal = parseInt(document.getElementById('inputNomorJuriLapangan').value);
+      if(!inVal || inVal < 1){
+        return alert("Masukkan nomor juri yang valid (angka 1 ke atas)!");
       }
-
-      btnPlus.addEventListener('touchstart', function(e){ e.preventDefault(); eksekusiPoin(1); }, { passive: false });
-      btnPlus.addEventListener('click', function(){ if(!('ontouchstart' in window)) eksekusiPoin(1); });
-
-      btnMinus.addEventListener('touchstart', function(e){ e.preventDefault(); eksekusiPoin(-1); }, { passive: false });
-      btnMinus.addEventListener('click', function(){ if(!('ontouchstart' in window)) eksekusiPoin(-1); });
+      localStorage.setItem(`juri_no_${ROOM_AKTIF}_${MODE_URL}`, inVal);
+      document.getElementById('overlayPilihJuri').style.display = 'none';
+      bangunKotakJuri(inVal);
     }
 
-    /* ================= MONITOR ================= */
+    function gantiNomorJuriManual(){
+      document.getElementById('overlayPilihJuri').style.display = 'flex';
+    }
+
+    function bangunKotakJuri(noJuri){
+      nomorJuriAktif = noJuri;
+      document.getElementById('headerModeJudulJuri').innerText = `JURI ${noJuri} (${jumlahBurungAktif}B)`;
+
+      var container = document.getElementById('areaGridJuri');
+      container.className = "container-juri-grid mode-" + (jumlahBurungAktif === 3 ? "3b" : "2b");
+      container.innerHTML = "";
+
+      // Rumus otomatis gantangan
+      var awalGtg = (noJuri - 1) * jumlahBurungAktif + 1;
+
+      for(var s = 0; s < jumlahBurungAktif; s++){
+        var nomorGtg = awalGtg + s;
+        if(nomorGtg > 150) break;
+
+        var col = document.createElement('div');
+        col.className = 'kolom-burung';
+        col.innerHTML = `
+          <div class="kop-gtg-juri">
+            <span class="label-gtg">GANTANGAN</span>
+            <span class="no-gtg-val">#${nomorGtg}</span>
+          </div>
+          <button class="btn-poin-utama" id="btnPlus_${nomorGtg}">
+            <span class="angka-tambah">+1</span>
+            <span class="label-tambah">TAMBAH POIN</span>
+          </button>
+          <button class="btn-batal-poin" id="btnMinus_${nomorGtg}">-1 BATAL</button>
+        `;
+        container.appendChild(col);
+        pasangAksiCepatJuri(nomorGtg);
+      }
+    }
+
+    function pasangAksiCepatJuri(noGtg){
+      var btnPlus = document.getElementById(`btnPlus_${noGtg}`);
+      var btnMinus = document.getElementById(`btnMinus_${noGtg}`);
+
+      function prosesKlik(delta){
+        if(navigator.vibrate) navigator.vibrate(20);
+
+        var nilaiSaatIni = (bufferSkorLokal[noGtg] !== undefined) ? bufferSkorLokal[noGtg] : 0;
+        var nilaiBaru = Math.max(0, nilaiSaatIni + delta);
+        bufferSkorLokal[noGtg] = nilaiBaru;
+
+        fetch(`${FIREBASE_URL}skor/${noGtg}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(nilaiBaru)
+        }).catch(function(){});
+      }
+
+      btnPlus.addEventListener('touchstart', function(e){ e.preventDefault(); prosesKlik(1); }, { passive: false });
+      btnPlus.addEventListener('click', function(){ if(!('ontouchstart' in window)) prosesKlik(1); });
+
+      btnMinus.addEventListener('touchstart', function(e){ e.preventDefault(); prosesKlik(-1); }, { passive: false });
+      btnMinus.addEventListener('click', function(){ if(!('ontouchstart' in window)) prosesKlik(-1); });
+    }
+
+    /* ================= LOGIKA MONITOR ================= */
     var dataSemuaGantangan = {};
     var hitungReset = 0;
     var timerReset = null;
@@ -777,21 +874,22 @@
       });
     }
 
+    /* MODAL TAUTAN SEDERHANA (1 LINK PER TIPE) */
     function bukaModalTautan(tipe){
       var base = window.location.origin + window.location.pathname;
       var urlTarget = "";
 
       if(tipe === 'penonton'){
         document.getElementById('modalJudulTautan').innerText = `🔗 Link Penonton - Room ${ROOM_AKTIF}`;
-        document.getElementById('modalDescTautan').innerText = "Monitor bersih tanpa tombol reset/pin.";
+        document.getElementById('modalDescTautan').innerText = "Tautan monitor bersih untuk penonton.";
         urlTarget = `${base}?mode=penonton&room=${ROOM_AKTIF}`;
       } else if(tipe === 'juri2b'){
         document.getElementById('modalJudulTautan').innerText = `🎯 Link Juri 2 Burung - Room ${ROOM_AKTIF}`;
-        document.getElementById('modalDescTautan').innerText = "Remote HP juri 2 burung responsif.";
+        document.getElementById('modalDescTautan').innerText = "Bagikan link ini ke semua juri 2B. Nomor juri ditentukan panitia di lapangan.";
         urlTarget = `${base}?mode=juri2b&room=${ROOM_AKTIF}`;
       } else if(tipe === 'juri3b'){
         document.getElementById('modalJudulTautan').innerText = `⚡ Link Juri 3 Burung - Room ${ROOM_AKTIF}`;
-        document.getElementById('modalDescTautan').innerText = "Remote HP juri 3 burung responsif.";
+        document.getElementById('modalDescTautan').innerText = "Bagikan link ini ke semua juri 3B. Nomor juri ditentukan panitia di lapangan.";
         urlTarget = `${base}?mode=juri3b&room=${ROOM_AKTIF}`;
       }
 
