@@ -9,13 +9,13 @@
     html, body {
       height: 100vh;
       width: 100vw;
-      background: #0f1015;
+      background: #0b0f19;
       color: #fff;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Segoe UI', -apple-system, Roboto, sans-serif;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      padding: 4px 6px;
+      padding: 3px 4px;
     }
     #lockScreenOverlay {
       position: fixed;
@@ -33,24 +33,22 @@
     .lock-box {
       background: #181b26;
       border: 1px solid #2e354f;
-      padding: 24px 18px;
-      border-radius: 12px;
+      padding: 20px;
+      border-radius: 10px;
       width: 100%;
-      max-width: 360px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+      max-width: 340px;
     }
     .input-sewa {
       width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 6px;
+      padding: 9px;
+      font-size: 0.95rem;
+      border-radius: 5px;
       border: 1px solid #38bdf8;
       background: #0f1015;
       color: #fff;
       text-align: center;
       font-weight: bold;
-      letter-spacing: 1px;
-      margin: 12px 0 8px 0;
+      margin: 10px 0;
       text-transform: uppercase;
     }
     .btn-buka-sewa {
@@ -58,9 +56,8 @@
       color: #000;
       font-weight: bold;
       border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 0.95rem;
+      padding: 10px;
+      border-radius: 5px;
       cursor: pointer;
       width: 100%;
     }
@@ -70,26 +67,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #181b26;
-      border: 1px solid #2e354f;
-      border-radius: 6px;
-      padding: 3px 6px;
-      margin-bottom: 4px;
+      background: #151b28;
+      border: 1px solid #283248;
+      border-radius: 5px;
+      padding: 2px 5px;
+      margin-bottom: 3px;
       flex-shrink: 0;
-      gap: 6px;
+      gap: 4px;
     }
-
-    /* TOMBOL RESET UKURAN TETAP */
     .btn-reset-utama {
       background: #dc2626 !important;
       border: 1px solid #fca5a5 !important;
       color: #ffffff !important;
-      font-size: 10px !important;
+      font-size: 9.5px !important;
       font-weight: 800 !important;
-      padding: 4px 8px !important;
-      border-radius: 4px;
+      padding: 3px 7px !important;
+      border-radius: 3px;
       cursor: pointer;
-      box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
       white-space: nowrap;
       flex-shrink: 0;
     }
@@ -98,20 +92,17 @@
     .grup-kanan { 
       display: flex; 
       align-items: center; 
-      gap: 4px; 
+      gap: 3px; 
       flex-shrink: 0; 
     }
-
-    /* KONTROL DIPERKECIL */
     .badge-room {
       background: #eab308;
       color: #000;
-      font-size: 8.5px;
+      font-size: 8px;
       font-weight: 900;
       padding: 1.5px 4px;
       border-radius: 3px;
       white-space: nowrap;
-      line-height: 1.2;
     }
     .badge-sewa {
       background: #15803d;
@@ -121,31 +112,17 @@
       padding: 1.5px 4px;
       border-radius: 3px;
       white-space: nowrap;
-      line-height: 1.2;
     }
     .badge-pin {
       background: #0284c7;
       color: #fff;
-      font-size: 8.5px;
+      font-size: 8px;
       font-weight: bold;
-      padding: 1.5px 5px;
+      padding: 1.5px 4px;
       border-radius: 3px;
       cursor: pointer;
       border: 1px solid #38bdf8;
       white-space: nowrap;
-      line-height: 1.2;
-    }
-    .btn-layar {
-      background: #2a2f42;
-      color: #e2e8f0;
-      border: 1px solid #434c69;
-      border-radius: 3px;
-      padding: 1.5px 5px;
-      font-size: 8.5px;
-      font-weight: bold;
-      cursor: pointer;
-      white-space: nowrap;
-      line-height: 1.2;
     }
     .btn-salin-link {
       background: #4f46e5;
@@ -153,255 +130,267 @@
       border: 1px solid #818cf8;
       border-radius: 3px;
       padding: 1.5px 5px;
-      font-size: 8.5px;
+      font-size: 8px;
       font-weight: bold;
       cursor: pointer;
       white-space: nowrap;
-      line-height: 1.2;
     }
-    .btn-salin-link:active { background: #3730a3; }
-
-    /* LABEL LIVE KHUSUS PENONTON */
+    .btn-layar {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      border-radius: 3px;
+      padding: 1.5px 4px;
+      font-size: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+    }
     .badge-live-penonton {
       display: inline-flex;
       align-items: center;
       gap: 4px;
       background: #1e1b4b;
       border: 1px solid #4338ca;
-      color: #a5b4fc;
-      font-size: 8.5px;
+      color: #c7d2fe;
+      font-size: 8px;
       font-weight: 800;
       padding: 1.5px 5px;
       border-radius: 3px;
     }
     .dot-live {
-      width: 5px;
-      height: 5px;
-      background: #ef4444;
-      border-radius: 50%;
-      box-shadow: 0 0 5px #ef4444;
+      width: 5px; height: 5px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 5px #ef4444;
       animation: pulse 1.2s infinite;
     }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-    /* MODAL POPUP SALIN LINK */
+    /* POPUP SALIN LINK */
     #modalLinkPenonton {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 999999;
       justify-content: center;
       align-items: center;
-      padding: 16px;
+      padding: 14px;
     }
     .box-modal {
       background: #181b26;
       border: 1px solid #38bdf8;
       border-radius: 8px;
-      padding: 16px;
+      padding: 14px;
       width: 100%;
-      max-width: 420px;
+      max-width: 380px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
     }
     .input-url-box {
       width: 100%;
-      padding: 8px;
+      padding: 7px;
       background: #0f1015;
       border: 1px solid #2e354f;
       color: #38bdf8;
       font-size: 11px;
       border-radius: 4px;
-      margin: 10px 0;
+      margin: 8px 0;
       text-align: center;
-      outline: none;
     }
-    .btn-aksi-modal {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-    }
-    .btn-m-salin {
-      background: #00e676;
-      color: #000;
-      border: none;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .btn-m-buka {
-      background: #0284c7;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-m-tutup {
-      background: #334155;
-      color: #cbd5e1;
-      border: none;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+    .btn-aksi-modal { display: flex; gap: 6px; justify-content: center; }
+    .btn-m-salin { background: #00e676; color: #000; border: none; padding: 5px 10px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+    .btn-m-buka { background: #0284c7; color: #fff; border: none; padding: 5px 10px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; }
+    .btn-m-tutup { background: #334155; color: #cbd5e1; border: none; padding: 5px 10px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-    /* LEADERBOARD TOP 10 (PERSIS ASLI) */
+    /* LEADERBOARD TOP 10 */
     .leaderboard-tv {
-      background: #171923;
-      border: 1px solid #2d3248;
-      border-radius: 6px;
-      padding: 3px 6px;
-      margin-bottom: 4px;
+      background: #131825;
+      border: 1px solid #21293e;
+      border-radius: 5px;
+      padding: 2px 4px;
+      margin-bottom: 3px;
       flex-shrink: 0;
     }
     .judul-top {
-      font-size: 9px;
-      font-weight: bold;
+      font-size: 8.5px;
+      font-weight: 800;
       color: #00e676;
       margin-bottom: 2px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
     .grid-top {
       display: grid;
       grid-template-columns: repeat(10, minmax(0, 1fr));
-      gap: 3px;
+      gap: 2.5px;
     }
     .card-rank {
-      background: #202434;
-      border-radius: 4px;
+      background: #192033;
+      border-radius: 3px;
       padding: 2px 1px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-top: 2px solid #4a5568;
+      border-top: 2px solid #475569;
       min-width: 0;
-      overflow: hidden;
     }
-    .rank-1 { border-top-color: #ffd700; background: #2d2612; }
-    .rank-2 { border-top-color: #e2e8f0; background: #222736; }
-    .rank-3 { border-top-color: #cd7f32; background: #291e17; }
-    .posisi-teks { font-size: 8px; font-weight: bold; color: #94a3b8; }
+    .rank-1 { border-top-color: #ffd700; background: #2a220d; }
+    .rank-2 { border-top-color: #cbd5e1; background: #1e2538; }
+    .rank-3 { border-top-color: #f59e0b; background: #26190e; }
+    .posisi-teks { font-size: 7.5px; font-weight: bold; color: #94a3b8; }
     .rank-1 .posisi-teks { color: #ffd700; }
-    .rank-2 .posisi-teks { color: #e2e8f0; }
-    .rank-3 .posisi-teks { color: #cd7f32; }
-    .gantangan-teks { font-size: 9px; font-weight: 800; white-space: nowrap; }
-    .poin-teks { font-size: 12px; font-weight: 900; color: #ffeb3b; line-height: 1; white-space: nowrap; }
+    .rank-2 .posisi-teks { color: #f1f5f9; }
+    .rank-3 .posisi-teks { color: #f59e0b; }
+    .gantangan-teks { font-size: 8.5px; font-weight: 800; white-space: nowrap; }
+    .poin-teks { font-size: 11px; font-weight: 900; color: #ffeb3b; line-height: 1; }
 
-    /* AREA 150 GANTANGAN (PERSIS ASLI) */
+    /* GRID 150 GANTANGAN (15 KOLOM X 10 BARIS PASTI PAS 1 LAYAR) */
     .area-gantangan-wrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-height: 0;
-      background: #13151f;
-      border: 1px solid #232738;
-      border-radius: 6px;
-      padding: 3px 4px;
+      background: #0f131f;
+      border: 1px solid #1e2638;
+      border-radius: 5px;
+      padding: 3px 2px;
       overflow: hidden;
     }
     .grid-header {
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: bold;
       color: #64748b;
       margin-bottom: 2px;
       text-transform: uppercase;
+      padding-left: 2px;
       flex-shrink: 0;
     }
     .kontainer-150 {
       flex: 1;
       display: grid;
       grid-template-columns: repeat(15, minmax(0, 1fr));
-      gap: 2px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding-right: 2px;
+      grid-template-rows: repeat(10, minmax(0, 1fr));
+      gap: 1.5px;
+      overflow: hidden;
       width: 100%;
+      height: 100%;
     }
-    .kontainer-150::-webkit-scrollbar { width: 4px; }
-    .kontainer-150::-webkit-scrollbar-thumb { background: #2e354f; border-radius: 4px; }
+
+    /* KOTAK GANTANGAN */
     .box-gantangan {
-      background: #171923;
-      border: 1px solid #232738;
+      background: #141926;
+      border: 1px solid #232d42;
       border-radius: 3px;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
+      overflow: visible;
+      position: relative;
+      transition: transform 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    /* KOP NOMOR GANTANGAN */
+    .box-gantangan .header-no {
+      background: #232d44;
+      color: #f8fafc;
+      font-size: 7.5px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.15;
+      padding: 1px 0;
+      width: 100%;
+      display: block;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+    }
+
+    /* AREA POIN */
+    .box-gantangan .area-poin {
+      flex: 1;
+      display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 26px;
-      min-width: 0;
+      min-height: 0;
+      padding: 0;
       overflow: hidden;
-      transition: background-color 0.15s;
-      padding: 1px;
     }
-    .box-gantangan .no-gtg { font-size: 8px; color: #64748b; font-weight: 700; line-height: 1; }
     .box-gantangan .skor-gtg {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 900;
-      color: #fffa65;
-      line-height: 1.1;
+      color: #526079; /* 0 berwarna redup */
+      line-height: 1;
       white-space: nowrap;
       text-align: center;
-      max-width: 100%;
-      letter-spacing: -0.5px;
+      display: inline-block;
     }
-    .skor-gtg.tiga-digit { font-size: 9px !important; letter-spacing: -0.8px; }
+
+    /* WARNA JIKA ADA POIN */
+    .skor-gtg.ada-poin {
+      color: #facc15 !important; /* Kuning terang */
+    }
+
+    /* KHUSUS POIN 3 DIGIT */
+    .skor-gtg.tiga-digit {
+      font-size: 8.5px !important;
+      letter-spacing: -0.8px;
+      transform: scaleX(0.85);
+      transform-origin: center;
+    }
+
+    /* EFEK NILAI MASUK (NEON GLOW PULSE) */
     .box-gantangan.hit {
-      background-color: #00e676 !important;
-      border-color: #ffffff !important;
-      transform: scale(1.04);
+      background: #064e3b !important;
+      border-color: #00e676 !important;
+      box-shadow: 0 0 10px rgba(0, 230, 118, 0.9) !important;
+      transform: scale(1.12);
+      z-index: 10;
     }
-    .box-gantangan.hit .no-gtg { color: #000; }
-    .box-gantangan.hit .skor-gtg { color: #000 !important; }
+    .box-gantangan.hit .header-no {
+      background: #00e676 !important;
+      color: #000000 !important;
+      font-weight: 900;
+    }
+    .box-gantangan.hit .skor-gtg {
+      color: #ffffff !important;
+      text-shadow: 0 0 6px #00e676;
+    }
 
     @media (max-height: 480px) and (orientation: landscape) {
-      body { padding: 2px 4px; }
-      .bar-kontrol-atas, .leaderboard-tv { margin-bottom: 2px; padding: 2px 4px; }
-      .btn-reset-utama { padding: 2px 6px !important; font-size: 9px !important; }
-      .kontainer-150 { grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 2px; }
-      .box-gantangan { min-height: 20px; }
+      body { padding: 2px; }
+      .bar-kontrol-atas, .leaderboard-tv { margin-bottom: 2px; }
+      .box-gantangan .header-no { font-size: 7px; padding: 0.5px 0; }
       .box-gantangan .skor-gtg { font-size: 9.5px; }
       .skor-gtg.tiga-digit { font-size: 8px !important; }
-      .poin-teks { font-size: 10px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- MODAL SALIN LINK PENONTON (UNTUK JURI/ADMIN) -->
+  <!-- MODAL SALIN LINK PENONTON -->
   <div id="modalLinkPenonton">
     <div class="box-modal">
-      <h4 style="color:#38bdf8; font-size:13px; margin-bottom:4px;">🔗 Tautan Penonton (<span id="modalRoomJudul">ROOM 1</span>)</h4>
-      <p style="font-size:10px; color:#94a3b8;">Penonton hanya bisa melihat skor secara live tanpa tombol reset ataupun PIN juri.</p>
+      <h4 style="color:#38bdf8; font-size:12px; margin-bottom:4px;">🔗 Tautan Penonton (<span id="modalRoomJudul">ROOM 1</span>)</h4>
+      <p style="font-size:9.5px; color:#94a3b8;">Penonton hanya bisa melihat skor secara realtime tanpa akses tombol reset maupun PIN juri.</p>
       
       <input type="text" id="inputUrlPenonton" class="input-url-box" readonly>
 
       <div class="btn-aksi-modal">
-        <button class="btn-m-salin" onclick="salinUrlPenonton()">📋 Salin Tautan</button>
+        <button class="btn-m-salin" onclick="salinUrlPenonton()">📋 Salin Link</button>
         <a id="linkBukaPenonton" href="#" target="_blank" class="btn-m-buka">👁️ Buka</a>
         <button class="btn-m-tutup" onclick="tutupModalLink()">Tutup</button>
       </div>
     </div>
   </div>
 
-  <!-- OVERLAY SEWA TERKUNCI (HANYA UNTUK MODE JURI) -->
+  <!-- OVERLAY SEWA JURI (TIDAK AKTIF DI PENONTON) -->
   <div id="lockScreenOverlay" style="display:none;">
     <div class="lock-box">
-      <div style="font-size:2.4rem; margin-bottom:8px;">🔒</div>
-      <h3 style="color:#00e676; margin-bottom:6px;">AKSES SISTEM TERKUNCI</h3>
-      <p style="font-size:0.75rem; color:#94a3b8;">Masa aktif sewa monitoring telah berakhir. Silakan masukkan Kode Lisensi dari Pemilik Sistem.</p>
-      
+      <div style="font-size:2.2rem; margin-bottom:6px;">🔒</div>
+      <h3 style="color:#00e676; margin-bottom:5px; font-size:14px;">AKSES SISTEM TERKUNCI</h3>
+      <p style="font-size:0.75rem; color:#94a3b8;">Masa aktif sewa monitoring telah berakhir.</p>
       <input type="text" id="inKodeSewa" class="input-sewa" placeholder="KLG1-XXXX-XXXX-XXXX">
       <button class="btn-buka-sewa" onclick="verifikasiLisensiSistem()">🔓 BUKA SISTEM</button>
     </div>
@@ -409,32 +398,28 @@
 
   <!-- BAR KONTROL ATAS -->
   <div class="bar-kontrol-atas">
-    <!-- Tombol Reset (Disembunyikan jika mode penonton) -->
     <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
 
-    <!-- Badge Penonton (Hanya muncul jika mode penonton) -->
     <div class="badge-live-penonton" id="badgeLivePenonton" style="display:none;">
-      <span class="dot-live"></span> PENONTON LIVE
+      <span class="dot-live"></span> MONITOR PENONTON
     </div>
 
-    <!-- Grup Kanan -->
     <div class="grup-kanan">
       <button class="btn-salin-link" id="btnBukaLinkModal" onclick="bukaModalLink()">🔗 Link Penonton</button>
       <span class="badge-room" id="badgeRoom">ROOM 1</span>
       <span class="badge-sewa" id="badgeMasaSewa">Aktif</span>
       <span class="badge-pin" id="badgePin" onclick="aturPIN()" title="Klik untuk ubah PIN">🔑 <span id="labelPIN">PIN: 1234</span></span>
-      <!-- Hanya tombol Layar Penuh ini yang tetap aktif di Penonton -->
       <button class="btn-layar" onclick="toggleLayarPenuh()">⛶ Layar</button>
     </div>
   </div>
 
   <!-- LEADERBOARD TOP 10 -->
   <div class="leaderboard-tv">
-    <div class="judul-top">🏆 Klasemen 10 Besar (Poin Terbanyak)</div>
+    <div class="judul-top">🏆 Klasemen 10 Besar</div>
     <div class="grid-top" id="top10Container"></div>
   </div>
 
-  <!-- STATUS 150 GANTANGAN -->
+  <!-- 150 GANTANGAN (15 x 10) -->
   <div class="area-gantangan-wrapper">
     <div class="grid-header">Status 150 Gantangan:</div>
     <div class="kontainer-150" id="kotak150Container"></div>
@@ -445,7 +430,6 @@
     var IS_PENONTON = urlParams.get('penonton') === "1";
     var ROOM_DARI_URL = urlParams.get('room');
 
-    // Tentukan Nomor Room: Jika penonton, baca dari ?room=X, jika juri baca dari localStorage
     var ROOM_AKTIF = ROOM_DARI_URL || localStorage.getItem('nomor_room_sewa') || "1";
     if(!["1", "2", "3", "4", "5"].includes(ROOM_AKTIF)) {
       ROOM_AKTIF = "1";
@@ -454,14 +438,12 @@
     document.getElementById('badgeRoom').innerText = "ROOM " + ROOM_AKTIF;
     document.getElementById('modalRoomJudul').innerText = "ROOM " + ROOM_AKTIF;
 
-    // KONFIGURASI TAMPILAN JIKA MODE PENONTON
+    // JIKA MODE PENONTON: HILANGKAN TOMBOL RESET, PIN, SEWA & TAMPILKAN LABEL PENONTON
     if(IS_PENONTON){
-      // Hilangkan tombol reset, tombol link, badge sewa, dan PIN juri
       document.getElementById('btnResetMaster').style.display = 'none';
       document.getElementById('btnBukaLinkModal').style.display = 'none';
       document.getElementById('badgeMasaSewa').style.display = 'none';
       document.getElementById('badgePin').style.display = 'none';
-      // Tampilkan indikator status Live
       document.getElementById('badgeLivePenonton').style.display = 'inline-flex';
     }
 
@@ -470,7 +452,6 @@
     var BASE_FIREBASE = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
     var FIREBASE_URL = BASE_FIREBASE + "room" + ROOM_AKTIF + "/";
 
-    // GENERATE LINK PENONTON SECARA OTOMATIS SESUAI ROOM INI
     function hitungUrlPenonton(){
       var cleanUrl = window.location.origin + window.location.pathname;
       return cleanUrl + "?penonton=1&room=" + ROOM_AKTIF;
@@ -511,9 +492,7 @@
     }
 
     function cekStatusSewa(){
-      // Penonton tidak memerlukan pengecekan lisensi
       if(IS_PENONTON) return true;
-
       var exp = localStorage.getItem('burung_license_exp');
       var now = new Date().getTime();
       if(!exp || now > parseInt(exp)){
@@ -593,17 +572,26 @@
       var el = document.getElementById(`layar-${no}`);
       if(el){
         el.innerText = skor;
+        if(skor > 0) el.classList.add('ada-poin');
+        else el.classList.remove('ada-poin');
+
         if(skor >= 100) el.classList.add('tiga-digit');
         else el.classList.remove('tiga-digit');
       }
     }
 
+    // Grid 150 kotak
     for(var i = 1; i <= 150; i++){
       dataSemuaGantangan[i] = 0;
       var elDiv = document.createElement('div');
       elDiv.className = 'box-gantangan';
       elDiv.id = `box-${i}`;
-      elDiv.innerHTML = `<span class="no-gtg">${i}</span><span class="skor-gtg" id="layar-${i}">0</span>`;
+      elDiv.innerHTML = `
+        <span class="header-no">${i}</span>
+        <div class="area-poin">
+          <span class="skor-gtg" id="layar-${i}">0</span>
+        </div>
+      `;
       gridContainer.appendChild(elDiv);
     }
 
@@ -643,7 +631,7 @@
           var b = document.getElementById(`box-${gtg}`);
           if(b){
             b.classList.add('hit');
-            setTimeout(function(){ b.classList.remove('hit'); }, 350);
+            setTimeout(function(){ b.classList.remove('hit'); }, 300);
           }
           perbaruiTop10();
         }
