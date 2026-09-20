@@ -64,6 +64,8 @@
       cursor: pointer;
       width: 100%;
     }
+
+    /* BAR KONTROL ATAS */
     .bar-kontrol-atas {
       display: flex;
       justify-content: space-between;
@@ -76,6 +78,8 @@
       flex-shrink: 0;
       gap: 6px;
     }
+
+    /* TOMBOL RESET UKURAN TETAP */
     .btn-reset-utama {
       background: #dc2626 !important;
       border: 1px solid #fca5a5 !important;
@@ -90,50 +94,168 @@
       flex-shrink: 0;
     }
     .btn-reset-utama:active { transform: scale(0.96); background: #b91c1c !important; }
-    .grup-kanan { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+    .grup-kanan { 
+      display: flex; 
+      align-items: center; 
+      gap: 4px; 
+      flex-shrink: 0; 
+    }
+
+    /* KONTROL DIPERKECIL */
     .badge-room {
       background: #eab308;
       color: #000;
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 900;
-      padding: 3px 6px;
+      padding: 1.5px 4px;
       border-radius: 3px;
       white-space: nowrap;
-      cursor: pointer;
-      box-shadow: 0 0 4px rgba(234, 179, 8, 0.5);
+      line-height: 1.2;
     }
     .badge-sewa {
       background: #15803d;
       color: #fff;
-      font-size: 9px;
+      font-size: 8px;
       font-weight: bold;
-      padding: 2px 4px;
+      padding: 1.5px 4px;
       border-radius: 3px;
       white-space: nowrap;
-      line-height: 1.1;
+      line-height: 1.2;
     }
     .badge-pin {
       background: #0284c7;
       color: #fff;
-      font-size: 10px;
+      font-size: 8.5px;
       font-weight: bold;
-      padding: 3px 6px;
-      border-radius: 4px;
+      padding: 1.5px 5px;
+      border-radius: 3px;
       cursor: pointer;
       border: 1px solid #38bdf8;
       white-space: nowrap;
+      line-height: 1.2;
     }
     .btn-layar {
       background: #2a2f42;
       color: #e2e8f0;
       border: 1px solid #434c69;
-      border-radius: 4px;
-      padding: 3px 6px;
-      font-size: 10px;
+      border-radius: 3px;
+      padding: 1.5px 5px;
+      font-size: 8.5px;
       font-weight: bold;
       cursor: pointer;
       white-space: nowrap;
+      line-height: 1.2;
     }
+    .btn-salin-link {
+      background: #4f46e5;
+      color: #ffffff;
+      border: 1px solid #818cf8;
+      border-radius: 3px;
+      padding: 1.5px 5px;
+      font-size: 8.5px;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    .btn-salin-link:active { background: #3730a3; }
+
+    /* LABEL LIVE KHUSUS PENONTON */
+    .badge-live-penonton {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1e1b4b;
+      border: 1px solid #4338ca;
+      color: #a5b4fc;
+      font-size: 8.5px;
+      font-weight: 800;
+      padding: 1.5px 5px;
+      border-radius: 3px;
+    }
+    .dot-live {
+      width: 5px;
+      height: 5px;
+      background: #ef4444;
+      border-radius: 50%;
+      box-shadow: 0 0 5px #ef4444;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* MODAL POPUP SALIN LINK */
+    #modalLinkPenonton {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 999999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .box-modal {
+      background: #181b26;
+      border: 1px solid #38bdf8;
+      border-radius: 8px;
+      padding: 16px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+    }
+    .input-url-box {
+      width: 100%;
+      padding: 8px;
+      background: #0f1015;
+      border: 1px solid #2e354f;
+      color: #38bdf8;
+      font-size: 11px;
+      border-radius: 4px;
+      margin: 10px 0;
+      text-align: center;
+      outline: none;
+    }
+    .btn-aksi-modal {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .btn-m-salin {
+      background: #00e676;
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-m-buka {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-m-tutup {
+      background: #334155;
+      color: #cbd5e1;
+      border: none;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* LEADERBOARD TOP 10 (PERSIS ASLI) */
     .leaderboard-tv {
       background: #171923;
       border: 1px solid #2d3248;
@@ -176,6 +298,8 @@
     .rank-3 .posisi-teks { color: #cd7f32; }
     .gantangan-teks { font-size: 9px; font-weight: 800; white-space: nowrap; }
     .poin-teks { font-size: 12px; font-weight: 900; color: #ffeb3b; line-height: 1; white-space: nowrap; }
+
+    /* AREA 150 GANTANGAN (PERSIS ASLI) */
     .area-gantangan-wrapper {
       flex: 1;
       display: flex;
@@ -255,6 +379,23 @@
 </head>
 <body>
 
+  <!-- MODAL SALIN LINK PENONTON (UNTUK JURI/ADMIN) -->
+  <div id="modalLinkPenonton">
+    <div class="box-modal">
+      <h4 style="color:#38bdf8; font-size:13px; margin-bottom:4px;">🔗 Tautan Penonton (<span id="modalRoomJudul">ROOM 1</span>)</h4>
+      <p style="font-size:10px; color:#94a3b8;">Penonton hanya bisa melihat skor secara live tanpa tombol reset ataupun PIN juri.</p>
+      
+      <input type="text" id="inputUrlPenonton" class="input-url-box" readonly>
+
+      <div class="btn-aksi-modal">
+        <button class="btn-m-salin" onclick="salinUrlPenonton()">📋 Salin Tautan</button>
+        <a id="linkBukaPenonton" href="#" target="_blank" class="btn-m-buka">👁️ Buka</a>
+        <button class="btn-m-tutup" onclick="tutupModalLink()">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY SEWA TERKUNCI (HANYA UNTUK MODE JURI) -->
   <div id="lockScreenOverlay" style="display:none;">
     <div class="lock-box">
       <div style="font-size:2.4rem; margin-bottom:8px;">🔒</div>
@@ -266,40 +407,99 @@
     </div>
   </div>
 
+  <!-- BAR KONTROL ATAS -->
   <div class="bar-kontrol-atas">
+    <!-- Tombol Reset (Disembunyikan jika mode penonton) -->
     <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
 
+    <!-- Badge Penonton (Hanya muncul jika mode penonton) -->
+    <div class="badge-live-penonton" id="badgeLivePenonton" style="display:none;">
+      <span class="dot-live"></span> PENONTON LIVE
+    </div>
+
+    <!-- Grup Kanan -->
     <div class="grup-kanan">
-      <!-- TOMBOL GANTI ROOM DENGAN PROTEKSI HAK AKSES -->
-      <span class="badge-room" id="badgeRoom" onclick="gantiRoomBebas()" title="Klik untuk ganti room">ROOM 1</span>
+      <button class="btn-salin-link" id="btnBukaLinkModal" onclick="bukaModalLink()">🔗 Link Penonton</button>
+      <span class="badge-room" id="badgeRoom">ROOM 1</span>
       <span class="badge-sewa" id="badgeMasaSewa">Aktif</span>
-      <span class="badge-pin" onclick="aturPIN()" title="Klik untuk ubah PIN">🔑 <span id="labelPIN">PIN: 1234</span></span>
-      <button class="btn-layar" onclick="toggleLayarPenuh()">⛶ Layar Penuh</button>
+      <span class="badge-pin" id="badgePin" onclick="aturPIN()" title="Klik untuk ubah PIN">🔑 <span id="labelPIN">PIN: 1234</span></span>
+      <!-- Hanya tombol Layar Penuh ini yang tetap aktif di Penonton -->
+      <button class="btn-layar" onclick="toggleLayarPenuh()">⛶ Layar</button>
     </div>
   </div>
 
+  <!-- LEADERBOARD TOP 10 -->
   <div class="leaderboard-tv">
     <div class="judul-top">🏆 Klasemen 10 Besar (Poin Terbanyak)</div>
     <div class="grid-top" id="top10Container"></div>
   </div>
 
+  <!-- STATUS 150 GANTANGAN -->
   <div class="area-gantangan-wrapper">
     <div class="grid-header">Status 150 Gantangan:</div>
     <div class="kontainer-150" id="kotak150Container"></div>
   </div>
 
   <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var IS_PENONTON = urlParams.get('penonton') === "1";
+    var ROOM_DARI_URL = urlParams.get('room');
+
+    // Tentukan Nomor Room: Jika penonton, baca dari ?room=X, jika juri baca dari localStorage
+    var ROOM_AKTIF = ROOM_DARI_URL || localStorage.getItem('nomor_room_sewa') || "1";
+    if(!["1", "2", "3", "4", "5"].includes(ROOM_AKTIF)) {
+      ROOM_AKTIF = "1";
+    }
+
+    document.getElementById('badgeRoom').innerText = "ROOM " + ROOM_AKTIF;
+    document.getElementById('modalRoomJudul').innerText = "ROOM " + ROOM_AKTIF;
+
+    // KONFIGURASI TAMPILAN JIKA MODE PENONTON
+    if(IS_PENONTON){
+      // Hilangkan tombol reset, tombol link, badge sewa, dan PIN juri
+      document.getElementById('btnResetMaster').style.display = 'none';
+      document.getElementById('btnBukaLinkModal').style.display = 'none';
+      document.getElementById('badgeMasaSewa').style.display = 'none';
+      document.getElementById('badgePin').style.display = 'none';
+      // Tampilkan indikator status Live
+      document.getElementById('badgeLivePenonton').style.display = 'inline-flex';
+    }
+
     var KUNCI_RAHASIA = "WAHYU_KOLONG_PEKALONGAN_99";
     var PIN_MASTER = "889900";
     var BASE_FIREBASE = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
-
-    // BACA PARAMETER DARI URL ATAU LOCALSTORAGE
-    var urlParams = new URLSearchParams(window.location.search);
-    var roomDariURL = urlParams.get('room');
-    var ROOM_AKTIF = roomDariURL || localStorage.getItem('nomor_room_sewa') || "1";
-
-    document.getElementById('badgeRoom').innerText = "ROOM " + ROOM_AKTIF + " ▾";
     var FIREBASE_URL = BASE_FIREBASE + "room" + ROOM_AKTIF + "/";
+
+    // GENERATE LINK PENONTON SECARA OTOMATIS SESUAI ROOM INI
+    function hitungUrlPenonton(){
+      var cleanUrl = window.location.origin + window.location.pathname;
+      return cleanUrl + "?penonton=1&room=" + ROOM_AKTIF;
+    }
+
+    function bukaModalLink(){
+      var url = hitungUrlPenonton();
+      document.getElementById('inputUrlPenonton').value = url;
+      document.getElementById('linkBukaPenonton').href = url;
+      document.getElementById('modalLinkPenonton').style.display = 'flex';
+    }
+
+    function tutupModalLink(){
+      document.getElementById('modalLinkPenonton').style.display = 'none';
+    }
+
+    function salinUrlPenonton(){
+      var inputEl = document.getElementById('inputUrlPenonton');
+      inputEl.select();
+      inputEl.setSelectionRange(0, 99999);
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(inputEl.value).then(function(){
+          alert('✅ Tautan Penonton ROOM ' + ROOM_AKTIF + ' Berhasil Disalin!');
+        });
+      } else {
+        document.execCommand('copy');
+        alert('✅ Tautan Penonton ROOM ' + ROOM_AKTIF + ' Berhasil Disalin!');
+      }
+    }
 
     function hitungHash(str){
       var hash = 0;
@@ -311,19 +511,20 @@
     }
 
     function cekStatusSewa(){
-      var isMaster = localStorage.getItem('akses_master_dev');
+      // Penonton tidak memerlukan pengecekan lisensi
+      if(IS_PENONTON) return true;
+
       var exp = localStorage.getItem('burung_license_exp');
       var now = new Date().getTime();
-
       if(!exp || now > parseInt(exp)){
         document.getElementById('lockScreenOverlay').style.display = 'flex';
-        document.getElementById('badgeMasaSewa').innerText = '🔒 Terkunci';
+        document.getElementById('badgeMasaSewa').innerText = '🔒 Kunci';
         document.getElementById('badgeMasaSewa').style.background = '#dc2626';
         return false;
       } else {
         document.getElementById('lockScreenOverlay').style.display = 'none';
         var d = new Date(parseInt(exp));
-        document.getElementById('badgeMasaSewa').innerText = (isMaster === 'true' ? "👑 Dev: " : "s/d: ") + d.toLocaleDateString('id-ID');
+        document.getElementById('badgeMasaSewa').innerText = `${d.getDate()}/${d.getMonth()+1}/${String(d.getFullYear()).slice(-2)}`;
         document.getElementById('badgeMasaSewa').style.background = '#15803d';
         return true;
       }
@@ -333,16 +534,14 @@
       var input = document.getElementById('inKodeSewa').value.trim().toUpperCase();
       if(!input) return alert('Masukkan kode lisensi!');
 
-      // JIKA INPUT PIN MASTER 889900 (HAK PENUH DEVELOPER)
       if(input === PIN_MASTER){
         localStorage.setItem('burung_license_exp', new Date().getTime() + (365*24*60*60*1000));
-        localStorage.setItem('akses_master_dev', 'true');
-        alert('🔓 Akses Master Pemilik Diterima! Bebas pantau semua Room.');
+        localStorage.setItem('nomor_room_sewa', "1");
+        alert('🔓 Akses Master Pemilik Diterima! Room 1 Aktif 1 Tahun.');
         location.reload();
         return;
       }
 
-      // JIKA INPUT KODE LISENSI PENYEWA BIASA (KLG...)
       var parts = input.split('-');
       if(parts.length === 4 && parts[0].startsWith("KLG")){
         var roomNo = parts[0].replace("KLG", "");
@@ -366,10 +565,8 @@
           var expDate = new Date(thn, bln, tgl, 23, 59, 59).getTime();
 
           if(expDate > new Date().getTime()){
-            // KUNCI PENYEWA KE ROOM TERTENTU & HAPUS AKSES MASTER
             localStorage.setItem('nomor_room_sewa', roomNo);
             localStorage.setItem('burung_license_exp', expDate);
-            localStorage.removeItem('akses_master_dev');
             alert('🔓 Sistem Berhasil Diaktifkan untuk ROOM ' + roomNo + '!');
             location.reload();
             return;
@@ -381,26 +578,10 @@
       alert('❌ Kode Lisensi Sewa Tidak Valid!');
     }
 
-    // FUNGSI GANTI ROOM: HANYA IZINKAN JIKA MEMILIKI AKSES MASTER (PIN 889900)
-    function gantiRoomBebas() {
-      if(!cekStatusSewa()) return;
-
-      var isMaster = localStorage.getItem('akses_master_dev');
-      if (isMaster !== 'true') {
-        alert('❌ Akses Ditolak! Anda hanya memiliki izin monitor untuk ROOM ' + ROOM_AKTIF + '.');
-        return;
-      }
-
-      var target = prompt("👑 Mode Pemilik Sistem: Mau intip Room berapa? (1 - 5):", ROOM_AKTIF);
-      if (target && ["1", "2", "3", "4", "5"].includes(target.trim())) {
-        var roomBaru = target.trim();
-        localStorage.setItem('nomor_room_sewa', roomBaru);
-        window.location.search = "?room=" + roomBaru;
-      }
+    if(!IS_PENONTON){
+      setInterval(cekStatusSewa, 60000);
+      cekStatusSewa();
     }
-
-    setInterval(cekStatusSewa, 60000);
-    cekStatusSewa();
 
     var gridContainer = document.getElementById('kotak150Container');
     var topContainer = document.getElementById('top10Container');
@@ -428,7 +609,7 @@
 
     var eventSource = new EventSource(`${FIREBASE_URL}.json`);
     eventSource.addEventListener('put', function(e){
-      if(!cekStatusSewa()) return;
+      if(!IS_PENONTON && !cekStatusSewa()) return;
       var d = JSON.parse(e.data);
       var p = d.path;
       var val = d.data;
@@ -441,13 +622,13 @@
               pasangSkorElemen(k, dataSemuaGantangan[k]);
             }
           } else { resetTampilanLokal(); }
-          if(val.pin_juri){
+          if(val.pin_juri && !IS_PENONTON){
             document.getElementById('labelPIN').innerText = `PIN: ${val.pin_juri}`;
           }
         } else { resetTampilanLokal(); }
         perbaruiTop10();
       } else if(p === "/pin_juri"){
-        document.getElementById('labelPIN').innerText = `PIN: ${val}`;
+        if(!IS_PENONTON) document.getElementById('labelPIN').innerText = `PIN: ${val}`;
       } else if(p === "/skor"){
         for(var m = 1; m <= 150; m++){
           dataSemuaGantangan[m] = (val && val[m]) ? val[m] : 0;
@@ -495,6 +676,7 @@
     }
 
     function eksekusiResetSemua(){
+      if(IS_PENONTON) return;
       if(!cekStatusSewa()) return;
       hitungReset++;
       clearTimeout(timerReset);
@@ -526,6 +708,7 @@
     }
 
     function aturPIN(){
+      if(IS_PENONTON) return;
       if(!cekStatusSewa()) return;
       var baru = prompt(`Masukkan PIN Juri Baru untuk Room ${ROOM_AKTIF} (misal: 1234):`);
       if(baru !== null && baru.trim() !== ""){
