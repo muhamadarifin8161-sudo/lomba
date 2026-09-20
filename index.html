@@ -303,7 +303,6 @@
     .box-gantangan.hit .header-no { background: #00e676 !important; color: #000 !important; font-weight: 900; }
     .box-gantangan.hit .skor-gtg { color: #fff !important; text-shadow: 0 0 6px #00e676; }
 
-    /* MODAL SALIN LINK TANPA DROPDOWN */
     #modalLinkUniversal {
       display: none;
       position: fixed;
@@ -339,13 +338,13 @@
     .btn-m-buka { background: #0284c7; color: #fff; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; }
     .btn-m-tutup { background: #334155; color: #cbd5e1; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-    /* ================= TAMPILAN JURI ================= */
+    /* ================= TAMPILAN JURI (WARNA TOMBOL DIBEDAKAN) ================= */
     #viewJuri {
       display: none;
       flex-direction: column;
       height: 100%;
       width: 100%;
-      padding: 6px;
+      padding: 5px;
       background: #090d16;
     }
     .bar-header-juri {
@@ -365,12 +364,11 @@
       font-weight: 800; 
       background: #eab308; 
       color: #000; 
-      padding: 2px 6px; 
+      padding: 2px 8px; 
       border-radius: 4px; 
       cursor: pointer;
     }
 
-    /* OVERLAY PIN JURI */
     #overlayPinJuri {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -415,7 +413,6 @@
       cursor: pointer;
     }
 
-    /* OVERLAY PILIH NOMOR JURI OLEH PANITIA LAPANGAN */
     #overlayPilihJuri {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -455,6 +452,7 @@
       gap: 6px;
       min-height: 0;
       height: 100%;
+      width: 100%;
     }
     .mode-2b { grid-template-columns: repeat(2, 1fr); }
     .mode-3b { grid-template-columns: repeat(3, 1fr); }
@@ -462,10 +460,12 @@
     .kolom-burung {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       height: 100%;
       min-height: 0;
     }
+
+    /* KOP NOMOR GANTANGAN */
     .kop-gtg-juri {
       width: 100%;
       background: #111827;
@@ -479,12 +479,12 @@
       justify-content: center;
       align-items: center;
     }
-    .kop-gtg-juri .label-gtg { font-size: 9px; color: #94a3b8; font-weight: bold; }
+    .kop-gtg-juri .label-gtg { font-size: 9px; color: #94a3b8; font-weight: bold; letter-spacing: 0.5px; }
     .kop-gtg-juri .no-gtg-val { font-size: 18px; color: #facc15; font-weight: 900; }
 
+    /* TOMBOL TAMBAH POIN UMUM */
     .btn-poin-utama {
-      flex: 4;
-      background: #059669;
+      flex: 1;
       color: #ffffff;
       border: none;
       border-radius: 8px;
@@ -496,40 +496,86 @@
       user-select: none;
       -webkit-user-select: none;
       transition: background-color 0.05s, transform 0.05s;
+      padding: 10px 4px;
+      position: relative;
     }
     .btn-poin-utama:active {
-      background: #10b981;
-      transform: scale(0.98);
+      transform: translateY(3px);
     }
-    .btn-poin-utama .angka-tambah { font-size: 28px; font-weight: 900; line-height: 1.1; }
-    .btn-poin-utama .label-tambah { font-size: 9px; font-weight: 800; letter-spacing: 0.5px; opacity: 0.9; margin-top: 4px; }
-
-    .btn-batal-poin {
-      flex: 1;
-      background: #dc2626;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 12px;
+    .btn-poin-utama .angka-tambah {
+      font-size: 32px;
       font-weight: 900;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-      letter-spacing: 0.5px;
-      transition: background-color 0.05s, transform 0.05s;
+      line-height: 1;
     }
-    .btn-batal-poin:active {
-      background: #ef4444;
-      transform: scale(0.98);
+    .btn-poin-utama .label-tambah {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ================= WARNA TOMBOL KHUSUS PER KOLOM ================= */
+    /* KOLOM 1: HIJAU ZAMRUD */
+    .btn-warna-1 {
+      background: #059669;
+      box-shadow: 0 4px 0 #047857;
+    }
+    .btn-warna-1:active {
+      background: #10b981;
+      box-shadow: 0 1px 0 #047857;
+    }
+
+    /* KOLOM 2: BIRU SAMUDERA */
+    .btn-warna-2 {
+      background: #0284c7;
+      box-shadow: 0 4px 0 #0369a1;
+    }
+    .btn-warna-2:active {
+      background: #38bdf8;
+      box-shadow: 0 1px 0 #0369a1;
+    }
+
+    /* KOLOM 3: EMAS / AMBER */
+    .btn-warna-3 {
+      background: #d97706;
+      box-shadow: 0 4px 0 #b45309;
+    }
+    .btn-warna-3:active {
+      background: #f59e0b;
+      box-shadow: 0 1px 0 #b45309;
+    }
+
+    /* BADGE TOTAL POIN DI DALAM TOMBOL */
+    .box-total-poin {
+      margin-top: 15px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      padding: 6px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 80px;
+    }
+    .box-total-poin .label-total {
+      font-size: 9px;
+      font-weight: 800;
+      color: #cbd5e1;
+      letter-spacing: 0.5px;
+    }
+    .box-total-poin .nilai-total {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffeb3b;
+      line-height: 1.1;
     }
   </style>
 </head>
 <body>
 
-  <!-- ================= TAMPILAN 1: MONITOR UTAMA ================= -->
+  <!-- ================= TAMPILAN MONITOR UTAMA ================= -->
   <div id="viewMonitor">
     <div id="modalLinkUniversal">
       <div class="box-modal">
@@ -582,9 +628,8 @@
   </div>
 
 
-  <!-- ================= TAMPILAN 2: JURI ================= -->
+  <!-- ================= TAMPILAN JURI (WARNA TOMBOL BEDA) ================= -->
   <div id="viewJuri">
-    <!-- POPUP PIN JURI -->
     <div id="overlayPinJuri">
       <div class="box-pin-juri">
         <h3 style="color:#38bdf8;">KODE PIN JURI</h3>
@@ -594,7 +639,6 @@
       </div>
     </div>
 
-    <!-- POPUP PEMILIHAN JURI OLEH PANITIA LAPANGAN -->
     <div id="overlayPilihJuri">
       <div class="box-pilih-juri">
         <h3 style="color:#00e676;">PANITIA LAPANGAN</h3>
@@ -654,15 +698,20 @@
         .then(res => res.json())
         .then(pin => { if(pin) PIN_SEKARANG = String(pin).trim(); });
 
-      // Dengarkan skor realtime Firebase
       var sseJuri = new EventSource(`${FIREBASE_URL}skor.json`);
       sseJuri.addEventListener('put', function(e){
         var d = JSON.parse(e.data);
         if(d.path === "/" || d.path === ""){
-          if(d.data) bufferSkorLokal = d.data;
+          if(d.data){
+            bufferSkorLokal = d.data;
+            updateTampilanSkorSemua();
+          }
         } else {
           var no = parseInt(d.path.replace("/", ""));
-          if(no) bufferSkorLokal[no] = d.data;
+          if(no){
+            bufferSkorLokal[no] = d.data;
+            updateTampilanSkorElemen(no, d.data);
+          }
         }
       });
     }
@@ -671,7 +720,6 @@
       var input = document.getElementById('inputPinJuri').value.trim();
       if(input === PIN_SEKARANG || input === PIN_MASTER){
         document.getElementById('overlayPinJuri').style.display = 'none';
-        // Cek apakah HP ini sudah pernah di-set nomor jurinya
         var simpananJuri = localStorage.getItem(`juri_no_${ROOM_AKTIF}_${MODE_URL}`);
         if(simpananJuri){
           bangunKotakJuri(parseInt(simpananJuri));
@@ -697,6 +745,17 @@
       document.getElementById('overlayPilihJuri').style.display = 'flex';
     }
 
+    function updateTampilanSkorElemen(noGtg, skor){
+      var el = document.getElementById(`liveSkor_${noGtg}`);
+      if(el) el.innerText = skor || 0;
+    }
+
+    function updateTampilanSkorSemua(){
+      for(var no in bufferSkorLokal){
+        updateTampilanSkorElemen(no, bufferSkorLokal[no]);
+      }
+    }
+
     function bangunKotakJuri(noJuri){
       nomorJuriAktif = noJuri;
       document.getElementById('headerModeJudulJuri').innerText = `JURI ${noJuri} (${jumlahBurungAktif}B)`;
@@ -705,12 +764,14 @@
       container.className = "container-juri-grid mode-" + (jumlahBurungAktif === 3 ? "3b" : "2b");
       container.innerHTML = "";
 
-      // Rumus otomatis gantangan
       var awalGtg = (noJuri - 1) * jumlahBurungAktif + 1;
 
       for(var s = 0; s < jumlahBurungAktif; s++){
         var nomorGtg = awalGtg + s;
         if(nomorGtg > 150) break;
+
+        var skorSaatIni = bufferSkorLokal[nomorGtg] || 0;
+        var warnaKelas = `btn-warna-${s + 1}`; // Kolom 1 = btn-warna-1 (Hijau), Kolom 2 = btn-warna-2 (Biru), Kolom 3 = btn-warna-3 (Amber)
 
         var col = document.createElement('div');
         col.className = 'kolom-burung';
@@ -719,11 +780,14 @@
             <span class="label-gtg">GANTANGAN</span>
             <span class="no-gtg-val">#${nomorGtg}</span>
           </div>
-          <button class="btn-poin-utama" id="btnPlus_${nomorGtg}">
+          <button class="btn-poin-utama ${warnaKelas}" id="btnPlus_${nomorGtg}">
             <span class="angka-tambah">+1</span>
             <span class="label-tambah">TAMBAH POIN</span>
+            <div class="box-total-poin">
+              <span class="label-total">TOTAL POIN</span>
+              <span class="nilai-total" id="liveSkor_${nomorGtg}">${skorSaatIni}</span>
+            </div>
           </button>
-          <button class="btn-batal-poin" id="btnMinus_${nomorGtg}">-1 BATAL</button>
         `;
         container.appendChild(col);
         pasangAksiCepatJuri(nomorGtg);
@@ -732,14 +796,15 @@
 
     function pasangAksiCepatJuri(noGtg){
       var btnPlus = document.getElementById(`btnPlus_${noGtg}`);
-      var btnMinus = document.getElementById(`btnMinus_${noGtg}`);
 
-      function prosesKlik(delta){
+      function prosesKlik(){
         if(navigator.vibrate) navigator.vibrate(20);
 
         var nilaiSaatIni = (bufferSkorLokal[noGtg] !== undefined) ? bufferSkorLokal[noGtg] : 0;
-        var nilaiBaru = Math.max(0, nilaiSaatIni + delta);
+        var nilaiBaru = nilaiSaatIni + 1;
         bufferSkorLokal[noGtg] = nilaiBaru;
+
+        updateTampilanSkorElemen(noGtg, nilaiBaru);
 
         fetch(`${FIREBASE_URL}skor/${noGtg}.json`, {
           method: 'PUT',
@@ -748,14 +813,17 @@
         }).catch(function(){});
       }
 
-      btnPlus.addEventListener('touchstart', function(e){ e.preventDefault(); prosesKlik(1); }, { passive: false });
-      btnPlus.addEventListener('click', function(){ if(!('ontouchstart' in window)) prosesKlik(1); });
+      btnPlus.addEventListener('touchstart', function(e){
+        e.preventDefault();
+        prosesKlik();
+      }, { passive: false });
 
-      btnMinus.addEventListener('touchstart', function(e){ e.preventDefault(); prosesKlik(-1); }, { passive: false });
-      btnMinus.addEventListener('click', function(){ if(!('ontouchstart' in window)) prosesKlik(-1); });
+      btnPlus.addEventListener('click', function(){
+        if(!('ontouchstart' in window)) prosesKlik();
+      });
     }
 
-    /* ================= LOGIKA MONITOR ================= */
+    /* ================= LOGIKA MONITOR UTAMA ================= */
     var dataSemuaGantangan = {};
     var hitungReset = 0;
     var timerReset = null;
@@ -874,7 +942,6 @@
       });
     }
 
-    /* MODAL TAUTAN SEDERHANA (1 LINK PER TIPE) */
     function bukaModalTautan(tipe){
       var base = window.location.origin + window.location.pathname;
       var urlTarget = "";
@@ -885,11 +952,11 @@
         urlTarget = `${base}?mode=penonton&room=${ROOM_AKTIF}`;
       } else if(tipe === 'juri2b'){
         document.getElementById('modalJudulTautan').innerText = `🎯 Link Juri 2 Burung - Room ${ROOM_AKTIF}`;
-        document.getElementById('modalDescTautan').innerText = "Bagikan link ini ke semua juri 2B. Nomor juri ditentukan panitia di lapangan.";
+        document.getElementById('modalDescTautan').innerText = "Bagikan link ini ke semua juri 2B. Nomor juri diatur panitia di lapangan.";
         urlTarget = `${base}?mode=juri2b&room=${ROOM_AKTIF}`;
       } else if(tipe === 'juri3b'){
         document.getElementById('modalJudulTautan').innerText = `⚡ Link Juri 3 Burung - Room ${ROOM_AKTIF}`;
-        document.getElementById('modalDescTautan').innerText = "Bagikan link ini ke semua juri 3B. Nomor juri ditentukan panitia di lapangan.";
+        document.getElementById('modalDescTautan').innerText = "Bagikan link ini ke semua juri 3B. Nomor juri diatur panitia di lapangan.";
         urlTarget = `${base}?mode=juri3b&room=${ROOM_AKTIF}`;
       }
 
