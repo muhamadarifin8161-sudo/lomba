@@ -149,10 +149,14 @@
       color: #000;
       font-size: 7px;
       font-weight: 900;
-      padding: 1.5px 3px;
+      padding: 1.5px 4px;
       border-radius: 2px;
       white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 0 3px rgba(234, 179, 8, 0.5);
     }
+    .badge-room:active { transform: scale(0.95); }
+
     .badge-sewa {
       background: #15803d;
       color: #fff;
@@ -235,7 +239,7 @@
       white-space: nowrap;
     }
 
-    /* WADAH TULISAN KELAS + KOTAK KOSONG */
+    /* WADAH KELAS: LABEL KELAS : DAN KOTAK KOSONG */
     .wadah-kelas {
       display: flex;
       align-items: center;
@@ -567,7 +571,7 @@
     .kop-gtg-juri .label-gtg { font-size: 8px; color: #94a3b8; font-weight: bold; }
     .kop-gtg-juri .no-gtg-val { font-size: 16px; color: #facc15; font-weight: 900; }
 
-    /* KOTAK POIN DI ATAS */
+    /* KOTAK TOTAL POIN DI ATAS */
     .box-total-poin {
       background: #090d16;
       border: 2px solid #38bdf8;
@@ -660,11 +664,12 @@
       </div>
     </div>
 
+    <!-- OVERLAY TERKUNCI -->
     <div id="lockScreenOverlay" style="display:none;">
       <div class="lock-box">
         <div style="font-size:2.2rem; margin-bottom:6px;">🔒</div>
-        <h3 style="color:#00e676; margin-bottom:5px; font-size:14px;">AKSES SISTEM TERKUNCI</h3>
-        <p style="font-size:0.75rem; color:#94a3b8;">Masa aktif sewa monitoring telah berakhir.</p>
+        <h3 style="color:#00e676; margin-bottom:5px; font-size:14px;" id="judulKunciOverlay">AKSES SISTEM TERKUNCI</h3>
+        <p style="font-size:0.75rem; color:#94a3b8;" id="pesanKunciOverlay">Masa aktif sewa monitoring telah berakhir.</p>
         <input type="text" id="inKodeSewa" class="input-sewa" placeholder="KLG1-XXXX-XXXX-XXXX">
         <button class="btn-buka-sewa" onclick="verifikasiLisensiSistem()">🔓 BUKA SISTEM</button>
       </div>
@@ -685,7 +690,8 @@
         <button class="btn-link-bar btn-penonton" id="btnLinkPnt" onclick="bukaModalTautan('penonton')">👁️ Penonton</button>
         <button class="btn-link-bar btn-juri-2b" id="btnLinkJuri2B" onclick="bukaModalTautan('juri2b')">🎯 Juri 2B</button>
         <button class="btn-link-bar btn-juri-3b" id="btnLinkJuri3B" onclick="bukaModalTautan('juri3b')">⚡ Juri 3B</button>
-        <span class="badge-room" id="badgeRoom">R-1</span>
+        <!-- BADGE ROOM: HANYA MASTER YANG BISA KLIK PINDAH ROOM -->
+        <span class="badge-room" id="badgeRoom" onclick="pindahRoomCepat()" title="Klik untuk cek room lain (Khusus Admin)">R-1</span>
         <span class="badge-sewa" id="badgeMasaSewa">Aktif</span>
         <span class="badge-pin" id="badgePin" onclick="aturPIN()" title="Klik ubah PIN">🔑 <span id="labelPIN">1234</span></span>
         <button class="btn-layar" onclick="toggleLayarPenuh()">⛶</button>
@@ -697,7 +703,6 @@
       <div class="leaderboard-tv">
         <div class="bar-judul-top">
           <div class="judul-top">🏆 Klasemen 10 Besar</div>
-          <!-- TULISAN KELAS : DIIKUTI KOTAK BERSIH KOSONG -->
           <div class="wadah-kelas">
             <span class="teks-label-kelas">KELAS :</span>
             <div id="inputKelasLomba" class="kotak-isi-kelas" contenteditable="true" onblur="simpanKelasLomba()"></div>
@@ -767,6 +772,22 @@
         inisialisasiMonitor(MODE_URL === "penonton");
       }
     });
+
+    /* HAK AKSES PINDAH ROOM: HANYA MASTER YANG BISA */
+    function pindahRoomCepat(){
+      var isMaster = localStorage.getItem('burung_is_master') === "true";
+      if(!isMaster){
+        alert("🔒 Akses Ditolak!\nAnda hanya memiliki lisensi sewa untuk Room " + ROOM_AKTIF + ".");
+        return;
+      }
+      var pilihan = prompt(`[AKSES MASTER ADMIN]\nPilih Room yang ingin dicek (Ketik angka 1 sampai 5):\nSaat ini aktif di Room ${ROOM_AKTIF}`, ROOM_AKTIF);
+      if(pilihan !== null && ["1", "2", "3", "4", "5"].includes(pilihan.trim())){
+        var roomTujuan = pilihan.trim();
+        var url = new URL(window.location.href);
+        url.searchParams.set('room', roomTujuan);
+        window.location.href = url.toString();
+      }
+    }
 
     /* SINKRONISASI KELAS LOMBA */
     function simpanKelasLomba(){
@@ -1132,35 +1153,59 @@
       return Math.abs(hash).toString(16).toUpperCase();
     }
 
+    /* SISTEM KEAMANAN LISENSI: PENYEWA TIDAK BISA INTIK ROOM LAIN */
     function cekStatusSewa(){
       var exp = localStorage.getItem('burung_license_exp');
+      var roomSewa = localStorage.getItem('nomor_room_sewa');
+      var isMaster = localStorage.getItem('burung_is_master') === "true";
       var now = new Date().getTime();
+
+      // 1. Cek masa expired
       if(!exp || now > parseInt(exp)){
-        document.getElementById('lockScreenOverlay').style.display = 'flex';
-        document.getElementById('badgeMasaSewa').innerText = '🔒';
-        document.getElementById('badgeMasaSewa').style.background = '#dc2626';
+        tampilkanKunciOverlay("AKSES SISTEM TERKUNCI", "Masa aktif sewa monitoring telah berakhir.");
         return false;
+      }
+
+      // 2. Jika bukan Master, periksa apakah room URL sama dengan room sewa
+      if(!isMaster && roomSewa && roomSewa !== ROOM_AKTIF){
+        tampilkanKunciOverlay("ROOM TIDAK SESUAI", `Lisensi Anda hanya berlaku untuk Room ${roomSewa}. Anda tidak diizinkan mengakses Room ${ROOM_AKTIF}.`);
+        return false;
+      }
+
+      document.getElementById('lockScreenOverlay').style.display = 'none';
+      if(isMaster){
+        document.getElementById('badgeMasaSewa').innerText = 'MASTER';
+        document.getElementById('badgeMasaSewa').style.background = '#8b5cf6';
       } else {
-        document.getElementById('lockScreenOverlay').style.display = 'none';
         var d = new Date(parseInt(exp));
         document.getElementById('badgeMasaSewa').innerText = `${d.getDate()}/${d.getMonth()+1}`;
         document.getElementById('badgeMasaSewa').style.background = '#15803d';
-        return true;
       }
+      return true;
+    }
+
+    function tampilkanKunciOverlay(judul, pesan){
+      document.getElementById('judulKunciOverlay').innerText = judul;
+      document.getElementById('pesanKunciOverlay').innerText = pesan;
+      document.getElementById('lockScreenOverlay').style.display = 'flex';
+      document.getElementById('badgeMasaSewa').innerText = '🔒';
+      document.getElementById('badgeMasaSewa').style.background = '#dc2626';
     }
 
     function verifikasiLisensiSistem(){
       var input = document.getElementById('inKodeSewa').value.trim().toUpperCase();
       if(!input) return alert('Masukkan kode lisensi!');
 
+      // JIKA MEMASUKKAN PIN MASTER
       if(input === PIN_MASTER){
         localStorage.setItem('burung_license_exp', new Date().getTime() + (365*24*60*60*1000));
-        localStorage.setItem('nomor_room_sewa', "1");
-        alert('🔓 Akses Master Diterima!');
+        localStorage.setItem('burung_is_master', "true");
+        alert('🔓 Akses Master Diterima! Bebas akses Room 1-5.');
         location.reload();
         return;
       }
 
+      // JIKA MEMASUKKAN KODE SEWA TOKEN
       var parts = input.split('-');
       if(parts.length === 4 && parts[0].startsWith("KLG")){
         var roomNo = parts[0].replace("KLG", "");
@@ -1181,10 +1226,15 @@
           var expDate = new Date(thn, bln, tgl, 23, 59, 59).getTime();
 
           if(expDate > new Date().getTime()){
+            // Kunci permanen ke nomor room yang disewa
             localStorage.setItem('nomor_room_sewa', roomNo);
             localStorage.setItem('burung_license_exp', expDate);
+            localStorage.removeItem('burung_is_master'); // Pastikan bukan status master
             alert('🔓 Room ' + roomNo + ' Aktif!');
-            location.reload();
+
+            var url = new URL(window.location.href);
+            url.searchParams.set('room', roomNo);
+            window.location.href = url.toString();
             return;
           }
         }
