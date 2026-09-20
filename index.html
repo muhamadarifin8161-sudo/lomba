@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Sistem Monitoring & Juri</title>
+  <title>Monitoring Penjurian</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
     html, body {
@@ -18,15 +18,15 @@
       padding: 3px 4px;
     }
 
-    /* ========================================================
-       TAMPILAN 1: MONITOR (ADMIN & PENONTON)
-       ======================================================== */
+    /* VIEW MONITOR */
     #viewMonitor {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex: 1;
+      min-height: 0;
       width: 100%;
     }
+
     #lockScreenOverlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -215,7 +215,7 @@
     .gantangan-teks { font-size: 8.5px; font-weight: 800; white-space: nowrap; }
     .poin-teks { font-size: 11px; font-weight: 900; color: #ffeb3b; line-height: 1; }
 
-    /* 150 GANTANGAN */
+    /* 150 GANTANGAN (FLEX AMAN) */
     .area-gantangan-wrapper {
       flex: 1;
       display: flex;
@@ -224,7 +224,7 @@
       background: #0f131f;
       border: 1px solid #1e2638;
       border-radius: 5px;
-      padding: 3px 2px;
+      padding: 2px;
       overflow: hidden;
     }
     .grid-header {
@@ -240,7 +240,7 @@
       flex: 1;
       display: grid;
       grid-template-columns: repeat(15, minmax(0, 1fr));
-      grid-template-rows: repeat(10, minmax(0, 1fr));
+      grid-auto-rows: 1fr;
       gap: 1.5px;
       overflow: hidden;
       width: 100%;
@@ -257,7 +257,8 @@
       overflow: visible;
       position: relative;
       transition: transform 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
-      min-width: 0; min-height: 0;
+      min-width: 0;
+      min-height: 0;
     }
     .box-gantangan .header-no {
       background: #232d44;
@@ -265,7 +266,7 @@
       font-size: 7.5px;
       font-weight: 800;
       text-align: center;
-      line-height: 1.15;
+      line-height: 1.1;
       padding: 1px 0;
       width: 100%;
       display: block;
@@ -342,12 +343,11 @@
     .btn-m-buka { background: #0284c7; color: #fff; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; }
     .btn-m-tutup { background: #334155; color: #cbd5e1; border: none; padding: 6px 12px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-    /* ========================================================
-       TAMPILAN 2: REMOTE INPUT JURI (RESPONSIF TOUCH)
-       ======================================================== */
+    /* VIEW JURI */
     #viewJuri {
       display: none;
       flex-direction: column;
+      flex: 1;
       height: 100%;
       width: 100%;
       padding: 4px;
@@ -488,9 +488,8 @@
 </head>
 <body>
 
-  <!-- ================= TAMPILAN 1: MONITOR (ADMIN / PENONTON) ================= -->
+  <!-- VIEW MONITOR -->
   <div id="viewMonitor">
-    <!-- MODAL LINK -->
     <div id="modalLinkUniversal">
       <div class="box-modal">
         <h4 id="modalJudulTautan" style="color:#38bdf8; font-size:12px; margin-bottom:4px;">🔗 Bagikan Tautan</h4>
@@ -504,7 +503,6 @@
       </div>
     </div>
 
-    <!-- OVERLAY SEWA -->
     <div id="lockScreenOverlay" style="display:none;">
       <div class="lock-box">
         <div style="font-size:2.2rem; margin-bottom:6px;">🔒</div>
@@ -515,7 +513,6 @@
       </div>
     </div>
 
-    <!-- BAR ATAS -->
     <div class="bar-kontrol-atas">
       <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
       <div class="badge-live-penonton" id="badgeLivePenonton" style="display:none;">
@@ -532,23 +529,19 @@
       </div>
     </div>
 
-    <!-- LEADERBOARD TOP 10 -->
     <div class="leaderboard-tv">
       <div class="judul-top">🏆 Klasemen 10 Besar</div>
       <div class="grid-top" id="top10Container"></div>
     </div>
 
-    <!-- 150 GANTANGAN -->
     <div class="area-gantangan-wrapper">
       <div class="grid-header">Status 150 Gantangan:</div>
       <div class="kontainer-150" id="kotak150Container"></div>
     </div>
   </div>
 
-
-  <!-- ================= TAMPILAN 2: REMOTE INPUT JURI ================= -->
+  <!-- VIEW JURI -->
   <div id="viewJuri">
-    <!-- POPUP PIN JURI -->
     <div id="overlayPinJuri">
       <div class="box-pin-juri">
         <h3 style="color:#38bdf8;">KODE PIN JURI</h3>
@@ -564,7 +557,6 @@
     </div>
     <div class="container-juri-grid" id="areaGridJuri"></div>
   </div>
-
 
   <script>
     var urlParams = new URLSearchParams(window.location.search);
@@ -582,18 +574,20 @@
     var FIREBASE_URL = BASE_FIREBASE + "room" + ROOM_AKTIF + "/";
     var PIN_SEKARANG = "1234";
 
-    // ROUTING TAMPILAN BERDASARKAN URL
-    if(MODE_URL === "juri2b" || MODE_URL === "juri3b"){
-      document.getElementById('viewMonitor').style.display = 'none';
-      document.getElementById('viewJuri').style.display = 'flex';
-      inisialisasiJuri(MODE_URL === "juri3b" ? 3 : 2);
-    } else {
-      document.getElementById('viewMonitor').style.display = 'flex';
-      document.getElementById('viewJuri').style.display = 'none';
-      inisialisasiMonitor(MODE_URL === "penonton");
-    }
+    // JALANKAN SETELAH HALAMAN SIAP
+    window.addEventListener('DOMContentLoaded', function(){
+      if(MODE_URL === "juri2b" || MODE_URL === "juri3b"){
+        document.getElementById('viewMonitor').style.display = 'none';
+        document.getElementById('viewJuri').style.display = 'flex';
+        inisialisasiJuri(MODE_URL === "juri3b" ? 3 : 2);
+      } else {
+        document.getElementById('viewMonitor').style.display = 'flex';
+        document.getElementById('viewJuri').style.display = 'none';
+        inisialisasiMonitor(MODE_URL === "penonton");
+      }
+    });
 
-    /* ================= LOGIKA JURI ================= */
+    /* ================= JURI ================= */
     function inisialisasiJuri(jumlahSlot){
       document.getElementById('headerRoomJudulJuri').innerText = "ROOM " + ROOM_AKTIF;
       document.getElementById('headerModeJudulJuri').innerText = jumlahSlot + " BURUNG";
@@ -664,7 +658,7 @@
       btnMinus.addEventListener('click', function(){ if(!('ontouchstart' in window)) eksekusiPoin(-1); });
     }
 
-    /* ================= LOGIKA MONITOR ================= */
+    /* ================= MONITOR ================= */
     var dataSemuaGantangan = {};
     var hitungReset = 0;
     var timerReset = null;
@@ -783,7 +777,6 @@
       });
     }
 
-    /* MODAL TAUTAN */
     function bukaModalTautan(tipe){
       var base = window.location.origin + window.location.pathname;
       var urlTarget = "";
@@ -823,7 +816,6 @@
       }
     }
 
-    /* KONTROL ADMIN & SEWA */
     function hitungHash(str){
       var hash = 0;
       for (var i = 0; i < str.length; i++) {
