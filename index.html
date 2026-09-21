@@ -89,7 +89,6 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .btn-reset-utama:active { transform: scale(0.96); background: #b91c1c !important; }
     .grup-kanan { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
     .badge-room {
       background: #eab308;
@@ -146,7 +145,6 @@
       color: #00e676;
       margin-bottom: 2px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
     .grid-top {
       display: grid;
@@ -239,7 +237,6 @@
     .box-gantangan.hit .no-gtg { color: #000; }
     .box-gantangan.hit .skor-gtg { color: #000 !important; }
 
-    /* --- EFLEK MERAH NEON ATURAN 1 (POMPAM POIN) --- */
     @keyframes kedipMerahNeon {
       0% { background-color: #ff0055; box-shadow: 0 0 12px #ff0055; border-color: #ffffff; }
       50% { background-color: #790022; box-shadow: none; }
@@ -252,17 +249,6 @@
     .box-gantangan.spam-neon .skor-gtg {
       color: #ffffff !important;
     }
-
-    @media (max-height: 480px) and (orientation: landscape) {
-      body { padding: 2px 4px; }
-      .bar-kontrol-atas, .leaderboard-tv { margin-bottom: 2px; padding: 2px 4px; }
-      .btn-reset-utama { padding: 2px 6px !important; font-size: 9px !important; }
-      .kontainer-150 { grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 2px; }
-      .box-gantangan { min-height: 20px; }
-      .box-gantangan .skor-gtg { font-size: 9.5px; }
-      .skor-gtg.tiga-digit { font-size: 8px !important; }
-      .poin-teks { font-size: 10px; }
-    }
   </style>
 </head>
 <body>
@@ -271,8 +257,7 @@
     <div class="lock-box">
       <div style="font-size:2.4rem; margin-bottom:8px;">🔒</div>
       <h3 style="color:#00e676; margin-bottom:6px;">AKSES SISTEM TERKUNCI</h3>
-      <p style="font-size:0.75rem; color:#94a3b8;">Masa aktif sewa monitoring telah berakhir. Silakan masukkan Kode Lisensi dari Pemilik Sistem.</p>
-      
+      <p style="font-size:0.75rem; color:#94a3b8;">Masa aktif sewa monitoring telah berakhir. Silakan masukkan Kode Lisensi.</p>
       <input type="text" id="inKodeSewa" class="input-sewa" placeholder="KLG1-XXXX-XXXX-XXXX">
       <button class="btn-buka-sewa" onclick="verifikasiLisensiSistem()">🔓 BUKA SISTEM</button>
     </div>
@@ -280,11 +265,10 @@
 
   <div class="bar-kontrol-atas">
     <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
-
     <div class="grup-kanan">
       <span class="badge-room" id="badgeRoom">ROOM 1</span>
       <span class="badge-sewa" id="badgeMasaSewa">Aktif</span>
-      <span class="badge-pin" onclick="aturPIN()" title="Klik untuk ubah PIN">🔑 <span id="labelPIN">PIN: 1234</span></span>
+      <span class="badge-pin" onclick="aturPIN()">🔑 <span id="labelPIN">PIN: 1234</span></span>
       <button class="btn-layar" onclick="toggleLayarPenuh()">⛶ Layar Penuh</button>
     </div>
   </div>
@@ -337,52 +321,37 @@
     function verifikasiLisensiSistem(){
       var input = document.getElementById('inKodeSewa').value.trim().toUpperCase();
       if(!input) return alert('Masukkan kode lisensi!');
-
       if(input === PIN_MASTER){
         localStorage.setItem('burung_license_exp', new Date().getTime() + (365*24*60*60*1000));
         localStorage.setItem('nomor_room_sewa', "1");
-        alert('🔓 Akses Master Pemilik Diterima! Room 1 Aktif 1 Tahun.');
+        alert('🔓 Akses Master Pemilik Diterima!');
         location.reload();
         return;
       }
-
       var parts = input.split('-');
       if(parts.length === 4 && parts[0].startsWith("KLG")){
         var roomNo = parts[0].replace("KLG", "");
-        if(!["1", "2", "3", "4", "5"].includes(roomNo)){
-          return alert('❌ Nomor Room dalam kode tidak valid (hanya 1-5)!');
-        }
-
         var gabung = parts[1] + parts[2];
         var checksumInput = parts[3].toUpperCase();
         var angkaStr = '';
-        for(var i = 0; i < gabung.length; i++){
-          angkaStr += (gabung.charCodeAt(i) - 65).toString();
-        }
-
+        for(var i = 0; i < gabung.length; i++){ angkaStr += (gabung.charCodeAt(i) - 65).toString(); }
         var validHash = hitungHash(parts[0] + angkaStr + KUNCI_RAHASIA).substring(0, 5);
-
-        if(checksumInput === validHash && angkaStr.length === 8){
+        if(checksumInput === validHash){
           var thn = parseInt(angkaStr.substring(0, 4));
           var bln = parseInt(angkaStr.substring(4, 6)) - 1;
           var tgl = parseInt(angkaStr.substring(6, 8));
           var expDate = new Date(thn, bln, tgl, 23, 59, 59).getTime();
-
           if(expDate > new Date().getTime()){
             localStorage.setItem('nomor_room_sewa', roomNo);
             localStorage.setItem('burung_license_exp', expDate);
-            alert('🔓 Sistem Berhasil Diaktifkan untuk ROOM ' + roomNo + '!');
             location.reload();
             return;
-          } else {
-            return alert('❌ Masa berlaku lisensi sudah kedaluwarsa!');
           }
         }
       }
-      alert('❌ Kode Lisensi Sewa Tidak Valid!');
+      alert('❌ Kode Lisensi Tidak Valid!');
     }
 
-    setInterval(cekStatusSewa, 60000);
     cekStatusSewa();
 
     var gridContainer = document.getElementById('kotak150Container');
@@ -409,77 +378,53 @@
       gridContainer.appendChild(elDiv);
     }
 
-    var eventSource = new EventSource(`${FIREBASE_URL}.json`);
-    eventSource.addEventListener('put', function(e){
-      if(!cekStatusSewa()) return;
-      var d = JSON.parse(e.data);
-      var p = d.path;
-      var val = d.data;
-
-      if(p === "/" || p === ""){
-        if(val){
-          if(val.skor){
+    // --- SINKRONISASI REALTIME MENGGUNAKAN INTERVAL FETCH (SANGAT STABIL DI GITHUB PAGES) ---
+    function ambilDataServer(){
+      fetch(`${FIREBASE_URL}.json`)
+        .then(res => res.json())
+        .then(data => {
+          if(!data) return;
+          if(data.pin_juri){
+            document.getElementById('labelPIN').innerText = `PIN: ${data.pin_juri}`;
+          }
+          if(data.skor){
             for(var k = 1; k <= 150; k++){
-              var itemSkor = val.skor[k];
-              dataSemuaGantangan[k] = (typeof itemSkor === 'object') ? itemSkor.poin : (itemSkor || 0);
-              pasangSkorElemen(k, dataSemuaGantangan[k]);
-            }
-          } else { resetTampilanLokal(); }
-          if(val.pin_juri){
-            document.getElementById('labelPIN').innerText = `PIN: ${val.pin_juri}`;
-          }
-        } else { resetTampilanLokal(); }
-        perbaruiTop10();
-      } else if(p === "/pin_juri"){
-        document.getElementById('labelPIN').innerText = `PIN: ${val}`;
-      } else if(p === "/skor"){
-        for(var m = 1; m <= 150; m++){
-          var item = val ? val[m] : 0;
-          dataSemuaGantangan[m] = (typeof item === 'object') ? item.poin : (item || 0);
-          pasangSkorElemen(m, dataSemuaGantangan[m]);
-        }
-        perbaruiTop10();
-      } else if(p.startsWith("/skor/")){
-        var gtg = parseInt(p.replace("/skor/", ""));
-        if(gtg >= 1 && gtg <= 150){
-          var poinAkhir = (val && typeof val === 'object') ? val.poin : (val || 0);
-          var isSpam = (val && typeof val === 'object') ? val.isSpam : false;
+              var item = data.skor[k];
+              var nilaiPoin = (typeof item === 'object' && item !== null) ? (item.poin || 0) : (item || 0);
+              var isSpam = (typeof item === 'object' && item !== null) ? (item.isSpam || false) : false;
 
-          dataSemuaGantangan[gtg] = poinAkhir;
-          pasangSkorElemen(gtg, poinAkhir);
-          
-          var b = document.getElementById(`box-${gtg}`);
-          if(b){
-            // DETEKSI KEDIP MERAH NEON ATURAN 1 (JIKA POMPAM POIN SENGASA >= 4 KALI)
-            if(isSpam){
-              b.classList.add('spam-neon');
-              setTimeout(function(){ b.classList.remove('spam-neon'); }, 2500);
-            } else {
-              b.classList.add('hit');
-              setTimeout(function(){ b.classList.remove('hit'); }, 350);
-            }
-          }
-          perbaruiTop10();
-        }
-      }
-    });
+              if(dataSemuaGantangan[k] !== nilaiPoin){
+                dataSemuaGantangan[k] = nilaiPoin;
+                pasangSkorElemen(k, nilaiPoin);
 
-    function resetTampilanLokal(){
-      for(var i = 1; i <= 150; i++){
-        dataSemuaGantangan[i] = 0;
-        pasangSkorElemen(i, 0);
-      }
+                var b = document.getElementById(`box-${k}`);
+                if(b){
+                  if(isSpam){
+                    b.classList.add('spam-neon');
+                    setTimeout(() => b.classList.remove('spam-neon'), 2500);
+                  } else {
+                    b.classList.add('hit');
+                    setTimeout(() => b.classList.remove('hit'), 350);
+                  }
+                }
+              }
+            }
+            perbaruiTop10();
+          }
+        }).catch(err => console.log("Sinkronisasi tertunda"));
     }
+
+    setInterval(ambilDataServer, 1000); // Sinkronisasi otomatis tiap 1 detik
 
     function perbaruiTop10(){
       var list = [];
       for(var i = 1; i <= 150; i++){
         list.push({ no: i, poin: dataSemuaGantangan[i] || 0 });
       }
-      list.sort(function(a,b){ return b.poin - a.poin || a.no - b.no; });
+      list.sort((a, b) => b.poin - a.poin || a.no - b.no);
       var top10 = list.slice(0, 10);
       topContainer.innerHTML = '';
-      top10.forEach(function(item, idx){
+      top10.forEach((item, idx) => {
         var rk = idx + 1;
         var cd = document.createElement('div');
         var cls = rk === 1 ? 'rank-1' : rk === 2 ? 'rank-2' : rk === 3 ? 'rank-3' : '';
@@ -495,47 +440,35 @@
       clearTimeout(timerReset);
       var btn = document.getElementById('btnResetMaster');
       btn.innerText = `(${hitungReset}/3)`;
-
       if(hitungReset >= 3){
-        btn.innerText = "...";
         var dataReset = {};
         for(var i = 1; i <= 150; i++) dataReset[i] = 0;
-
         fetch(`${FIREBASE_URL}skor.json`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dataReset)
-        }).then(function(){
-          resetTampilanLokal();
-          perbaruiTop10();
-          hitungReset = 0;
-          btn.innerText = 'RESET (3x)';
-        }).catch(function(){
-          alert('Gagal menghubungi server!');
-          hitungReset = 0;
-          btn.innerText = 'RESET (3x)';
+        }).then(() => {
+          location.reload();
         });
       } else {
-        timerReset = setTimeout(function(){ hitungReset = 0; btn.innerText = 'RESET (3x)'; }, 3000);
+        timerReset = setTimeout(() => { hitungReset = 0; btn.innerText = 'RESET (3x)'; }, 3000);
       }
     }
 
     function aturPIN(){
       if(!cekStatusSewa()) return;
-      var baru = prompt(`Masukkan PIN Juri Baru untuk Room ${ROOM_AKTIF} (misal: 1234):`);
+      var baru = prompt(`Masukkan PIN Juri Baru untuk Room ${ROOM_AKTIF}:`);
       if(baru !== null && baru.trim() !== ""){
         fetch(`${FIREBASE_URL}pin_juri.json`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(baru.trim())
-        }).then(function(){
-          alert(`PIN Room ${ROOM_AKTIF} berhasil diubah jadi: ${baru.trim()}`);
-        });
+        }).then(() => alert('PIN Berhasil Diubah!'));
       }
     }
 
     function toggleLayarPenuh(){
-      if(!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(function(){}); }
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(()=>{}); }
       else { if(document.exitFullscreen) document.exitFullscreen(); }
     }
   </script>
