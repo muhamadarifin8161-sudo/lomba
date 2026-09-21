@@ -33,8 +33,23 @@
       padding: 4px 8px;
       border-radius: 6px;
     }
+    .btn-header-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
     .btn-reset-block {
       background: #ef4444;
+      color: #fff;
+      border: none;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-history-menu {
+      background: #3b82f6;
       color: #fff;
       border: none;
       font-size: 11px;
@@ -152,6 +167,65 @@
       margin-bottom: 12px;
       text-align: center;
     }
+
+    /* Modal History Kelas */
+    #historyModal {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(9, 13, 22, 0.85);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .history-box {
+      background: #1e293b;
+      border: 2px solid #3b82f6;
+      padding: 16px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 380px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+    }
+    .history-list {
+      overflow-y: auto;
+      flex: 1;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .history-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .history-item-info {
+      font-size: 12px;
+    }
+    .history-item-title {
+      font-weight: bold;
+      color: #38bdf8;
+      font-size: 13px;
+    }
+    .btn-history-reset {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -185,11 +259,31 @@
     </div>
   </div>
 
+  <!-- MODAL RIWAYAT KELAS -->
+  <div id="historyModal">
+    <div class="history-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px;">
+        <h3 style="color:#38bdf8; font-size:15px;">📜 RIWAYAT KELAS & SKOR</h3>
+        <button onclick="tutupHistory()" style="background:none; border:none; color:#94a3b8; font-size:16px; font-weight:bold; cursor:pointer;">✕</button>
+      </div>
+      <div class="history-list" id="kontainerHistory">
+        <div style="text-align:center; color:#64748b; font-size:12px; margin-top:20px;">Memuat riwayat kelas...</div>
+      </div>
+      <button onclick="tutupHistory()" style="width:100%; padding:10px; background:#334155; color:white; border:none; font-weight:bold; border-radius:8px; cursor:pointer; margin-top:4px;">TUTUP</button>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <div class="header-bar">
     <span class="badge-info" id="badgeRoom">ROOM 1</span>
-    <span style="font-size:12px; font-weight:bold; color:#cbd5e1;" id="txtLabelJuri">JURI 1</span>
-    <button class="btn-reset-block" onclick="bukaUlangSetup()">⚙️ Ganti No</button>
+    <div style="text-align:center;">
+      <span style="font-size:12px; font-weight:bold; color:#cbd5e1; display:block;" id="txtLabelJuri">JURI 1</span>
+      <span style="font-size:10px; color:#38bdf8;" id="txtInfoKelas">Kelas: -</span>
+    </div>
+    <div class="btn-header-group">
+      <button class="btn-history-menu" onclick="bukaHistory()">📋 History</button>
+      <button class="btn-reset-block" onclick="bukaUlangSetup()">⚙️ Ganti</button>
+    </div>
   </div>
 
   <!-- GRID 3 TOMBOL BESAR BIRU, HIJAU & ORANYE -->
@@ -240,8 +334,9 @@
     var NO_JURI = parseInt(localStorage.getItem('juri3_nojuri')) || 1;
     var gtgSlot = { 1: 1, 2: 2, 3: 3 };
     var skorLokal = { 1: 0, 2: 0, 3: 0 };
+    var kelasAktif = "-";
     
-    // Variabel pengaman agar angka tidak turun-naik saat tap cepat (menahan sinkronisasi sesaat)
+    // Variabel pengaman anti-glitch saat tap cepat
     var terakhirDipencet = { 1: 0, 2: 0, 3: 0 };
 
     document.getElementById('selRoom').value = ROOM;
@@ -306,27 +401,45 @@
     }
 
     function bacaRealtimeRoom(){
-      var es = new EventSource(`${BASE_URL}room${ROOM}/skor.json`);
+      // Pantau nama kelas yang ditulis dari index
+      fetch(`${BASE_URL}room${ROOM}/info_kelas.json`).then(res => res.json()).then(val => {
+        if(val) {
+          kelasAktif = val;
+          document.getElementById('txtInfoKelas').innerText = "Kelas: " + kelasAktif;
+        }
+      });
+
+      var es = new EventSource(`${BASE_URL}room${ROOM}/.json`);
       es.addEventListener('put', function(e){
         var d = JSON.parse(e.data);
         var waktuSekarang = Date.now();
 
-        if(!d.path || d.path === "/"){
-          if(d.data){
+        // Jika perubahan terjadi pada info_kelas
+        if(d.path === "/info_kelas" || (!d.path && d.data && d.data.info_kelas)){
+          kelasAktif = d.data ? d.data.info_kelas : d.data;
+          if(!kelasAktif) kelasAktif = "-";
+          document.getElementById('txtInfoKelas').innerText = "Kelas: " + kelasAktif;
+        }
+
+        // Jika perubahan terjadi pada skor
+        if(!d.path || d.path === "/" || d.path.startsWith("/skor")){
+          var skorData = d.path === "/" ? d.data.skor : (d.path === "/skor" ? d.data : null);
+          
+          if(skorData){
             for(var s = 1; s <= 3; s++){
               var g = gtgSlot[s];
-              if(d.data[g] !== undefined && (waktuSekarang - terakhirDipencet[s] > 1500)){
-                skorLokal[s] = d.data[g];
-                document.getElementById('skor' + s).innerText = d.data[g];
+              if(skorData[g] !== undefined && (waktuSekarang - terakhirDipencet[s] > 1500)){
+                skorLokal[s] = skorData[g];
+                document.getElementById('skor' + s).innerText = skorData[g];
               }
             }
-          }
-        } else {
-          var no = parseInt(d.path.replace("/", ""));
-          for(var s = 1; s <= 3; s++){
-            if(no === gtgSlot[s] && (waktuSekarang - terakhirDipencet[s] > 1500)){
-              skorLokal[s] = d.data || 0;
-              document.getElementById('skor' + s).innerText = skorLokal[s];
+          } else if(d.path && d.path.startsWith("/skor/")) {
+            var no = parseInt(d.path.replace("/skor/", ""));
+            for(var s = 1; s <= 3; s++){
+              if(no === gtgSlot[s] && (waktuSekarang - terakhirDipencet[s] > 1500)){
+                skorLokal[s] = d.data || 0;
+                document.getElementById('skor' + s).innerText = skorLokal[s];
+              }
             }
           }
         }
@@ -335,19 +448,99 @@
 
     function tambahPoin(slot){
       var g = gtgSlot[slot];
-      
-      // Catat waktu klik agar update server yang terlambat tertahan sementara (cegah turun-naik)
       terakhirDipencet[slot] = Date.now();
       
       var baru = (skorLokal[slot] || 0) + 1;
       skorLokal[slot] = baru;
       document.getElementById('skor' + slot).innerText = baru;
 
+      // Kirim skor ke server untuk gantangan ini
       fetch(`${BASE_URL}room${ROOM}/skor/${g}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(baru)
       });
+
+      // Otomatis simpan juga ke history riwayat kelas aktif jika ada kelas
+      if(kelasAktif && kelasAktif !== "-"){
+        var historyKey = kelasAktif.replace(/[.#$\/\[\]]/g, "_");
+        fetch(`${BASE_URL}room${ROOM}/history_kelas/${historyKey}/skor/${g}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(baru)
+        });
+      }
+    }
+
+    function bukaHistory(){
+      document.getElementById('historyModal').style.display = 'flex';
+      muatDataHistory();
+    }
+
+    function tutupHistory(){
+      document.getElementById('historyModal').style.display = 'none';
+    }
+
+    function muatDataHistory(){
+      var kontainer = document.getElementById('kontainerHistory');
+      kontainer.innerHTML = `<div style="text-align:center; color:#64748b; font-size:12px; margin-top:20px;">Memuat riwayat...</div>`;
+
+      fetch(`${BASE_URL}room${ROOM}/history_kelas.json`).then(res => res.json()).then(data => {
+        if(!data){
+          kontainer.innerHTML = `<div style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">Belum ada riwayat kelas tersimpan.</div>`;
+          return;
+        }
+
+        kontainer.innerHTML = "";
+        Object.keys(data).forEach(key => {
+          var item = data[key];
+          var namaAsli = item.nama_kelas || key;
+          var skorList = item.skor || {};
+          
+          var rincianSkor = `Gantangan ${gtgSlot[1]}: ${skorList[gtgSlot[1]] || 0} | Gantangan ${gtgSlot[2]}: ${skorList[gtgSlot[2]] || 0} | Gantangan ${gtgSlot[3]}: ${skorList[gtgSlot[3]] || 0}`;
+
+          var div = document.createElement('div');
+          div.className = 'history-item';
+          div.innerHTML = `
+            <div class="history-item-info">
+              <div class="history-item-title">${namaAsli}</div>
+              <div style="color:#cbd5e1; margin-top:2px;">${rincianSkor}</div>
+            </div>
+            <button class="btn-history-reset" onclick="konfirmasiResetHistory('${key}', this)" data-klik="0">RESET (0/3)</button>
+          `;
+          kontainer.appendChild(div);
+        });
+      }).catch(() => {
+        kontainer.innerHTML = `<div style="text-align:center; color:#ef4444; font-size:12px; margin-top:20px;">Gagal memuat data history.</div>`;
+      });
+    }
+
+    // Fitur pengamanan reset 3x klik
+    function konfirmasiResetHistory(key, btn){
+      var klikCount = parseInt(btn.getAttribute('data-klik')) + 1;
+      
+      if(klikCount < 3){
+        btn.setAttribute('data-klik', klikCount);
+        btn.innerText = `YAKIN? (${klikCount}/3)`;
+        btn.style.background = "#f59e0b"; // Warna kuning peringatan
+        
+        // Reset hitungan kalau tidak ditekan lagi dalam 3 detik
+        setTimeout(() => {
+          if(btn.getAttribute('data-klik') == klikCount){
+            btn.setAttribute('data-klik', '0');
+            btn.innerText = "RESET (0/3)";
+            btn.style.background = "#ef4444";
+          }
+        }, 3000);
+      } else {
+        // Jika sudah 3x klik, hapus data riwayat kelas tersebut di Firebase
+        btn.innerText = "MENGHAPUS...";
+        fetch(`${BASE_URL}room${ROOM}/history_kelas/${key}.json`, {
+          method: 'DELETE'
+        }).then(() => {
+          muatDataHistory();
+        });
+      }
     }
   </script>
 </body>
