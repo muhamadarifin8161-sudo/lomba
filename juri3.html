@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Juri Pantau 3 Burung - Auto Lanskap</title>
+  <title>Juri Pantau 3 Burung - Auto Lanskap Murni</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     
-    /* MEMAKSA TAMPILAN MENJADI LANDSCAPE DI LAYAR HP (ROTASI OTOMATIS CSS) */
+    /* MENGUNCI BODY AGAR SELALU LANDSCAPE SECARA OTOMATIS DI HP */
     html, body {
       width: 100vw;
       height: 100vh;
@@ -16,28 +16,29 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* KONTTAINER UTAMA YANG DIPUTAR 90 DERAJAT JIKA HP POSISI BERDIRI */
+    /* KONTTAINER YANG MEMBALIK ORIENTASI SECARA DIGITAL JADI LANDSCAPE */
     #app-wrapper {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
       width: 100vh;
       height: 100vw;
-      transform-origin: top left;
-      transform: rotate(90deg) translateY(-100%);
+      transform: translate(-50%, -50%) rotate(90deg);
+      transform-origin: center center;
       background: #090d16;
       display: flex;
       flex-direction: column;
     }
 
-    /* JIKA HP SUDAH DALAM POSISI LANDSCAPE ALAMI */
-    @media (min-aspect-ratio: 16/9) {
+    /* JIKA PERANGKAT SUDAH DALAM POSISI LANDSCAPE ALAMI */
+    @media (min-aspect-ratio: 4/3) {
       #app-wrapper {
-        transform: none;
-        width: 100vw;
-        height: 100vh;
+        position: relative;
         top: 0;
         left: 0;
+        width: 100vw;
+        height: 100vh;
+        transform: none;
       }
     }
 
@@ -49,7 +50,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 8px;
+      padding: 0 10px;
       flex-shrink: 0;
     }
     .badge-info {
@@ -86,24 +87,24 @@
       cursor: pointer;
     }
 
-    /* GRID 3 KOLOM LANSKAP */
+    /* GRID 3 KOLOM LANSKAP TEBAL */
     .grid-container {
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
-      padding: 6px;
+      gap: 8px;
+      padding: 8px;
       height: calc(100% - 34px);
     }
     .slot-card {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-radius: 10px;
-      padding: 6px 8px;
+      border-radius: 12px;
+      padding: 8px 10px;
       position: relative;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       transition: transform 0.04s ease, filter 0.04s ease;
       touch-action: manipulation;
       height: 100%;
@@ -112,21 +113,21 @@
       transform: scale(0.97);
       filter: brightness(1.2);
     }
-    .slot-biru { background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border: 2.5px solid #38bdf8; }
-    .slot-hijau { background: linear-gradient(180deg, #16a34a 0%, #15803d 100%); border: 2.5px solid #4ade80; }
-    .slot-oranye { background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%); border: 2.5px solid #fb923c; }
+    .slot-biru { background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border: 3px solid #38bdf8; }
+    .slot-hijau { background: linear-gradient(180deg, #16a34a 0%, #15803d 100%); border: 3px solid #4ade80; }
+    .slot-oranye { background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%); border: 3px solid #fb923c; }
 
     .gtg-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.35);
       border-radius: 6px;
-      padding: 2px 8px;
+      padding: 3px 8px;
     }
-    .gtg-label { font-size: 9px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
+    .gtg-label { font-size: 10px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
     .gtg-number {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 1px 2px rgba(0,0,0,0.6);
@@ -141,26 +142,27 @@
       flex: 1;
     }
     .skor-angka {
-      font-size: 3.6rem;
+      font-size: 4rem;
       font-weight: 900;
       color: #fef08a;
       text-shadow: 0 3px 8px rgba(0,0,0,0.7);
       line-height: 1;
     }
     .skor-caption {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
       color: rgba(255,255,255,0.85);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
+    /* TOMBOL +1 DIBUAT TEBAL DAN NYAMAN UNTUK JARI */
     .btn-tap-area {
-      background: rgba(255,255,255,0.22);
-      border: 1.5px solid rgba(255,255,255,0.4);
-      border-radius: 6px;
-      padding: 8px 0;
+      background: rgba(255,255,255,0.25);
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 8px;
+      padding: 10px 0;
       text-align: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
@@ -262,7 +264,7 @@
 </head>
 <body>
 
-  <!-- SEMUA ELEMEN DIBUNGKUS DALAM WRAPPER AGAR OTOMATIS MENJADI LANDSCAPE -->
+  <!-- KONTTAINER WRAPPER UTAMA -->
   <div id="app-wrapper">
 
     <!-- MODAL PENGATURAN AWAL JURI -->
@@ -321,7 +323,7 @@
       </div>
     </div>
 
-    <!-- GRID 3 KOLOM LANSKAP -->
+    <!-- GRID 3 KOLOM LANSKAP TEBAL -->
     <div class="grid-container">
       <!-- BURUNG 1 (BIRU) -->
       <div class="slot-card slot-biru" onclick="tambahPoin(1)">
