@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Juri Pantau 3 Burung</title>
+  <title>Juri Pantau 3 Burung - Lanskap</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     html, body {
@@ -15,90 +15,97 @@
       display: flex;
       flex-direction: column;
     }
+
+    /* BAR ATAS: DIBUAT KECIL / TIPIS NAMUN TETAP NYAMAN DIPENCET */
     .header-bar {
-      height: 48px;
+      height: 34px;
       background: #0f172a;
-      border-bottom: 2px solid #1e293b;
+      border-bottom: 1px solid #1e293b;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 12px;
+      padding: 0 8px;
       flex-shrink: 0;
     }
     .badge-info {
       background: #334155;
       color: #38bdf8;
       font-weight: 900;
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 6px;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
     }
     .btn-header-group {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       align-items: center;
     }
     .btn-reset-block {
       background: #ef4444;
       color: #fff;
       border: none;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
       cursor: pointer;
     }
     .btn-history-menu {
       background: #3b82f6;
       color: #fff;
       border: none;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
       cursor: pointer;
     }
+
+    /* GRID LANSKAP: TIGA KOLOM MELEBAR KE SAMPING AGAR JARI TIDAK MELESET */
     .grid-container {
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 6px;
       padding: 6px;
+      height: calc(100% - 34px);
     }
-    /* Tombol Besar Biru, Hijau & Oranye */
     .slot-card {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-radius: 12px;
-      padding: 8px 4px;
+      border-radius: 10px;
+      padding: 6px 8px;
       position: relative;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      transition: transform 0.05s ease, filter 0.05s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+      transition: transform 0.04s ease, filter 0.04s ease;
       touch-action: manipulation;
+      height: 100%;
     }
     .slot-card:active {
       transform: scale(0.97);
       filter: brightness(1.2);
     }
-    .slot-biru { background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border: 3px solid #38bdf8; }
-    .slot-hijau { background: linear-gradient(180deg, #16a34a 0%, #15803d 100%); border: 3px solid #4ade80; }
-    .slot-oranye { background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%); border: 3px solid #fb923c; }
+    .slot-biru { background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border: 2.5px solid #38bdf8; }
+    .slot-hijau { background: linear-gradient(180deg, #16a34a 0%, #15803d 100%); border: 2.5px solid #4ade80; }
+    .slot-oranye { background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%); border: 2.5px solid #fb923c; }
 
     .gtg-header {
-      text-align: center;
-      background: rgba(0,0,0,0.35);
-      border-radius: 8px;
-      padding: 4px 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.3);
+      border-radius: 6px;
+      padding: 2px 8px;
     }
-    .gtg-label { font-size: 10px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
+    .gtg-label { font-size: 9px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
     .gtg-number {
-      font-size: 1.9rem;
+      font-size: 1.2rem;
       font-weight: 900;
       color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-      line-height: 1.1;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+      line-height: 1;
     }
     .skor-center {
       text-align: center;
@@ -109,29 +116,29 @@
       flex: 1;
     }
     .skor-angka {
-      font-size: 4.8rem;
+      font-size: 3.6rem;
       font-weight: 900;
       color: #fef08a;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.7);
+      text-shadow: 0 3px 8px rgba(0,0,0,0.7);
       line-height: 1;
     }
     .skor-caption {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       color: rgba(255,255,255,0.85);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
     .btn-tap-area {
-      background: rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
-      padding: 12px 0;
+      background: rgba(255,255,255,0.22);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 6px;
+      padding: 8px 0;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 900;
       color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
 
     /* Modal Setup Juri */
@@ -148,7 +155,7 @@
     .login-box {
       background: #1e293b;
       border: 2px solid #38bdf8;
-      padding: 20px;
+      padding: 16px;
       border-radius: 12px;
       width: 100%;
       max-width: 340px;
@@ -157,14 +164,14 @@
     }
     .input-field {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       background: #0f172a;
       color: #38bdf8;
       border: 1px solid #475569;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      border-radius: 6px;
+      font-size: 1rem;
       font-weight: bold;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       text-align: center;
     }
 
@@ -182,10 +189,10 @@
     .history-box {
       background: #1e293b;
       border: 2px solid #3b82f6;
-      padding: 16px;
+      padding: 14px;
       border-radius: 12px;
       width: 100%;
-      max-width: 380px;
+      max-width: 420px;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
@@ -194,36 +201,36 @@
     .history-list {
       overflow-y: auto;
       flex: 1;
-      margin: 10px 0;
+      margin: 8px 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .history-item {
       background: #0f172a;
       border: 1px solid #334155;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 8px;
+      border-radius: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .history-item-info {
-      font-size: 12px;
+      font-size: 11px;
     }
     .history-item-title {
       font-weight: bold;
       color: #38bdf8;
-      font-size: 13px;
+      font-size: 12px;
     }
     .btn-history-reset {
       background: #ef4444;
       color: white;
       border: none;
-      padding: 6px 10px;
-      font-size: 11px;
+      padding: 5px 8px;
+      font-size: 10px;
       font-weight: bold;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
     }
   </style>
@@ -233,10 +240,10 @@
   <!-- MODAL PENGATURAN AWAL JURI -->
   <div id="loginOverlay">
     <div class="login-box">
-      <h3 style="color:#38bdf8; margin-bottom:12px;">PENGATURAN JURI (PANTAU 3)</h3>
+      <h3 style="color:#38bdf8; margin-bottom:8px; font-size:14px;">PENGATURAN JURI (PANTAU 3)</h3>
       
-      <label style="font-size:11px; color:#94a3b8; display:block; text-align:left; margin-bottom:4px;">PILIH ROOM:</label>
-      <select id="selRoom" class="input-field" style="font-size:0.95rem;">
+      <label style="font-size:10px; color:#94a3b8; display:block; text-align:left; margin-bottom:2px;">PILIH ROOM:</label>
+      <select id="selRoom" class="input-field" style="font-size:0.9rem;">
         <option value="1">ROOM 1</option>
         <option value="2">ROOM 2</option>
         <option value="3">ROOM 3</option>
@@ -244,16 +251,16 @@
         <option value="5">ROOM 5</option>
       </select>
 
-      <label style="font-size:11px; color:#94a3b8; display:block; text-align:left; margin-bottom:4px;">NOMOR JURI (MISAL 1, 2, 3...):</label>
+      <label style="font-size:10px; color:#94a3b8; display:block; text-align:left; margin-bottom:2px;">NOMOR JURI (MISAL 1, 2, 3...):</label>
       <input type="number" id="inNoJuri" class="input-field" placeholder="No Juri" value="1" oninput="hitungOtomatisGtg()">
 
-      <div id="previewJatah" style="background:#0f172a; padding:8px; border-radius:6px; font-size:12px; color:#4ade80; margin-bottom:12px; font-weight:bold;">
+      <div id="previewJatah" style="background:#0f172a; padding:6px; border-radius:6px; font-size:11px; color:#4ade80; margin-bottom:8px; font-weight:bold;">
         Jatah Gantangan: 1, 2, dan 3
       </div>
 
       <input type="password" id="inPin" class="input-field" placeholder="PIN JURI" style="letter-spacing:4px;">
 
-      <button onclick="masukJuri()" style="width:100%; padding:14px; background:#16a34a; color:white; border:none; font-weight:900; font-size:1rem; border-radius:8px; cursor:pointer;">
+      <button onclick="masukJuri()" style="width:100%; padding:10px; background:#16a34a; color:white; border:none; font-weight:900; font-size:0.95rem; border-radius:6px; cursor:pointer;">
         MULAI PENJURIAN ➔
       </button>
     </div>
@@ -262,22 +269,22 @@
   <!-- MODAL RIWAYAT KELAS -->
   <div id="historyModal">
     <div class="history-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px;">
-        <h3 style="color:#38bdf8; font-size:15px;">📜 RIWAYAT KELAS & SKOR</h3>
-        <button onclick="tutupHistory()" style="background:none; border:none; color:#94a3b8; font-size:16px; font-weight:bold; cursor:pointer;">✕</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:6px;">
+        <h3 style="color:#38bdf8; font-size:13px;">📜 RIWAYAT KELAS & SKOR</h3>
+        <button onclick="tutupHistory()" style="background:none; border:none; color:#94a3b8; font-size:14px; font-weight:bold; cursor:pointer;">✕</button>
       </div>
       <div class="history-list" id="kontainerHistory">
-        <div style="text-align:center; color:#64748b; font-size:12px; margin-top:20px;">Memuat riwayat kelas...</div>
+        <div style="text-align:center; color:#64748b; font-size:11px; margin-top:20px;">Memuat riwayat kelas...</div>
       </div>
-      <button onclick="tutupHistory()" style="width:100%; padding:10px; background:#334155; color:white; border:none; font-weight:bold; border-radius:8px; cursor:pointer; margin-top:4px;">TUTUP</button>
+      <button onclick="tutupHistory()" style="width:100%; padding:8px; background:#334155; color:white; border:none; font-weight:bold; border-radius:6px; cursor:pointer; margin-top:2px; font-size:11px;">TUTUP</button>
     </div>
   </div>
 
-  <!-- HEADER -->
+  <!-- HEADER TIPIS/COMPACT -->
   <div class="header-bar">
     <span class="badge-info" id="badgeRoom">ROOM 1</span>
-    <div style="text-align:center;">
-      <span style="font-size:12px; font-weight:bold; color:#cbd5e1; display:block;" id="txtLabelJuri">JURI 1</span>
+    <div style="text-align:center; display:flex; gap:6px; align-items:center;">
+      <span style="font-size:11px; font-weight:bold; color:#cbd5e1;" id="txtLabelJuri">JURI 1</span>
       <span style="font-size:10px; color:#38bdf8;" id="txtInfoKelas">Kelas: -</span>
     </div>
     <div class="btn-header-group">
@@ -286,12 +293,12 @@
     </div>
   </div>
 
-  <!-- GRID 3 TOMBOL BESAR BIRU, HIJAU & ORANYE -->
+  <!-- GRID 3 KOLOM LANSKAP -->
   <div class="grid-container">
     <!-- BURUNG 1 (BIRU) -->
     <div class="slot-card slot-biru" onclick="tambahPoin(1)">
       <div class="gtg-header">
-        <div class="gtg-label">NO GANTANGAN</div>
+        <div class="gtg-label">GANTANGAN</div>
         <div class="gtg-number" id="labelGtg1">-</div>
       </div>
       <div class="skor-center">
@@ -304,7 +311,7 @@
     <!-- BURUNG 2 (HIJAU) -->
     <div class="slot-card slot-hijau" onclick="tambahPoin(2)">
       <div class="gtg-header">
-        <div class="gtg-label">NO GANTANGAN</div>
+        <div class="gtg-label">GANTANGAN</div>
         <div class="gtg-number" id="labelGtg2">-</div>
       </div>
       <div class="skor-center">
@@ -317,7 +324,7 @@
     <!-- BURUNG 3 (ORANYE) -->
     <div class="slot-card slot-oranye" onclick="tambahPoin(3)">
       <div class="gtg-header">
-        <div class="gtg-label">NO GANTANGAN</div>
+        <div class="gtg-label">GANTANGAN</div>
         <div class="gtg-number" id="labelGtg3">-</div>
       </div>
       <div class="skor-center">
@@ -401,7 +408,6 @@
     }
 
     function bacaRealtimeRoom(){
-      // Pantau nama kelas yang ditulis dari index
       fetch(`${BASE_URL}room${ROOM}/info_kelas.json`).then(res => res.json()).then(val => {
         if(val) {
           kelasAktif = val;
@@ -414,14 +420,12 @@
         var d = JSON.parse(e.data);
         var waktuSekarang = Date.now();
 
-        // Jika perubahan terjadi pada info_kelas
         if(d.path === "/info_kelas" || (!d.path && d.data && d.data.info_kelas)){
           kelasAktif = d.data ? d.data.info_kelas : d.data;
           if(!kelasAktif) kelasAktif = "-";
           document.getElementById('txtInfoKelas').innerText = "Kelas: " + kelasAktif;
         }
 
-        // Jika perubahan terjadi pada skor
         if(!d.path || d.path === "/" || d.path.startsWith("/skor")){
           var skorData = d.path === "/" ? d.data.skor : (d.path === "/skor" ? d.data : null);
           
@@ -454,14 +458,12 @@
       skorLokal[slot] = baru;
       document.getElementById('skor' + slot).innerText = baru;
 
-      // Kirim skor ke server untuk gantangan ini
       fetch(`${BASE_URL}room${ROOM}/skor/${g}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(baru)
       });
 
-      // Otomatis simpan juga ke history riwayat kelas aktif jika ada kelas
       if(kelasAktif && kelasAktif !== "-"){
         var historyKey = kelasAktif.replace(/[.#$\/\[\]]/g, "_");
         fetch(`${BASE_URL}room${ROOM}/history_kelas/${historyKey}/skor/${g}.json`, {
@@ -483,11 +485,11 @@
 
     function muatDataHistory(){
       var kontainer = document.getElementById('kontainerHistory');
-      kontainer.innerHTML = `<div style="text-align:center; color:#64748b; font-size:12px; margin-top:20px;">Memuat riwayat...</div>`;
+      kontainer.innerHTML = `<div style="text-align:center; color:#64748b; font-size:11px; margin-top:20px;">Memuat riwayat...</div>`;
 
       fetch(`${BASE_URL}room${ROOM}/history_kelas.json`).then(res => res.json()).then(data => {
         if(!data){
-          kontainer.innerHTML = `<div style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">Belum ada riwayat kelas tersimpan.</div>`;
+          kontainer.innerHTML = `<div style="text-align:center; color:#94a3b8; font-size:11px; margin-top:20px;">Belum ada riwayat kelas tersimpan.</div>`;
           return;
         }
 
@@ -511,20 +513,18 @@
           kontainer.appendChild(div);
         });
       }).catch(() => {
-        kontainer.innerHTML = `<div style="text-align:center; color:#ef4444; font-size:12px; margin-top:20px;">Gagal memuat data history.</div>`;
+        kontainer.innerHTML = `<div style="text-align:center; color:#ef4444; font-size:11px; margin-top:20px;">Gagal memuat data history.</div>`;
       });
     }
 
-    // Fitur pengamanan reset 3x klik
     function konfirmasiResetHistory(key, btn){
       var klikCount = parseInt(btn.getAttribute('data-klik')) + 1;
       
       if(klikCount < 3){
         btn.setAttribute('data-klik', klikCount);
         btn.innerText = `YAKIN? (${klikCount}/3)`;
-        btn.style.background = "#f59e0b"; // Warna kuning peringatan
+        btn.style.background = "#f59e0b";
         
-        // Reset hitungan kalau tidak ditekan lagi dalam 3 detik
         setTimeout(() => {
           if(btn.getAttribute('data-klik') == klikCount){
             btn.setAttribute('data-klik', '0');
@@ -533,7 +533,6 @@
           }
         }, 3000);
       } else {
-        // Jika sudah 3x klik, hapus data riwayat kelas tersebut di Firebase
         btn.innerText = "MENGHAPUS...";
         fetch(`${BASE_URL}room${ROOM}/history_kelas/${key}.json`, {
           method: 'DELETE'
