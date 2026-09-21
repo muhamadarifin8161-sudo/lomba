@@ -2,12 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
-  <title>Juri Pantau 3 Burung - Landscape Lock</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Juri Pantau 3 Burung - Landscape View</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     
-    /* PAKSA BODY JADI LANDSCAPE MURNI MENYAMPING */
     html, body {
       width: 100vw;
       height: 100vh;
@@ -20,7 +19,7 @@
 
     /* BAR ATAS: TIPIS DAN COMPACT */
     .header-bar {
-      height: 34px;
+      height: 36px;
       background: #0f172a;
       border-bottom: 1px solid #1e293b;
       display: flex;
@@ -63,21 +62,21 @@
       cursor: pointer;
     }
 
-    /* GRID 3 KOLOM LANSKAP TEBAL */
+    /* GRID 3 KOLOM BERDERET MENYAMPING (TERKESAN LANDSCAPE DI LAYAR HP) */
     .grid-container {
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      padding: 8px;
-      height: calc(100% - 34px);
+      gap: 6px;
+      padding: 6px;
+      height: calc(100% - 36px);
     }
     .slot-card {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-radius: 12px;
-      padding: 8px 10px;
+      border-radius: 10px;
+      padding: 6px;
       position: relative;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
@@ -99,11 +98,11 @@
       align-items: center;
       background: rgba(0,0,0,0.35);
       border-radius: 6px;
-      padding: 3px 8px;
+      padding: 2px 6px;
     }
-    .gtg-label { font-size: 10px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
+    .gtg-label { font-size: 9px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
     .gtg-number {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 1px 2px rgba(0,0,0,0.6);
@@ -118,26 +117,27 @@
       flex: 1;
     }
     .skor-angka {
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 900;
       color: #fef08a;
       text-shadow: 0 3px 8px rgba(0,0,0,0.7);
       line-height: 1;
     }
     .skor-caption {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       color: rgba(255,255,255,0.85);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
+    /* TOMBOL TAMBAH POIN DIPERLUAS AGAR AMAN UNTUK JARI */
     .btn-tap-area {
       background: rgba(255,255,255,0.25);
       border: 2px solid rgba(255,255,255,0.5);
       border-radius: 8px;
-      padding: 10px 0;
+      padding: 12px 0;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
@@ -295,7 +295,7 @@
     </div>
   </div>
 
-  <!-- GRID 3 KOLOM LANSKAP TEBAL -->
+  <!-- GRID 3 KOLOM BERDERET MENYAMPING -->
   <div class="grid-container">
     <!-- BURUNG 1 (BIRU) -->
     <div class="slot-card slot-biru" onclick="tambahPoin(1)">
@@ -307,7 +307,7 @@
         <div class="skor-caption">POIN</div>
         <div class="skor-angka" id="skor1">0</div>
       </div>
-      <div class="btn-tap-area">+1</div>
+      <div class="btn-tap-area">+1 TAMBAH</div>
     </div>
 
     <!-- BURUNG 2 (HIJAU) -->
@@ -320,7 +320,7 @@
         <div class="skor-caption">POIN</div>
         <div class="skor-angka" id="skor2">0</div>
       </div>
-      <div class="btn-tap-area">+1</div>
+      <div class="btn-tap-area">+1 TAMBAH</div>
     </div>
 
     <!-- BURUNG 3 (ORANYE) -->
@@ -333,18 +333,11 @@
         <div class="skor-caption">POIN</div>
         <div class="skor-angka" id="skor3">0</div>
       </div>
-      <div class="btn-tap-area">+1</div>
+      <div class="btn-tap-area">+1 TAMBAH</div>
     </div>
   </div>
 
   <script>
-    // PERINTAH OTOMATIS KUNCI LAYAR KE LANDSCAPE LEWAT API BROWSER
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock("landscape").catch(function() {
-        // Jika diblokir browser, abaikan agar aplikasi tetap berjalan normal
-      });
-    }
-
     var BASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
     var ROOM = localStorage.getItem('juri3_room') || "1";
     var NO_JURI = parseInt(localStorage.getItem('juri3_nojuri')) || 1;
