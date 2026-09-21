@@ -27,15 +27,6 @@
       margin-bottom: 4px;
     }
     .badge-room { background: #eab308; color: #000; font-weight: 900; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
-    .select-kelas {
-      background: #0f1015;
-      color: #00e676;
-      border: 1px solid #38bdf8;
-      font-weight: bold;
-      font-size: 10px;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
     .grid-3b {
       flex: 1;
       display: grid;
@@ -69,17 +60,8 @@
       border-radius: 6px;
       padding: 6px 0;
       border: 1px dashed #475569;
-      position: relative;
     }
     .skor-angka { font-size: 1.9rem; font-weight: 900; color: #ffeb3b; }
-    .warning-text {
-      color: #ff3838;
-      font-size: 9px;
-      font-weight: 900;
-      display: none;
-      text-transform: uppercase;
-      margin-top: 1px;
-    }
     .btn-tambah {
       background: #00e676;
       color: #000;
@@ -121,7 +103,6 @@
       margin-bottom: 10px;
       font-weight: bold;
     }
-    .status-offline { font-size: 9px; font-weight: bold; color: #ff3838; display: none; }
   </style>
 </head>
 <body>
@@ -143,20 +124,8 @@
   </div>
 
   <div class="header-bar">
-    <div>
-      <span style="font-size:11px; font-weight:bold;">PANTAU 3</span>
-      <span id="statusOffline" class="status-offline"> (OFFLINE)</span>
-    </div>
-    <div style="display:flex; gap:4px; align-items:center;">
-      <select id="selKelas" class="select-kelas" onchange="gantiKelas()">
-        <option value="Dewasa Senior">Dewasa Senior</option>
-        <option value="Dewasa Yunior">Dewasa Yunior</option>
-        <option value="Hanging">Hanging</option>
-        <option value="Bebas">Bebas</option>
-      </select>
-      <button onclick="resetKelasIni()" style="background:#dc2626; color:#fff; border:none; padding:2px 4px; font-size:8px; border-radius:3px; font-weight:bold;">RESET</button>
-      <span class="badge-room" id="badgeRoom">ROOM 1</span>
-    </div>
+    <span style="font-size:12px; font-weight:bold;">JURI PANTAU 3</span>
+    <span class="badge-room" id="badgeRoom">ROOM 1</span>
   </div>
 
   <div class="grid-3b">
@@ -168,7 +137,6 @@
       <div class="monitor-skor">
         <div style="font-size:9px; color:#94a3b8;">SKOR</div>
         <div class="skor-angka" id="skor1">0</div>
-        <div class="warning-text" id="warn1">JANGAN CURANG!</div>
       </div>
       <button class="btn-tambah" onclick="tambahPoin(1)">+1</button>
     </div>
@@ -181,7 +149,6 @@
       <div class="monitor-skor">
         <div style="font-size:9px; color:#94a3b8;">SKOR</div>
         <div class="skor-angka" id="skor2">0</div>
-        <div class="warning-text" id="warn2">JANGAN CURANG!</div>
       </div>
       <button class="btn-tambah" onclick="tambahPoin(2)">+1</button>
     </div>
@@ -194,7 +161,6 @@
       <div class="monitor-skor">
         <div style="font-size:9px; color:#94a3b8;">SKOR</div>
         <div class="skor-angka" id="skor3">0</div>
-        <div class="warning-text" id="warn3">JANGAN CURANG!</div>
       </div>
       <button class="btn-tambah" onclick="tambahPoin(3)">+1</button>
     </div>
@@ -202,13 +168,11 @@
 
   <script>
     var BASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
-    var ROOM = localStorage.getItem('juri_room3') || "1";
+    var urlParams = new URLSearchParams(window.location.search);
+    var ROOM = urlParams.get('r') || localStorage.getItem('juri_room3') || "1";
     document.getElementById('selRoom').value = ROOM;
 
     var skorLokal = { 1: 0, 2: 0, 3: 0 };
-    var catatanKlik = {};
-    var timerWarn = { 1: null, 2: null, 3: null };
-    var audioAlarm = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
 
     function masukJuri(){
       var r = document.getElementById('selRoom').value;
@@ -216,34 +180,37 @@
       
       fetch(`${BASE_URL}room${r}/pin_juri.json`).then(res => res.json()).then(pinServer => {
         var validPin = pinServer || "1234";
-        if(pinInput === validPin || pinInput === "889900" || pinInput === ""){
+        if(pinInput === validPin || pinInput === "889900"){
           ROOM = r;
           localStorage.setItem('juri_room3', ROOM);
           document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
           document.getElementById('loginOverlay').style.display = 'none';
-          setInterval(sinkronisasiSkorJuri3, 1500);
-          prosesAntreanOffline();
+          bacaRealtimeRoom();
         } else {
           alert('❌ PIN Juri Salah!');
         }
-      }).catch(() => {
-        ROOM = r;
-        document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
-        document.getElementById('loginOverlay').style.display = 'none';
-        setInterval(sinkronisasiSkorJuri3, 1500);
-      });
+      }).catch(() => alert('Gagal koneksi ke server!'));
     }
 
-    function sinkronisasiSkorJuri3(){
-      for(var s = 1; s <= 3; s++){
-        var g = parseInt(document.getElementById('gtg' + s).value);
-        if(g){
-          fetch(`${BASE_URL}room${ROOM}/skor/${g}.json`).then(r => r.json()).then(val => {
-            var poin = (val && typeof val === 'object') ? (val.poin || 0) : (val || 0);
-            setAngka(s, poin);
-          }).catch(()=>{});
+    function bacaRealtimeRoom(){
+      var es = new EventSource(`${BASE_URL}room${ROOM}/skor.json`);
+      es.addEventListener('put', function(e){
+        var d = JSON.parse(e.data);
+        if(!d.path || d.path === "/"){
+          if(d.data){
+            for(var s = 1; s <= 3; s++){
+              var g = parseInt(document.getElementById('gtg' + s).value);
+              if(g && d.data[g] !== undefined) setAngka(s, d.data[g]);
+            }
+          }
+        } else {
+          var no = parseInt(d.path.replace("/", ""));
+          for(var s = 1; s <= 3; s++){
+            var g = parseInt(document.getElementById('gtg' + s).value);
+            if(no === g) setAngka(s, d.data || 0);
+          }
         }
-      }
+      });
     }
 
     function setAngka(slot, val){
@@ -255,103 +222,22 @@
       var no = parseInt(document.getElementById('gtg' + slot).value);
       if(!no || no < 1 || no > 150) return;
       fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`).then(r => r.json()).then(val => {
-        var poin = (val && typeof val === 'object') ? (val.poin || 0) : (val || 0);
-        setAngka(slot, poin);
+        setAngka(slot, val || 0);
       });
     }
 
     function tambahPoin(slot){
       var no = parseInt(document.getElementById('gtg' + slot).value);
       if(!no || no < 1 || no > 150) return alert('Pilih nomor gantangan 1-150 dulu!');
-
-      var now = Date.now();
-      if(!catatanKlik[no]) catatanKlik[no] = [];
-      if(catatanKlik[no].length > 0 && (now - catatanKlik[no][catatanKlik[no].length - 1]) < 300) return;
-
-      catatanKlik[no].push(now);
-      var klik2Detik = catatanKlik[no].filter(t => (now - t) <= 2000);
-      catatanKlik[no] = klik2Detik;
-
-      var jmlKlik = klik2Detik.length;
-      var isPompamSengaja = (jmlKlik >= 4);
-
-      if(jmlKlik > 1){
-        var el = document.getElementById('warn' + slot);
-        el.style.display = 'block';
-        clearTimeout(timerWarn[slot]);
-        timerWarn[slot] = setTimeout(() => { el.style.display = 'none'; }, 2000);
-      }
-
-      if(isPompamSengaja){
-        audioAlarm.currentTime = 0;
-        audioAlarm.play().catch(() => {});
-      }
-
+      
       var skorBaru = (skorLokal[slot] || 0) + 1;
       setAngka(slot, skorBaru);
 
-      var dataKirim = { poin: skorBaru, isSpam: isPompamSengaja, waktu: now };
-      catatHistoriKelas(no, skorBaru);
-      kirimDataPoin(no, dataKirim);
-    }
-
-    function kirimDataPoin(no, dataKirim){
-      if(navigator.onLine){
-        fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dataKirim)
-        }).catch(() => simpanKeAntreanOffline(no, dataKirim));
-      } else {
-        simpanKeAntreanOffline(no, dataKirim);
-      }
-    }
-
-    function simpanKeAntreanOffline(no, data){
-      var queue = JSON.parse(localStorage.getItem('offline_queue_juri3') || "[]");
-      queue.push({ room: ROOM, gantangan: no, payload: data });
-      localStorage.setItem('offline_queue_juri3', JSON.stringify(queue));
-      document.getElementById('statusOffline').style.display = 'inline';
-    }
-
-    function prosesAntreanOffline(){
-      if(!navigator.onLine) return;
-      var queue = JSON.parse(localStorage.getItem('offline_queue_juri3') || "[]");
-      if(queue.length === 0){ document.getElementById('statusOffline').style.display = 'none'; return; }
-      var item = queue.shift();
-      fetch(`${BASE_URL}room${item.room}/skor/${item.gantangan}.json`, {
+      fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item.payload)
-      }).then(() => {
-        localStorage.setItem('offline_queue_juri3', JSON.stringify(queue));
-        prosesAntreanOffline();
-      }).catch(() => {
-        queue.unshift(item);
-        localStorage.setItem('offline_queue_juri3', JSON.stringify(queue));
+        body: JSON.stringify(skorBaru)
       });
-    }
-
-    window.addEventListener('online', () => { document.getElementById('statusOffline').style.display = 'none'; prosesAntreanOffline(); });
-    window.addEventListener('offline', () => { document.getElementById('statusOffline').style.display = 'inline'; });
-
-    function catatHistoriKelas(noGantangan, poin){
-      var kelasAktif = document.getElementById('selKelas').value;
-      var keyHistori = `histori_${ROOM}_${kelasAktif}`;
-      var histori = JSON.parse(localStorage.getItem(keyHistori) || "[]");
-      histori.push({ gantangan: noGantangan, poin: poin, jam: new Date().toLocaleTimeString('id-ID') });
-      localStorage.setItem(keyHistori, JSON.stringify(histori));
-    }
-
-    function gantiKelas(){ for(var s = 1; s <= 3; s++) muatSkor(s); }
-
-    function resetKelasIni(){
-      var kelasAktif = document.getElementById('selKelas').value;
-      if(confirm(`Reset histori kelas "${kelasAktif}"?`)){
-        localStorage.removeItem(`histori_${ROOM}_${kelasAktif}`);
-        for(var s = 1; s <= 3; s++) setAngka(s, 0);
-        alert('Histori kelas dibersihkan!');
-      }
     }
   </script>
 </body>
