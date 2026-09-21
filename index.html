@@ -305,7 +305,8 @@
       align-items: stretch;
       overflow: visible;
       position: relative;
-      transition: transform 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+      /* Tambahan transisi mulus agar responsif mengikuti kecepatan tombol juri */
+      transition: transform 0.05s ease-out, background-color 0.05s, border-color 0.05s, box-shadow 0.05s;
       min-width: 0; min-height: 0;
     }
     .box-gantangan .header-no {
@@ -337,6 +338,7 @@
       white-space: nowrap;
       text-align: center;
       display: inline-block;
+      transition: transform 0.05s ease-out;
     }
     .skor-gtg.ada-poin { color: #facc15 !important; }
     .skor-gtg.tiga-digit {
@@ -345,6 +347,13 @@
       transform: scaleX(0.85);
       transform-origin: center;
     }
+    
+    /* Efek Kedip/Tekan Responsif Sama Seperti Tombol Juri */
+    .box-gantangan.efek-tekan-monitor {
+      transform: translateY(2px) scale(0.96) !important;
+      filter: brightness(1.25) contrast(1.1);
+    }
+
     .box-gantangan.hit {
       background: #064e3b !important;
       border-color: #00e676 !important;
@@ -1030,6 +1039,10 @@
 
             var b = document.getElementById(`box-${gtg}`);
             if(b){
+              // Tambahan efek kedip/tekan responsif pada kotak monitor utama saat skor masuk
+              b.classList.add('efek-tekan-monitor');
+              setTimeout(function(){ b.classList.remove('efek-tekan-monitor'); }, 100);
+
               var waktuSekarang = new Date().getTime();
               if(!riwayatKlikGantangan[gtg]){
                 riwayatKlikGantangan[gtg] = { waktu: waktuSekarang, akumulasi: 0 };
