@@ -2,44 +2,20 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Juri Pantau 3 Burung - Auto Lanskap Murni</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
+  <title>Juri Pantau 3 Burung - Landscape Lock</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     
-    /* MENGUNCI BODY AGAR SELALU LANDSCAPE SECARA OTOMATIS DI HP */
+    /* PAKSA BODY JADI LANDSCAPE MURNI MENYAMPING */
     html, body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
       background: #090d16;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    /* KONTTAINER YANG MEMBALIK ORIENTASI SECARA DIGITAL JADI LANDSCAPE */
-    #app-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100vh;
-      height: 100vw;
-      transform: translate(-50%, -50%) rotate(90deg);
-      transform-origin: center center;
-      background: #090d16;
       display: flex;
       flex-direction: column;
-    }
-
-    /* JIKA PERANGKAT SUDAH DALAM POSISI LANDSCAPE ALAMI */
-    @media (min-aspect-ratio: 4/3) {
-      #app-wrapper {
-        position: relative;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        transform: none;
-      }
     }
 
     /* BAR ATAS: TIPIS DAN COMPACT */
@@ -155,7 +131,6 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    /* TOMBOL +1 DIBUAT TEBAL DAN NYAMAN UNTUK JARI */
     .btn-tap-area {
       background: rgba(255,255,255,0.25);
       border: 2px solid rgba(255,255,255,0.5);
@@ -264,110 +239,112 @@
 </head>
 <body>
 
-  <!-- KONTTAINER WRAPPER UTAMA -->
-  <div id="app-wrapper">
+  <!-- MODAL PENGATURAN AWAL JURI -->
+  <div id="loginOverlay">
+    <div class="login-box">
+      <h3 style="color:#38bdf8; margin-bottom:8px; font-size:14px;">PENGATURAN JURI (PANTAU 3)</h3>
+      
+      <label style="font-size:10px; color:#94a3b8; display:block; text-align:left; margin-bottom:2px;">PILIH ROOM:</label>
+      <select id="selRoom" class="input-field" style="font-size:0.9rem;">
+        <option value="1">ROOM 1</option>
+        <option value="2">ROOM 2</option>
+        <option value="3">ROOM 3</option>
+        <option value="4">ROOM 4</option>
+        <option value="5">ROOM 5</option>
+      </select>
 
-    <!-- MODAL PENGATURAN AWAL JURI -->
-    <div id="loginOverlay">
-      <div class="login-box">
-        <h3 style="color:#38bdf8; margin-bottom:8px; font-size:14px;">PENGATURAN JURI (PANTAU 3)</h3>
-        
-        <label style="font-size:10px; color:#94a3b8; display:block; text-align:left; margin-bottom:2px;">PILIH ROOM:</label>
-        <select id="selRoom" class="input-field" style="font-size:0.9rem;">
-          <option value="1">ROOM 1</option>
-          <option value="2">ROOM 2</option>
-          <option value="3">ROOM 3</option>
-          <option value="4">ROOM 4</option>
-          <option value="5">ROOM 5</option>
-        </select>
+      <label style="font-size:10px; color:#94a3b8; display:block; text-align:left; margin-bottom:2px;">NOMOR JURI (MISAL 1, 2, 3...):</label>
+      <input type="number" id="inNoJuri" class="input-field" placeholder="No Juri" value="1" oninput="hitungOtomatisGtg()">
 
-        <label style="font-size:10px; color:#94a3b8; display:block; text-align:left; margin-bottom:2px;">NOMOR JURI (MISAL 1, 2, 3...):</label>
-        <input type="number" id="inNoJuri" class="input-field" placeholder="No Juri" value="1" oninput="hitungOtomatisGtg()">
-
-        <div id="previewJatah" style="background:#0f172a; padding:6px; border-radius:6px; font-size:11px; color:#4ade80; margin-bottom:8px; font-weight:bold;">
-          Jatah Gantangan: 1, 2, dan 3
-        </div>
-
-        <input type="password" id="inPin" class="input-field" placeholder="PIN JURI" style="letter-spacing:4px;">
-
-        <button onclick="masukJuri()" style="width:100%; padding:10px; background:#16a34a; color:white; border:none; font-weight:900; font-size:0.95rem; border-radius:6px; cursor:pointer;">
-          MULAI PENJURIAN ➔
-        </button>
+      <div id="previewJatah" style="background:#0f172a; padding:6px; border-radius:6px; font-size:11px; color:#4ade80; margin-bottom:8px; font-weight:bold;">
+        Jatah Gantangan: 1, 2, dan 3
       </div>
+
+      <input type="password" id="inPin" class="input-field" placeholder="PIN JURI" style="letter-spacing:4px;">
+
+      <button onclick="masukJuri()" style="width:100%; padding:10px; background:#16a34a; color:white; border:none; font-weight:900; font-size:0.95rem; border-radius:6px; cursor:pointer;">
+        MULAI PENJURIAN ➔
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL RIWAYAT KELAS -->
+  <div id="historyModal">
+    <div class="history-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:6px;">
+        <h3 style="color:#38bdf8; font-size:13px;">📜 RIWAYAT KELAS & SKOR</h3>
+        <button onclick="tutupHistory()" style="background:none; border:none; color:#94a3b8; font-size:14px; font-weight:bold; cursor:pointer;">✕</button>
+      </div>
+      <div class="history-list" id="kontainerHistory">
+        <div style="text-align:center; color:#64748b; font-size:11px; margin-top:20px;">Memuat riwayat kelas...</div>
+      </div>
+      <button onclick="tutupHistory()" style="width:100%; padding:8px; background:#334155; color:white; border:none; font-weight:bold; border-radius:6px; cursor:pointer; margin-top:2px; font-size:11px;">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- HEADER TIPIS/COMPACT -->
+  <div class="header-bar">
+    <span class="badge-info" id="badgeRoom">ROOM 1</span>
+    <div style="text-align:center; display:flex; gap:6px; align-items:center;">
+      <span style="font-size:11px; font-weight:bold; color:#cbd5e1;" id="txtLabelJuri">JURI 1</span>
+      <span style="font-size:10px; color:#38bdf8;" id="txtInfoKelas">Kelas: -</span>
+    </div>
+    <div class="btn-header-group">
+      <button class="btn-history-menu" onclick="bukaHistory()">📋 History</button>
+      <button class="btn-reset-block" onclick="bukaUlangSetup()">⚙️ Ganti</button>
+    </div>
+  </div>
+
+  <!-- GRID 3 KOLOM LANSKAP TEBAL -->
+  <div class="grid-container">
+    <!-- BURUNG 1 (BIRU) -->
+    <div class="slot-card slot-biru" onclick="tambahPoin(1)">
+      <div class="gtg-header">
+        <div class="gtg-label">GANTANGAN</div>
+        <div class="gtg-number" id="labelGtg1">-</div>
+      </div>
+      <div class="skor-center">
+        <div class="skor-caption">POIN</div>
+        <div class="skor-angka" id="skor1">0</div>
+      </div>
+      <div class="btn-tap-area">+1</div>
     </div>
 
-    <!-- MODAL RIWAYAT KELAS -->
-    <div id="historyModal">
-      <div class="history-box">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:6px;">
-          <h3 style="color:#38bdf8; font-size:13px;">📜 RIWAYAT KELAS & SKOR</h3>
-          <button onclick="tutupHistory()" style="background:none; border:none; color:#94a3b8; font-size:14px; font-weight:bold; cursor:pointer;">✕</button>
-        </div>
-        <div class="history-list" id="kontainerHistory">
-          <div style="text-align:center; color:#64748b; font-size:11px; margin-top:20px;">Memuat riwayat kelas...</div>
-        </div>
-        <button onclick="tutupHistory()" style="width:100%; padding:8px; background:#334155; color:white; border:none; font-weight:bold; border-radius:6px; cursor:pointer; margin-top:2px; font-size:11px;">TUTUP</button>
+    <!-- BURUNG 2 (HIJAU) -->
+    <div class="slot-card slot-hijau" onclick="tambahPoin(2)">
+      <div class="gtg-header">
+        <div class="gtg-label">GANTANGAN</div>
+        <div class="gtg-number" id="labelGtg2">-</div>
       </div>
+      <div class="skor-center">
+        <div class="skor-caption">POIN</div>
+        <div class="skor-angka" id="skor2">0</div>
+      </div>
+      <div class="btn-tap-area">+1</div>
     </div>
 
-    <!-- HEADER TIPIS/COMPACT -->
-    <div class="header-bar">
-      <span class="badge-info" id="badgeRoom">ROOM 1</span>
-      <div style="text-align:center; display:flex; gap:6px; align-items:center;">
-        <span style="font-size:11px; font-weight:bold; color:#cbd5e1;" id="txtLabelJuri">JURI 1</span>
-        <span style="font-size:10px; color:#38bdf8;" id="txtInfoKelas">Kelas: -</span>
+    <!-- BURUNG 3 (ORANYE) -->
+    <div class="slot-card slot-oranye" onclick="tambahPoin(3)">
+      <div class="gtg-header">
+        <div class="gtg-label">GANTANGAN</div>
+        <div class="gtg-number" id="labelGtg3">-</div>
       </div>
-      <div class="btn-header-group">
-        <button class="btn-history-menu" onclick="bukaHistory()">📋 History</button>
-        <button class="btn-reset-block" onclick="bukaUlangSetup()">⚙️ Ganti</button>
+      <div class="skor-center">
+        <div class="skor-caption">POIN</div>
+        <div class="skor-angka" id="skor3">0</div>
       </div>
+      <div class="btn-tap-area">+1</div>
     </div>
-
-    <!-- GRID 3 KOLOM LANSKAP TEBAL -->
-    <div class="grid-container">
-      <!-- BURUNG 1 (BIRU) -->
-      <div class="slot-card slot-biru" onclick="tambahPoin(1)">
-        <div class="gtg-header">
-          <div class="gtg-label">GANTANGAN</div>
-          <div class="gtg-number" id="labelGtg1">-</div>
-        </div>
-        <div class="skor-center">
-          <div class="skor-caption">POIN</div>
-          <div class="skor-angka" id="skor1">0</div>
-        </div>
-        <div class="btn-tap-area">+1</div>
-      </div>
-
-      <!-- BURUNG 2 (HIJAU) -->
-      <div class="slot-card slot-hijau" onclick="tambahPoin(2)">
-        <div class="gtg-header">
-          <div class="gtg-label">GANTANGAN</div>
-          <div class="gtg-number" id="labelGtg2">-</div>
-        </div>
-        <div class="skor-center">
-          <div class="skor-caption">POIN</div>
-          <div class="skor-angka" id="skor2">0</div>
-        </div>
-        <div class="btn-tap-area">+1</div>
-      </div>
-
-      <!-- BURUNG 3 (ORANYE) -->
-      <div class="slot-card slot-oranye" onclick="tambahPoin(3)">
-        <div class="gtg-header">
-          <div class="gtg-label">GANTANGAN</div>
-          <div class="gtg-number" id="labelGtg3">-</div>
-        </div>
-        <div class="skor-center">
-          <div class="skor-caption">POIN</div>
-          <div class="skor-angka" id="skor3">0</div>
-        </div>
-        <div class="btn-tap-area">+1</div>
-      </div>
-    </div>
-
   </div>
 
   <script>
+    // PERINTAH OTOMATIS KUNCI LAYAR KE LANDSCAPE LEWAT API BROWSER
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock("landscape").catch(function() {
+        // Jika diblokir browser, abaikan agar aplikasi tetap berjalan normal
+      });
+    }
+
     var BASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
     var ROOM = localStorage.getItem('juri3_room') || "1";
     var NO_JURI = parseInt(localStorage.getItem('juri3_nojuri')) || 1;
