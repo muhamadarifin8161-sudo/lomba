@@ -5,120 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Juri Pantau 2 Burung</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
       background: #090d16;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      padding: 6px;
+      overflow: hidden;
     }
     .header-bar {
-      height: 48px;
-      background: #0f172a;
-      border-bottom: 2px solid #1e293b;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 12px;
-      flex-shrink: 0;
-    }
-    .badge-info {
-      background: #334155;
-      color: #38bdf8;
-      font-weight: 900;
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-    .btn-reset-block {
-      background: #ef4444;
-      color: #fff;
-      border: none;
-      font-size: 11px;
-      font-weight: bold;
+      background: #181b26;
+      border: 1px solid #2e354f;
       padding: 6px 10px;
       border-radius: 6px;
-      cursor: pointer;
+      margin-bottom: 6px;
     }
-    .grid-container {
+    .badge-room { background: #eab308; color: #000; font-weight: 900; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+    .select-kelas {
+      background: #0f1015;
+      color: #00e676;
+      border: 1px solid #38bdf8;
+      font-weight: bold;
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+    .grid-2b {
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px;
+    }
+    .card-burung {
+      background: #13151f;
+      border: 2px solid #2e354f;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
       padding: 6px;
-    }
-    /* Tombol Besar Biru & Hijau */
-    .slot-card {
-      display: flex;
-      flex-direction: column;
       justify-content: space-between;
-      border-radius: 12px;
-      padding: 10px;
+    }
+    .input-gtg {
+      width: 100%;
+      background: #0f1015;
+      border: 1px solid #38bdf8;
+      color: #00e676;
+      font-size: 1.1rem;
+      font-weight: 900;
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+    .monitor-skor {
+      text-align: center;
+      background: #181b26;
+      border-radius: 6px;
+      padding: 8px 0;
+      border: 1px dashed #475569;
       position: relative;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      transition: transform 0.05s ease, filter 0.05s ease;
-      touch-action: manipulation;
     }
-    .slot-card:active {
-      transform: scale(0.97);
-      filter: brightness(1.2);
-    }
-    .slot-biru { background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border: 3px solid #38bdf8; }
-    .slot-hijau { background: linear-gradient(180deg, #16a34a 0%, #15803d 100%); border: 3px solid #4ade80; }
-
-    .gtg-header {
-      text-align: center;
-      background: rgba(0,0,0,0.35);
-      border-radius: 8px;
-      padding: 6px 4px;
-    }
-    .gtg-label { font-size: 11px; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; }
-    .gtg-number {
-      font-size: 2.2rem;
+    .skor-angka { font-size: 2.2rem; font-weight: 900; color: #ffeb3b; }
+    .warning-text {
+      color: #ff3838;
+      font-size: 10px;
       font-weight: 900;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-      line-height: 1.1;
-    }
-    .skor-center {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-    }
-    .skor-angka {
-      font-size: 5.5rem;
-      font-weight: 900;
-      color: #fef08a;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.7);
-      line-height: 1;
-    }
-    .skor-caption {
-      font-size: 11px;
-      font-weight: 800;
-      color: rgba(255,255,255,0.85);
+      display: none;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
     }
-    .btn-tap-area {
-      background: rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
+    .btn-tambah {
+      background: #00e676;
+      color: #000;
+      border: none;
       padding: 14px 0;
-      text-align: center;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 900;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
+    .btn-tambah:active { transform: scale(0.96); background: #00b359; }
 
-    /* Modal Setup Juri */
     #loginOverlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -130,157 +105,133 @@
       padding: 16px;
     }
     .login-box {
-      background: #1e293b;
-      border: 2px solid #38bdf8;
+      background: #181b26;
+      border: 1px solid #2e354f;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 10px;
       width: 100%;
-      max-width: 340px;
+      max-width: 320px;
       text-align: center;
-      color: #fff;
     }
-    .input-field {
+    .select-room {
       width: 100%;
       padding: 10px;
-      background: #0f172a;
-      color: #38bdf8;
-      border: 1px solid #475569;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      background: #0f1015;
+      color: #fff;
+      border: 1px solid #38bdf8;
+      border-radius: 6px;
+      margin-bottom: 10px;
       font-weight: bold;
-      margin-bottom: 12px;
-      text-align: center;
+    }
+    .status-offline {
+      font-size: 9px;
+      font-weight: bold;
+      color: #ff3838;
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- MODAL PENGATURAN AWAL JURI -->
   <div id="loginOverlay">
     <div class="login-box">
-      <h3 style="color:#38bdf8; margin-bottom:12px;">PENGATURAN JURI (PANTAU 2)</h3>
-      
+      <h3 style="color:#00e676; margin-bottom:12px;">LOGIN JURI (2 BURUNG)</h3>
       <label style="font-size:11px; color:#94a3b8; display:block; text-align:left; margin-bottom:4px;">PILIH ROOM:</label>
-      <select id="selRoom" class="input-field" style="font-size:0.95rem;">
+      <select id="selRoom" class="select-room">
         <option value="1">ROOM 1</option>
         <option value="2">ROOM 2</option>
         <option value="3">ROOM 3</option>
         <option value="4">ROOM 4</option>
         <option value="5">ROOM 5</option>
       </select>
-
-      <label style="font-size:11px; color:#94a3b8; display:block; text-align:left; margin-bottom:4px;">NOMOR JURI (MISAL 1, 2, 3...):</label>
-      <input type="number" id="inNoJuri" class="input-field" placeholder="No Juri" value="1" oninput="hitungOtomatisGtg()">
-
-      <div id="previewJatah" style="background:#0f172a; padding:8px; border-radius:6px; font-size:12px; color:#4ade80; margin-bottom:12px; font-weight:bold;">
-        Jatah Gantangan: 1 dan 2
-      </div>
-
-      <input type="password" id="inPin" class="input-field" placeholder="PIN JURI" style="letter-spacing:4px;">
-
-      <button onclick="masukJuri()" style="width:100%; padding:14px; background:#16a34a; color:white; border:none; font-weight:900; font-size:1rem; border-radius:8px; cursor:pointer;">
-        MULAI PENJURIAN ➔
-      </button>
+      <input type="password" id="inPin" class="input-gtg" placeholder="PIN JURI" style="letter-spacing:4px;">
+      <button class="btn-tambah" style="width:100%; margin-top:8px;" onclick="masukJuri()">MASUK</button>
     </div>
   </div>
 
-  <!-- HEADER -->
   <div class="header-bar">
-    <span class="badge-info" id="badgeRoom">ROOM 1</span>
-    <span style="font-size:12px; font-weight:bold; color:#cbd5e1;" id="txtLabelJuri">JURI 1</span>
-    <button class="btn-reset-block" onclick="bukaUlangSetup()">⚙️ Ganti No</button>
+    <div>
+      <span style="font-size:12px; font-weight:bold;">PANTAU 2</span>
+      <span id="statusOffline" class="status-offline"> (OFFLINE)</span>
+    </div>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <select id="selKelas" class="select-kelas" onchange="gantiKelas()">
+        <option value="Dewasa Senior">Dewasa Senior</option>
+        <option value="Dewasa Yunior">Dewasa Yunior</option>
+        <option value="Hanging">Hanging</option>
+        <option value="Bebas">Bebas</option>
+      </select>
+      <button onclick="resetKelasIni()" style="background:#dc2626; color:#fff; border:none; padding:3px 6px; font-size:9px; border-radius:3px; font-weight:bold; cursor:pointer;">RESET KELAS</button>
+      <span class="badge-room" id="badgeRoom">ROOM 1</span>
+    </div>
   </div>
 
-  <!-- GRID 2 TOMBOL BESAR BIRU & HIJAU -->
-  <div class="grid-container">
-    <!-- BURUNG 1 (BIRU) -->
-    <div class="slot-card slot-biru" onclick="tambahPoin(1)">
-      <div class="gtg-header">
-        <div class="gtg-label">NOMOR GANTANGAN</div>
-        <div class="gtg-number" id="labelGtg1">-</div>
+  <div class="grid-2b">
+    <div class="card-burung">
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">NO. GANTANGAN A:</label>
+        <input type="number" id="gtgA" class="input-gtg" placeholder="Nomor" onchange="muatSkor('A')">
       </div>
-      <div class="skor-center">
-        <div class="skor-caption">TOTAL POIN</div>
-        <div class="skor-angka" id="skor1">0</div>
+      <div class="monitor-skor">
+        <div style="font-size:10px; color:#94a3b8;">SKOR SAAT INI</div>
+        <div class="skor-angka" id="skorA">0</div>
+        <div class="warning-text" id="warnA">JANGANGAN CURANG!</div>
       </div>
-      <div class="btn-tap-area">+1 POIN</div>
+      <button class="btn-tambah" id="btnA" onclick="tambahPoin('A')">+1 POIN</button>
     </div>
 
-    <!-- BURUNG 2 (HIJAU) -->
-    <div class="slot-card slot-hijau" onclick="tambahPoin(2)">
-      <div class="gtg-header">
-        <div class="gtg-label">NOMOR GANTANGAN</div>
-        <div class="gtg-number" id="labelGtg2">-</div>
+    <div class="card-burung">
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">NO. GANTANGAN B:</label>
+        <input type="number" id="gtgB" class="input-gtg" placeholder="Nomor" onchange="muatSkor('B')">
       </div>
-      <div class="skor-center">
-        <div class="skor-caption">TOTAL POIN</div>
-        <div class="skor-angka" id="skor2">0</div>
+      <div class="monitor-skor">
+        <div style="font-size:10px; color:#94a3b8;">SKOR SAAT INI</div>
+        <div class="skor-angka" id="skorB">0</div>
+        <div class="warning-text" id="warnB">JANGANGAN CURANG!</div>
       </div>
-      <div class="btn-tap-area">+1 POIN</div>
+      <button class="btn-tambah" id="btnB" onclick="tambahPoin('B')">+1 POIN</button>
     </div>
   </div>
 
   <script>
     var BASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
-    var ROOM = localStorage.getItem('juri2_room') || "1";
-    var NO_JURI = parseInt(localStorage.getItem('juri2_nojuri')) || 1;
-    var gtgSlot = { 1: 1, 2: 2 };
-    var skorLokal = { 1: 0, 2: 0 };
-
+    var urlParams = new URLSearchParams(window.location.search);
+    var ROOM = urlParams.get('r') || localStorage.getItem('juri_room') || "1";
     document.getElementById('selRoom').value = ROOM;
-    document.getElementById('inNoJuri').value = NO_JURI;
-    hitungOtomatisGtg();
 
-    function hitungOtomatisGtg(){
-      var j = parseInt(document.getElementById('inNoJuri').value) || 1;
-      // Rumus otomatis jatah 2 burung: Juri 1 (1,2), Juri 2 (3,4), Juri 3 (5,6)
-      var g1 = ((j - 1) * 2) + 1;
-      var g2 = g1 + 1;
-      document.getElementById('previewJatah').innerText = `Jatah Gantangan: ${g1} dan ${g2}`;
-    }
+    var skorLokal = { A: 0, B: 0 };
+    var catatanKlik = {}; // Melacak timestamp klik per nomor gantangan
+    var timerWarn = { A: null, B: null };
 
-    function bukaUlangSetup(){
-      document.getElementById('loginOverlay').style.display = 'flex';
-    }
+    // Inisialisasi Audio Alarm
+    var audioAlarm = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
 
     function masukJuri(){
       var r = document.getElementById('selRoom').value;
-      var j = parseInt(document.getElementById('inNoJuri').value) || 1;
       var pinInput = document.getElementById('inPin').value.trim();
-
+      
       fetch(`${BASE_URL}room${r}/pin_juri.json`).then(res => res.json()).then(pinServer => {
         var validPin = pinServer || "1234";
         if(pinInput === validPin || pinInput === "889900"){
           ROOM = r;
-          NO_JURI = j;
-          localStorage.setItem('juri2_room', ROOM);
-          localStorage.setItem('juri2_nojuri', NO_JURI);
-
-          gtgSlot[1] = ((NO_JURI - 1) * 2) + 1;
-          gtgSlot[2] = gtgSlot[1] + 1;
-
+          localStorage.setItem('juri_room', ROOM);
           document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
-          document.getElementById('txtLabelJuri').innerText = "JURI " + NO_JURI;
-          document.getElementById('labelGtg1').innerText = gtgSlot[1];
-          document.getElementById('labelGtg2').innerText = gtgSlot[2];
-
           document.getElementById('loginOverlay').style.display = 'none';
           bacaRealtimeRoom();
-          muatAwalSemua();
+          prosesAntreanOffline();
         } else {
           alert('❌ PIN Juri Salah!');
         }
-      }).catch(() => alert('Gagal koneksi ke server!'));
-    }
-
-    function muatAwalSemua(){
-      for(let s = 1; s <= 2; s++){
-        let g = gtgSlot[s];
-        fetch(`${BASE_URL}room${ROOM}/skor/${g}.json`).then(r => r.json()).then(val => {
-          skorLokal[s] = val || 0;
-          document.getElementById('skor' + s).innerText = skorLokal[s];
-        });
-      }
+      }).catch(() => {
+        if(pinInput === "1234" || pinInput === "889900"){
+          ROOM = r;
+          document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
+          document.getElementById('loginOverlay').style.display = 'none';
+        } else {
+          alert('Gagal koneksi ke server!');
+        }
+      });
     }
 
     function bacaRealtimeRoom(){
@@ -289,37 +240,172 @@
         var d = JSON.parse(e.data);
         if(!d.path || d.path === "/"){
           if(d.data){
-            for(var s = 1; s <= 2; s++){
-              var g = gtgSlot[s];
-              if(d.data[g] !== undefined){
-                skorLokal[s] = d.data[g];
-                document.getElementById('skor' + s).innerText = d.data[g];
-              }
-            }
+            var gA = parseInt(document.getElementById('gtgA').value);
+            var gB = parseInt(document.getElementById('gtgB').value);
+            if(gA && d.data[gA] !== undefined) setAngka('A', typeof d.data[gA] === 'object' ? d.data[gA].poin : d.data[gA]);
+            if(gB && d.data[gB] !== undefined) setAngka('B', typeof d.data[gB] === 'object' ? d.data[gB].poin : d.data[gB]);
           }
         } else {
           var no = parseInt(d.path.replace("/", ""));
-          for(var s = 1; s <= 2; s++){
-            if(no === gtgSlot[s]){
-              skorLokal[s] = d.data || 0;
-              document.getElementById('skor' + s).innerText = skorLokal[s];
-            }
-          }
+          var gA = parseInt(document.getElementById('gtgA').value);
+          var gB = parseInt(document.getElementById('gtgB').value);
+          var val = (d.data && typeof d.data === 'object') ? d.data.poin : (d.data || 0);
+          if(no === gA) setAngka('A', val);
+          if(no === gB) setAngka('B', val);
         }
       });
     }
 
-    function tambahPoin(slot){
-      var g = gtgSlot[slot];
-      var baru = (skorLokal[slot] || 0) + 1;
-      skorLokal[slot] = baru;
-      document.getElementById('skor' + slot).innerText = baru;
+    function setAngka(slot, val){
+      skorLokal[slot] = val;
+      document.getElementById('skor' + slot).innerText = val;
+    }
 
-      fetch(`${BASE_URL}room${ROOM}/skor/${g}.json`, {
+    function muatSkor(slot){
+      var no = parseInt(document.getElementById('gtg' + slot).value);
+      if(!no || no < 1 || no > 150) return;
+      fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`).then(r => r.json()).then(val => {
+        var poin = (val && typeof val === 'object') ? val.poin : (val || 0);
+        setAngka(slot, poin);
+      });
+    }
+
+    // --- ATURAN 1: ANTI-SPAM & DETEKSI POMPAM POIN ---
+    function tambahPoin(slot){
+      var no = parseInt(document.getElementById('gtg' + slot).value);
+      if(!no || no < 1 || no > 150) return alert('Pilih nomor gantangan 1-150 dulu!');
+
+      var now = Date.now();
+      if(!catatanKlik[no]) catatanKlik[no] = [];
+      
+      // Proteksi refleks double-tap unintentional (<300ms)
+      if(catatanKlik[no].length > 0 && (now - catatanKlik[no][catatanKlik[no].length - 1]) < 300){
+        return;
+      }
+
+      catatanKlik[no].push(now);
+
+      // Saring klik dalam rentang 2 detik (2000 ms) terakhir untuk gantangan SAMA
+      var klik2Detik = catatanKlik[no].filter(t => (now - t) <= 2000);
+      catatanKlik[no] = klik2Detik;
+
+      var jmlKlik = klik2Detik.length;
+      var isPompamSengaja = (jmlKlik >= 4); // >= 4 kali klik dalam 2 detik = POMPAM SENGASA
+
+      // Toleransi Refleks Jari (1-3 kali): Tampilkan teks "JANGAN CURANG!"
+      if(jmlKlik > 1){
+        tampilkanPeringatanHalus(slot);
+      }
+
+      // Pompam Sengaja (>= 4 kali): Bunyikan alarm bising di HP
+      if(isPompamSengaja){
+        audioAlarm.currentTime = 0;
+        audioAlarm.play().catch(() => {});
+      }
+
+      var skorBaru = (skorLokal[slot] || 0) + 1;
+      setAngka(slot, skorBaru);
+
+      var dataKirim = {
+        poin: skorBaru,
+        isSpam: isPompamSengaja,
+        waktu: now
+      };
+
+      // Simpan ke Histori Kelas
+      catatHistoriKelas(no, skorBaru);
+
+      // --- ATURAN 2: PENGIRIMAN DATA / OFFLINE QUEUE ---
+      kirimDataPoin(no, dataKirim);
+    }
+
+    function tampilkanPeringatanHalus(slot){
+      var el = document.getElementById('warn' + slot);
+      el.style.display = 'block';
+      clearTimeout(timerWarn[slot]);
+      timerWarn[slot] = setTimeout(() => { el.style.display = 'none'; }, 2000);
+    }
+
+    function kirimDataPoin(no, dataKirim){
+      if(navigator.onLine){
+        fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataKirim)
+        }).catch(() => simpanKeAntreanOffline(no, dataKirim));
+      } else {
+        simpanKeAntreanOffline(no, dataKirim);
+      }
+    }
+
+    function simpanKeAntreanOffline(no, data){
+      var queue = JSON.parse(localStorage.getItem('offline_queue_juri') || "[]");
+      queue.push({ room: ROOM, gantangan: no, payload: data });
+      localStorage.setItem('offline_queue_juri', JSON.stringify(queue));
+      document.getElementById('statusOffline').style.display = 'inline';
+    }
+
+    function prosesAntreanOffline(){
+      if(!navigator.onLine) return;
+      var queue = JSON.parse(localStorage.getItem('offline_queue_juri') || "[]");
+      if(queue.length === 0){
+        document.getElementById('statusOffline').style.display = 'none';
+        return;
+      }
+
+      var item = queue.shift();
+      fetch(`${BASE_URL}room${item.room}/skor/${item.gantangan}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(baru)
+        body: JSON.stringify(item.payload)
+      }).then(() => {
+        localStorage.setItem('offline_queue_juri', JSON.stringify(queue));
+        prosesAntreanOffline();
+      }).catch(() => {
+        queue.unshift(item);
+        localStorage.setItem('offline_queue_juri', JSON.stringify(queue));
       });
+    }
+
+    window.addEventListener('online', () => {
+      document.getElementById('statusOffline').style.display = 'none';
+      prosesAntreanOffline();
+    });
+    window.addEventListener('offline', () => {
+      document.getElementById('statusOffline').style.display = 'inline';
+    });
+
+    // --- ATURAN 3: HISTORI DATA PER KELAS ---
+    function catatHistoriKelas(noGantangan, poin){
+      var kelasAktif = document.getElementById('selKelas').value;
+      var keyHistori = `histori_${ROOM}_${kelasAktif}`;
+      var histori = JSON.parse(localStorage.getItem(keyHistori) || "[]");
+
+      histori.push({
+        gantangan: noGantangan,
+        poin: poin,
+        jam: new Date().toLocaleTimeString('id-ID')
+      });
+
+      localStorage.setItem(keyHistori, JSON.stringify(histori));
+    }
+
+    function gantiKelas(){
+      var gA = parseInt(document.getElementById('gtgA').value);
+      var gB = parseInt(document.getElementById('gtgB').value);
+      if(gA) muatSkor('A');
+      if(gB) muatSkor('B');
+    }
+
+    function resetKelasIni(){
+      var kelasAktif = document.getElementById('selKelas').value;
+      if(confirm(`Aturan 3: Reset seluruh histori & skor untuk kelas "${kelasAktif}"?`)){
+        var keyHistori = `histori_${ROOM}_${kelasAktif}`;
+        localStorage.removeItem(keyHistori);
+        setAngka('A', 0);
+        setAngka('B', 0);
+        alert(`Histori kelas ${kelasAktif} telah bersih kembali ke nol!`);
+      }
     }
   </script>
 </body>
