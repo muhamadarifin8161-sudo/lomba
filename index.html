@@ -2,13 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Monitoring Penjurian</title>
   <style>
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      margin: 0;
-      padding: 8px 12px;
       height: 100vh;
       width: 100vw;
       background: #0f1015;
@@ -17,6 +15,54 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      padding: 4px 6px;
+    }
+    #lockScreenOverlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #090d16;
+      color: white;
+      z-index: 9999999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #181b26;
+      border: 1px solid #2e354f;
+      padding: 24px 18px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+    }
+    .input-sewa {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #38bdf8;
+      background: #0f1015;
+      color: #fff;
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin: 12px 0 8px 0;
+      text-transform: uppercase;
+    }
+    .btn-buka-sewa {
+      background: #00e676;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      width: 100%;
     }
     .bar-kontrol-atas {
       display: flex;
@@ -24,311 +70,448 @@
       align-items: center;
       background: #181b26;
       border: 1px solid #2e354f;
-      border-radius: 8px;
-      padding: 6px 12px;
-      margin-bottom: 6px;
+      border-radius: 6px;
+      padding: 3px 6px;
+      margin-bottom: 4px;
       flex-shrink: 0;
+      gap: 6px;
     }
     .btn-reset-utama {
       background: #dc2626 !important;
-      border: 2px solid #fca5a5 !important;
+      border: 1px solid #fca5a5 !important;
       color: #ffffff !important;
-      font-size: 14px !important;
-      font-weight: 900 !important;
-      padding: 8px 20px !important;
-      border-radius: 6px;
+      font-size: 10px !important;
+      font-weight: 800 !important;
+      padding: 4px 8px !important;
+      border-radius: 4px;
       cursor: pointer;
-      box-shadow: 0 0 12px rgba(220, 38, 38, 0.7);
-      letter-spacing: 0.5px;
+      box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .btn-reset-utama:active {
-      transform: scale(0.96);
-      background: #b91c1c !important;
+    .btn-reset-utama:active { transform: scale(0.96); background: #b91c1c !important; }
+    .grup-kanan { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .badge-room {
+      background: #eab308;
+      color: #000;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 2px 5px;
+      border-radius: 3px;
+      white-space: nowrap;
     }
-    .grup-kanan {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .status-live {
-      font-size: 11px;
-      color: #00e676;
+    .badge-sewa {
+      background: #15803d;
+      color: #fff;
+      font-size: 9px;
       font-weight: bold;
+      padding: 2px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      line-height: 1.1;
     }
     .badge-pin {
       background: #0284c7;
       color: #fff;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 5px;
+      padding: 3px 6px;
+      border-radius: 4px;
       cursor: pointer;
       border: 1px solid #38bdf8;
+      white-space: nowrap;
     }
     .btn-layar {
       background: #2a2f42;
       color: #e2e8f0;
       border: 1px solid #434c69;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 12px;
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-size: 10px;
       font-weight: bold;
       cursor: pointer;
+      white-space: nowrap;
     }
     .leaderboard-tv {
       background: #171923;
       border: 1px solid #2d3248;
-      border-radius: 8px;
-      padding: 6px 10px;
-      margin-bottom: 6px;
+      border-radius: 6px;
+      padding: 3px 6px;
+      margin-bottom: 4px;
       flex-shrink: 0;
     }
     .judul-top {
-      font-size: 11px;
+      font-size: 9px;
       font-weight: bold;
       color: #00e676;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .grid-top {
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 5px;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 3px;
     }
     .card-rank {
       background: #202434;
-      border-radius: 5px;
-      padding: 3px 4px;
+      border-radius: 4px;
+      padding: 2px 1px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-top: 3px solid #4a5568;
+      border-top: 2px solid #4a5568;
+      min-width: 0;
+      overflow: hidden;
     }
     .rank-1 { border-top-color: #ffd700; background: #2d2612; }
     .rank-2 { border-top-color: #e2e8f0; background: #222736; }
     .rank-3 { border-top-color: #cd7f32; background: #291e17; }
-    .posisi-teks { font-size: 10px; font-weight: bold; color: #94a3b8; }
+    .posisi-teks { font-size: 8px; font-weight: bold; color: #94a3b8; }
     .rank-1 .posisi-teks { color: #ffd700; }
     .rank-2 .posisi-teks { color: #e2e8f0; }
     .rank-3 .posisi-teks { color: #cd7f32; }
-    .gantangan-teks { font-size: 13px; font-weight: 800; margin: 1px 0; }
-    .poin-teks { font-size: 16px; font-weight: 900; color: #ffeb3b; }
+    .gantangan-teks { font-size: 9px; font-weight: 800; white-space: nowrap; }
+    .poin-teks { font-size: 12px; font-weight: 900; color: #ffeb3b; line-height: 1; white-space: nowrap; }
+    .area-gantangan-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #13151f;
+      border: 1px solid #232738;
+      border-radius: 6px;
+      padding: 3px 4px;
+      overflow: hidden;
+    }
     .grid-header {
-      font-size: 11px;
+      font-size: 9px;
       font-weight: bold;
       color: #64748b;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
       text-transform: uppercase;
       flex-shrink: 0;
     }
     .kontainer-150 {
       flex: 1;
       display: grid;
-      grid-template-columns: repeat(15, 1fr);
-      gap: 3px;
-      min-height: 0;
+      grid-template-columns: repeat(15, minmax(0, 1fr));
+      gap: 2px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 2px;
+      width: 100%;
     }
+    .kontainer-150::-webkit-scrollbar { width: 4px; }
+    .kontainer-150::-webkit-scrollbar-thumb { background: #2e354f; border-radius: 4px; }
     .box-gantangan {
       background: #171923;
       border: 1px solid #232738;
-      border-radius: 4px;
+      border-radius: 3px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 0;
-      transition: background-color 0.2s;
+      min-height: 26px;
+      min-width: 0;
+      overflow: hidden;
+      transition: background-color 0.15s;
+      padding: 1px;
     }
-    .box-gantangan .no-gtg {
-      font-size: 9px;
-      color: #64748b;
-      font-weight: 700;
-      line-height: 1;
-    }
+    .box-gantangan .no-gtg { font-size: 8px; color: #64748b; font-weight: 700; line-height: 1; }
     .box-gantangan .skor-gtg {
-      font-size: 15px;
+      font-size: 11px;
       font-weight: 900;
       color: #fffa65;
       line-height: 1.1;
-      margin-top: 1px;
+      white-space: nowrap;
+      text-align: center;
+      max-width: 100%;
+      letter-spacing: -0.5px;
     }
+    .skor-gtg.tiga-digit { font-size: 9px !important; letter-spacing: -0.8px; }
     .box-gantangan.hit {
       background-color: #00e676 !important;
       border-color: #ffffff !important;
-      transform: scale(1.05);
+      transform: scale(1.04);
     }
     .box-gantangan.hit .no-gtg { color: #000; }
     .box-gantangan.hit .skor-gtg { color: #000 !important; }
+
+    @media (max-height: 480px) and (orientation: landscape) {
+      body { padding: 2px 4px; }
+      .bar-kontrol-atas, .leaderboard-tv { margin-bottom: 2px; padding: 2px 4px; }
+      .btn-reset-utama { padding: 2px 6px !important; font-size: 9px !important; }
+      .kontainer-150 { grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 2px; }
+      .box-gantangan { min-height: 20px; }
+      .box-gantangan .skor-gtg { font-size: 9.5px; }
+      .skor-gtg.tiga-digit { font-size: 8px !important; }
+      .poin-teks { font-size: 10px; }
+    }
   </style>
 </head>
 <body>
 
+  <div id="lockScreenOverlay" style="display:none;">
+    <div class="lock-box">
+      <div style="font-size:2.4rem; margin-bottom:8px;">ðŸ”’</div>
+      <h3 style="color:#00e676; margin-bottom:6px;">AKSES SISTEM TERKUNCI</h3>
+      <p style="font-size:0.75rem; color:#94a3b8;">Masa aktif sewa monitoring telah berakhir. Silakan masukkan Kode Lisensi dari Pemilik Sistem.</p>
+      
+      <input type="text" id="inKodeSewa" class="input-sewa" placeholder="KLG1-XXXX-XXXX-XXXX">
+      <button class="btn-buka-sewa" onclick="verifikasiLisensiSistem()">ðŸ”“ BUKA SISTEM</button>
+    </div>
+  </div>
+
   <div class="bar-kontrol-atas">
-    <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET KELAS (Tekan 3x)</button>
+    <button class="btn-reset-utama" id="btnResetMaster" onclick="eksekusiResetSemua()">RESET (3x)</button>
 
     <div class="grup-kanan">
-      <span class="status-live">● REALTIME</span>
-      <span class="badge-pin" onclick="aturPIN()" title="Klik untuk ubah PIN">🔑 <span id="labelPIN">PIN: 1234</span></span>
-      <button class="btn-layar" onclick="toggleLayarPenuh()">⛶ Fullscreen</button>
+      <span class="badge-room" id="badgeRoom">ROOM 1</span>
+      <span class="badge-sewa" id="badgeMasaSewa">Aktif</span>
+      <span class="badge-pin" onclick="aturPIN()" title="Klik untuk ubah PIN">ðŸ”‘ <span id="labelPIN">PIN: 1234</span></span>
+      <button class="btn-layar" onclick="toggleLayarPenuh()">â›¶ Layar Penuh</button>
     </div>
   </div>
 
   <div class="leaderboard-tv">
-    <div class="judul-top">🏆 Klasemen 10 Besar (Poin Terbanyak)</div>
+    <div class="judul-top">ðŸ† Klasemen 10 Besar (Poin Terbanyak)</div>
     <div class="grid-top" id="top10Container"></div>
   </div>
 
-  <div class="grid-header">Status 150 Gantangan:</div>
-  <div class="kontainer-150" id="kotak150Container"></div>
+  <div class="area-gantangan-wrapper">
+    <div class="grid-header">Status 150 Gantangan:</div>
+    <div class="kontainer-150" id="kotak150Container"></div>
+  </div>
 
-<script>
-  const FIREBASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
+  <script>
+    var KUNCI_RAHASIA = "WAHYU_KOLONG_PEKALONGAN_99";
+    var PIN_MASTER = "889900";
+    var BASE_FIREBASE = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
 
-  const gridContainer = document.getElementById('kotak150Container');
-  const topContainer = document.getElementById('top10Container');
-  let dataSemuaGantangan = {};
-  let hitungReset = 0;
-  let timerReset = null;
+    var ROOM_AKTIF = localStorage.getItem('nomor_room_sewa') || "1";
+    document.getElementById('badgeRoom').innerText = "ROOM " + ROOM_AKTIF;
+    var FIREBASE_URL = BASE_FIREBASE + "room" + ROOM_AKTIF + "/";
 
-  // Inisialisasi 150 kotak gantangan di layar
-  for (let i = 1; i <= 150; i++) {
-    dataSemuaGantangan[i] = 0;
-    const box = document.createElement('div');
-    box.className = 'box-gantangan';
-    box.id = `box-${i}`;
-    box.innerHTML = `
-      <span class="no-gtg">${i}</span>
-      <span class="skor-gtg" id="layar-${i}">0</span>
-    `;
-    gridContainer.appendChild(box);
-  }
+    function hitungHash(str){
+      var hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash).toString(16).toUpperCase();
+    }
 
-  // Sinkronisasi data berkala dari Firebase (Stabil & Anti-Putus)
-  function sinkronkanInduk() {
-    fetch(`${FIREBASE_URL}skor.json`)
-      .then(res => res.json())
-      .then(data => {
-        if (!data) data = {};
-        for (let i = 1; i <= 150; i++) {
-          let nilaiBaru = data[i] || 0;
-          if (dataSemuaGantangan[i] !== nilaiBaru) {
-            dataSemuaGantangan[i] = nilaiBaru;
-            document.getElementById(`layar-${i}`).innerText = nilaiBaru;
-            
-            // Efek kedip hijau saat skor bertambah
-            const boxEl = document.getElementById(`box-${i}`);
-            boxEl.classList.add('hit');
-            setTimeout(() => boxEl.classList.remove('hit'), 350);
+    function cekStatusSewa(){
+      var exp = localStorage.getItem('burung_license_exp');
+      var now = new Date().getTime();
+      if(!exp || now > parseInt(exp)){
+        document.getElementById('lockScreenOverlay').style.display = 'flex';
+        document.getElementById('badgeMasaSewa').innerText = 'ðŸ”’ Terkunci';
+        document.getElementById('badgeMasaSewa').style.background = '#dc2626';
+        return false;
+      } else {
+        document.getElementById('lockScreenOverlay').style.display = 'none';
+        var d = new Date(parseInt(exp));
+        document.getElementById('badgeMasaSewa').innerText = `s/d: ${d.toLocaleDateString('id-ID')}`;
+        document.getElementById('badgeMasaSewa').style.background = '#15803d';
+        return true;
+      }
+    }
+
+    function verifikasiLisensiSistem(){
+      var input = document.getElementById('inKodeSewa').value.trim().toUpperCase();
+      if(!input) return alert('Masukkan kode lisensi!');
+
+      if(input === PIN_MASTER){
+        localStorage.setItem('burung_license_exp', new Date().getTime() + (365*24*60*60*1000));
+        localStorage.setItem('nomor_room_sewa', "1");
+        alert('ðŸ”“ Akses Master Pemilik Diterima! Room 1 Aktif 1 Tahun.');
+        location.reload();
+        return;
+      }
+
+      var parts = input.split('-');
+      if(parts.length === 4 && parts[0].startsWith("KLG")){
+        var roomNo = parts[0].replace("KLG", "");
+        if(!["1", "2", "3", "4", "5"].includes(roomNo)){
+          return alert('âŒ Nomor Room dalam kode tidak valid (hanya 1-5)!');
+        }
+
+        var gabung = parts[1] + parts[2];
+        var checksumInput = parts[3].toUpperCase();
+        var angkaStr = '';
+        for(var i = 0; i < gabung.length; i++){
+          angkaStr += (gabung.charCodeAt(i) - 65).toString();
+        }
+
+        var validHash = hitungHash(parts[0] + angkaStr + KUNCI_RAHASIA).substring(0, 5);
+
+        if(checksumInput === validHash && angkaStr.length === 8){
+          var thn = parseInt(angkaStr.substring(0, 4));
+          var bln = parseInt(angkaStr.substring(4, 6)) - 1;
+          var tgl = parseInt(angkaStr.substring(6, 8));
+          var expDate = new Date(thn, bln, tgl, 23, 59, 59).getTime();
+
+          if(expDate > new Date().getTime()){
+            localStorage.setItem('nomor_room_sewa', roomNo);
+            localStorage.setItem('burung_license_exp', expDate);
+            alert('ðŸ”“ Sistem Berhasil Diaktifkan untuk ROOM ' + roomNo + '!');
+            location.reload();
+            return;
+          } else {
+            return alert('âŒ Masa berlaku lisensi sudah kedaluwarsa!');
           }
         }
-        perbaruiTop10();
-      }).catch(() => {});
+      }
+      alert('âŒ Kode Lisensi Sewa Tidak Valid!');
+    }
 
-    // Sinkronisasi PIN juri
-    fetch(`${FIREBASE_URL}pin_juri.json`)
-      .then(res => res.json())
-      .then(pin => {
-        if (pin) document.getElementById('labelPIN').innerText = `PIN: ${pin}`;
-      }).catch(() => {});
-  }
+    setInterval(cekStatusSewa, 60000);
+    cekStatusSewa();
 
-  // Jalankan interval sinkronisasi setiap 1.5 detik
-  setInterval(sinkronkanInduk, 1500);
-  sinkronkanInduk();
+    var gridContainer = document.getElementById('kotak150Container');
+    var topContainer = document.getElementById('top10Container');
+    var dataSemuaGantangan = {};
+    var hitungReset = 0;
+    var timerReset = null;
 
-  function resetTampilanLokal() {
-    for (let i = 1; i <= 150; i++) {
+    function pasangSkorElemen(no, skor){
+      var el = document.getElementById(`layar-${no}`);
+      if(el){
+        el.innerText = skor;
+        if(skor >= 100) el.classList.add('tiga-digit');
+        else el.classList.remove('tiga-digit');
+      }
+    }
+
+    for(var i = 1; i <= 150; i++){
       dataSemuaGantangan[i] = 0;
-      document.getElementById(`layar-${i}`).innerText = 0;
-    }
-  }
-
-  function perbaruiTop10() {
-    let urutan = [];
-    for (let i = 1; i <= 150; i++) {
-      urutan.push({ no: i, poin: dataSemuaGantangan[i] || 0 });
+      var elDiv = document.createElement('div');
+      elDiv.className = 'box-gantangan';
+      elDiv.id = `box-${i}`;
+      elDiv.innerHTML = `<span class="no-gtg">${i}</span><span class="skor-gtg" id="layar-${i}">0</span>`;
+      gridContainer.appendChild(elDiv);
     }
 
-    urutan.sort((a, b) => b.poin - a.poin || a.no - b.no);
-    const top10 = urutan.slice(0, 10);
+    var eventSource = new EventSource(`${FIREBASE_URL}.json`);
+    eventSource.addEventListener('put', function(e){
+      if(!cekStatusSewa()) return;
+      var d = JSON.parse(e.data);
+      var p = d.path;
+      var val = d.data;
 
-    topContainer.innerHTML = '';
-    top10.forEach((item, idx) => {
-      const posisi = idx + 1;
-      const card = document.createElement('div');
-      
-      let badge = '';
-      if (posisi === 1) badge = 'rank-1';
-      else if (posisi === 2) badge = 'rank-2';
-      else if (posisi === 3) badge = 'rank-3';
-
-      card.className = `card-rank ${badge}`;
-      card.innerHTML = `
-        <span class="posisi-teks">#${posisi}</span>
-        <span class="gantangan-teks">G-${item.no}</span>
-        <span class="poin-teks">${item.poin}</span>
-      `;
-      topContainer.appendChild(card);
-    });
-  }
-
-  function eksekusiResetSemua() {
-    hitungReset++;
-    clearTimeout(timerReset);
-    const btn = document.getElementById('btnResetMaster');
-    btn.innerText = `KONFIRMASI (${hitungReset}/3)`;
-
-    if (hitungReset >= 3) {
-      btn.innerText = "MEMBERSIHKAN...";
-
-      const resetObj = {};
-      for (let i = 1; i <= 150; i++) resetObj[i] = 0;
-
-      fetch(`${FIREBASE_URL}skor.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(resetObj)
-      })
-      .then(() => {
-        resetTampilanLokal();
+      if(p === "/" || p === ""){
+        if(val){
+          if(val.skor){
+            for(var k = 1; k <= 150; k++){
+              dataSemuaGantangan[k] = val.skor[k] || 0;
+              pasangSkorElemen(k, dataSemuaGantangan[k]);
+            }
+          } else { resetTampilanLokal(); }
+          if(val.pin_juri){
+            document.getElementById('labelPIN').innerText = `PIN: ${val.pin_juri}`;
+          }
+        } else { resetTampilanLokal(); }
         perbaruiTop10();
-        hitungReset = 0;
-        btn.innerText = 'RESET KELAS (Tekan 3x)';
-      })
-      .catch(() => {
-        alert('Gagal menghubungi server! Periksa internet.');
-        hitungReset = 0;
-        btn.innerText = 'RESET KELAS (Tekan 3x)';
+      } else if(p === "/pin_juri"){
+        document.getElementById('labelPIN').innerText = `PIN: ${val}`;
+      } else if(p === "/skor"){
+        for(var m = 1; m <= 150; m++){
+          dataSemuaGantangan[m] = (val && val[m]) ? val[m] : 0;
+          pasangSkorElemen(m, dataSemuaGantangan[m]);
+        }
+        perbaruiTop10();
+      } else if(p.startsWith("/skor/")){
+        var gtg = parseInt(p.replace("/skor/", ""));
+        if(gtg >= 1 && gtg <= 150){
+          dataSemuaGantangan[gtg] = val || 0;
+          pasangSkorElemen(gtg, val || 0);
+          var b = document.getElementById(`box-${gtg}`);
+          if(b){
+            b.classList.add('hit');
+            setTimeout(function(){ b.classList.remove('hit'); }, 350);
+          }
+          perbaruiTop10();
+        }
+      }
+    });
+
+    function resetTampilanLokal(){
+      for(var i = 1; i <= 150; i++){
+        dataSemuaGantangan[i] = 0;
+        pasangSkorElemen(i, 0);
+      }
+    }
+
+    function perbaruiTop10(){
+      var list = [];
+      for(var i = 1; i <= 150; i++){
+        list.push({ no: i, poin: dataSemuaGantangan[i] || 0 });
+      }
+      list.sort(function(a,b){ return b.poin - a.poin || a.no - b.no; });
+      var top10 = list.slice(0, 10);
+      topContainer.innerHTML = '';
+      top10.forEach(function(item, idx){
+        var rk = idx + 1;
+        var cd = document.createElement('div');
+        var cls = rk === 1 ? 'rank-1' : rk === 2 ? 'rank-2' : rk === 3 ? 'rank-3' : '';
+        cd.className = `card-rank ${cls}`;
+        cd.innerHTML = `<span class="posisi-teks">#${rk}</span><span class="gantangan-teks">G-${item.no}</span><span class="poin-teks">${item.poin}</span>`;
+        topContainer.appendChild(cd);
       });
-    } else {
-      timerReset = setTimeout(() => {
-        hitungReset = 0;
-        btn.innerText = 'RESET KELAS (Tekan 3x)';
-      }, 3000);
     }
-  }
 
-  function aturPIN() {
-    const pinBaru = prompt("Masukkan PIN Juri Baru (misal: 1234):");
-    if (pinBaru !== null && pinBaru.trim() !== "") {
-      fetch(`${FIREBASE_URL}pin_juri.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pinBaru.trim())
-      }).then(() => alert(`PIN berhasil diubah jadi: ${pinBaru.trim()}`));
+    function eksekusiResetSemua(){
+      if(!cekStatusSewa()) return;
+      hitungReset++;
+      clearTimeout(timerReset);
+      var btn = document.getElementById('btnResetMaster');
+      btn.innerText = `(${hitungReset}/3)`;
+
+      if(hitungReset >= 3){
+        btn.innerText = "...";
+        var dataReset = {};
+        for(var i = 1; i <= 150; i++) dataReset[i] = 0;
+
+        fetch(`${FIREBASE_URL}skor.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataReset)
+        }).then(function(){
+          resetTampilanLokal();
+          perbaruiTop10();
+          hitungReset = 0;
+          btn.innerText = 'RESET (3x)';
+        }).catch(function(){
+          alert('Gagal menghubungi server!');
+          hitungReset = 0;
+          btn.innerText = 'RESET (3x)';
+        });
+      } else {
+        timerReset = setTimeout(function(){ hitungReset = 0; btn.innerText = 'RESET (3x)'; }, 3000);
+      }
     }
-  }
 
-  function toggleLayarPenuh() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
+    function aturPIN(){
+      if(!cekStatusSewa()) return;
+      var baru = prompt(`Masukkan PIN Juri Baru untuk Room ${ROOM_AKTIF} (misal: 1234):`);
+      if(baru !== null && baru.trim() !== ""){
+        fetch(`${FIREBASE_URL}pin_juri.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(baru.trim())
+        }).then(function(){
+          alert(`PIN Room ${ROOM_AKTIF} berhasil diubah jadi: ${baru.trim()}`);
+        });
+      }
     }
-  }
-</script>
 
+    function toggleLayarPenuh(){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(function(){}); }
+      else { if(document.exitFullscreen) document.exitFullscreen(); }
+    }
+  </script>
 </body>
 </html>
