@@ -355,6 +355,17 @@
     .box-gantangan.hit .header-no { background: #00e676 !important; color: #000 !important; font-weight: 900; }
     .box-gantangan.hit .skor-gtg { color: #fff !important; text-shadow: 0 0 6px #00e676; }
 
+    /* Efek Merah Neon saat spam/memompa poin lebih dari 4 dalam 2 detik */
+    .box-gantangan.hit-fast {
+      background: #7f1d1d !important;
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.95) !important;
+      transform: scale(1.12);
+      z-index: 10;
+    }
+    .box-gantangan.hit-fast .header-no { background: #ef4444 !important; color: #fff !important; font-weight: 900; }
+    .box-gantangan.hit-fast .skor-gtg { color: #fff !important; text-shadow: 0 0 6px #ef4444; }
+
     #modalLinkUniversal {
       display: none;
       position: fixed;
@@ -937,6 +948,7 @@
     var dataSemuaGantangan = {};
     var hitungReset = 0;
     var timerReset = null;
+    var riwayatKlikGantangan = {}; // Melacak waktu dan akumulasi klik cepat per gantangan
 
     function inisialisasiMonitor(isPenonton){
       document.getElementById('badgeRoom').innerText = "R-" + ROOM_AKTIF;
@@ -1009,12 +1021,36 @@
         } else if(p.startsWith("/skor/")){
           var gtg = parseInt(p.replace("/skor/", ""));
           if(gtg >= 1 && gtg <= 150){
-            dataSemuaGantangan[gtg] = val || 0;
-            pasangSkorElemen(gtg, val || 0);
+            var skorLama = dataSemuaGantangan[gtg] || 0;
+            var skorBaru = val || 0;
+            var selisihPoin = skorBaru - skorLama;
+
+            dataSemuaGantangan[gtg] = skorBaru;
+            pasangSkorElemen(gtg, skorBaru);
+
             var b = document.getElementById(`box-${gtg}`);
             if(b){
-              b.classList.add('hit');
-              setTimeout(function(){ b.classList.remove('hit'); }, 300);
+              var waktuSekarang = new Date().getTime();
+              if(!riwayatKlikGantangan[gtg]){
+                riwayatKlikGantangan[gtg] = { waktu: waktuSekarang, akumulasi: 0 };
+              }
+
+              // Jika rentang waktu kurang dari 2 detik (2000 ms)
+              if(waktuSekarang - riwayatKlikGantangan[gtg].waktu < 2000){
+                riwayatKlikGantangan[gtg].akumulasi += selisihPoin;
+              } else {
+                riwayatKlikGantangan[gtg].waktu = waktuSekarang;
+                riwayatKlikGantangan[gtg].akumulasi = selisihPoin;
+              }
+
+              // Cek apakah dalam 2 detik bertambah lebih dari 4 poin (memompa/spam)
+              var isMemompa = riwayatKlikGantangan[gtg].akumulasi > 4;
+              var namaKelasHit = isMemompa ? 'hit-fast' : 'hit';
+
+              b.classList.add(namaKelasHit);
+              setTimeout(function(){ 
+                b.classList.remove('hit', 'hit-fast'); 
+              }, 400);
             }
             perbaruiTop10();
           }
