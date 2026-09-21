@@ -240,6 +240,9 @@
     var NO_JURI = parseInt(localStorage.getItem('juri3_nojuri')) || 1;
     var gtgSlot = { 1: 1, 2: 2, 3: 3 };
     var skorLokal = { 1: 0, 2: 0, 3: 0 };
+    
+    // Variabel pengaman agar angka tidak turun-naik saat tap cepat (menahan sinkronisasi sesaat)
+    var terakhirDipencet = { 1: 0, 2: 0, 3: 0 };
 
     document.getElementById('selRoom').value = ROOM;
     document.getElementById('inNoJuri').value = NO_JURI;
@@ -247,7 +250,6 @@
 
     function hitungOtomatisGtg(){
       var j = parseInt(document.getElementById('inNoJuri').value) || 1;
-      // Rumus otomatis jatah 3 burung: Juri 1 (1,2,3), Juri 2 (4,5,6), Juri 3 (7,8,9)
       var g1 = ((j - 1) * 3) + 1;
       var g2 = g1 + 1;
       var g3 = g1 + 2;
@@ -294,8 +296,11 @@
       for(let s = 1; s <= 3; s++){
         let g = gtgSlot[s];
         fetch(`${BASE_URL}room${ROOM}/skor/${g}.json`).then(r => r.json()).then(val => {
-          skorLokal[s] = val || 0;
-          document.getElementById('skor' + s).innerText = skorLokal[s];
+          let serverVal = val || 0;
+          if (Date.now() - terakhirDipencet[s] > 1500) {
+            skorLokal[s] = serverVal;
+            document.getElementById('skor' + s).innerText = serverVal;
+          }
         });
       }
     }
@@ -304,11 +309,13 @@
       var es = new EventSource(`${BASE_URL}room${ROOM}/skor.json`);
       es.addEventListener('put', function(e){
         var d = JSON.parse(e.data);
+        var waktuSekarang = Date.now();
+
         if(!d.path || d.path === "/"){
           if(d.data){
             for(var s = 1; s <= 3; s++){
               var g = gtgSlot[s];
-              if(d.data[g] !== undefined){
+              if(d.data[g] !== undefined && (waktuSekarang - terakhirDipencet[s] > 1500)){
                 skorLokal[s] = d.data[g];
                 document.getElementById('skor' + s).innerText = d.data[g];
               }
@@ -317,7 +324,7 @@
         } else {
           var no = parseInt(d.path.replace("/", ""));
           for(var s = 1; s <= 3; s++){
-            if(no === gtgSlot[s]){
+            if(no === gtgSlot[s] && (waktuSekarang - terakhirDipencet[s] > 1500)){
               skorLokal[s] = d.data || 0;
               document.getElementById('skor' + s).innerText = skorLokal[s];
             }
@@ -328,6 +335,10 @@
 
     function tambahPoin(slot){
       var g = gtgSlot[slot];
+      
+      // Catat waktu klik agar update server yang terlambat tertahan sementara (cegah turun-naik)
+      terakhirDipencet[slot] = Date.now();
+      
       var baru = (skorLokal[slot] || 0) + 1;
       skorLokal[slot] = baru;
       document.getElementById('skor' + slot).innerText = baru;
