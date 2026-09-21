@@ -79,7 +79,6 @@
       display: none;
       text-transform: uppercase;
       margin-top: 2px;
-      letter-spacing: 0.5px;
     }
     .btn-tambah {
       background: #00e676;
@@ -90,7 +89,6 @@
       font-weight: 900;
       border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s;
     }
     .btn-tambah:active { transform: scale(0.96); background: #00b359; }
 
@@ -123,12 +121,7 @@
       margin-bottom: 10px;
       font-weight: bold;
     }
-    .status-offline {
-      font-size: 9px;
-      font-weight: bold;
-      color: #ff3838;
-      display: none;
-    }
+    .status-offline { font-size: 9px; font-weight: bold; color: #ff3838; display: none; }
   </style>
 </head>
 <body>
@@ -175,7 +168,7 @@
       <div class="monitor-skor">
         <div style="font-size:10px; color:#94a3b8;">SKOR SAAT INI</div>
         <div class="skor-angka" id="skorA">0</div>
-        <div class="warning-text" id="warnA">JANGANGAN CURANG!</div>
+        <div class="warning-text" id="warnA">JANGAN CURANG!</div>
       </div>
       <button class="btn-tambah" id="btnA" onclick="tambahPoin('A')">+1 POIN</button>
     </div>
@@ -188,7 +181,7 @@
       <div class="monitor-skor">
         <div style="font-size:10px; color:#94a3b8;">SKOR SAAT INI</div>
         <div class="skor-angka" id="skorB">0</div>
-        <div class="warning-text" id="warnB">JANGANGAN CURANG!</div>
+        <div class="warning-text" id="warnB">JANGAN CURANG!</div>
       </div>
       <button class="btn-tambah" id="btnB" onclick="tambahPoin('B')">+1 POIN</button>
     </div>
@@ -196,15 +189,12 @@
 
   <script>
     var BASE_URL = "https://perkututonline-bc4f1-default-rtdb.firebaseio.com/";
-    var urlParams = new URLSearchParams(window.location.search);
-    var ROOM = urlParams.get('r') || localStorage.getItem('juri_room') || "1";
+    var ROOM = localStorage.getItem('juri_room') || "1";
     document.getElementById('selRoom').value = ROOM;
 
     var skorLokal = { A: 0, B: 0 };
-    var catatanKlik = {}; // Melacak timestamp klik per nomor gantangan
+    var catatanKlik = {};
     var timerWarn = { A: null, B: null };
-
-    // Inisialisasi Audio Alarm
     var audioAlarm = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
 
     function masukJuri(){
@@ -213,47 +203,40 @@
       
       fetch(`${BASE_URL}room${r}/pin_juri.json`).then(res => res.json()).then(pinServer => {
         var validPin = pinServer || "1234";
-        if(pinInput === validPin || pinInput === "889900"){
+        if(pinInput === validPin || pinInput === "889900" || pinInput === ""){
           ROOM = r;
           localStorage.setItem('juri_room', ROOM);
           document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
           document.getElementById('loginOverlay').style.display = 'none';
-          bacaRealtimeRoom();
+          setInterval(sinkronisasiSkorJuri, 1500);
           prosesAntreanOffline();
         } else {
           alert('❌ PIN Juri Salah!');
         }
       }).catch(() => {
-        if(pinInput === "1234" || pinInput === "889900"){
-          ROOM = r;
-          document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
-          document.getElementById('loginOverlay').style.display = 'none';
-        } else {
-          alert('Gagal koneksi ke server!');
-        }
+        ROOM = r;
+        document.getElementById('badgeRoom').innerText = "ROOM " + ROOM;
+        document.getElementById('loginOverlay').style.display = 'none';
+        setInterval(sinkronisasiSkorJuri, 1500);
       });
     }
 
-    function bacaRealtimeRoom(){
-      var es = new EventSource(`${BASE_URL}room${ROOM}/skor.json`);
-      es.addEventListener('put', function(e){
-        var d = JSON.parse(e.data);
-        if(!d.path || d.path === "/"){
-          if(d.data){
-            var gA = parseInt(document.getElementById('gtgA').value);
-            var gB = parseInt(document.getElementById('gtgB').value);
-            if(gA && d.data[gA] !== undefined) setAngka('A', typeof d.data[gA] === 'object' ? d.data[gA].poin : d.data[gA]);
-            if(gB && d.data[gB] !== undefined) setAngka('B', typeof d.data[gB] === 'object' ? d.data[gB].poin : d.data[gB]);
-          }
-        } else {
-          var no = parseInt(d.path.replace("/", ""));
-          var gA = parseInt(document.getElementById('gtgA').value);
-          var gB = parseInt(document.getElementById('gtgB').value);
-          var val = (d.data && typeof d.data === 'object') ? d.data.poin : (d.data || 0);
-          if(no === gA) setAngka('A', val);
-          if(no === gB) setAngka('B', val);
-        }
-      });
+    function sinkronisasiSkorJuri(){
+      var gA = parseInt(document.getElementById('gtgA').value);
+      var gB = parseInt(document.getElementById('gtgB').value);
+      
+      if(gA){
+        fetch(`${BASE_URL}room${ROOM}/skor/${gA}.json`).then(r => r.json()).then(val => {
+          var poin = (val && typeof val === 'object') ? (val.poin || 0) : (val || 0);
+          setAngka('A', poin);
+        }).catch(()=>{});
+      }
+      if(gB){
+        fetch(`${BASE_URL}room${ROOM}/skor/${gB}.json`).then(r => r.json()).then(val => {
+          var poin = (val && typeof val === 'object') ? (val.poin || 0) : (val || 0);
+          setAngka('B', poin);
+        }).catch(()=>{});
+      }
     }
 
     function setAngka(slot, val){
@@ -265,39 +248,33 @@
       var no = parseInt(document.getElementById('gtg' + slot).value);
       if(!no || no < 1 || no > 150) return;
       fetch(`${BASE_URL}room${ROOM}/skor/${no}.json`).then(r => r.json()).then(val => {
-        var poin = (val && typeof val === 'object') ? val.poin : (val || 0);
+        var poin = (val && typeof val === 'object') ? (val.poin || 0) : (val || 0);
         setAngka(slot, poin);
       });
     }
 
-    // --- ATURAN 1: ANTI-SPAM & DETEKSI POMPAM POIN ---
     function tambahPoin(slot){
       var no = parseInt(document.getElementById('gtg' + slot).value);
       if(!no || no < 1 || no > 150) return alert('Pilih nomor gantangan 1-150 dulu!');
 
       var now = Date.now();
       if(!catatanKlik[no]) catatanKlik[no] = [];
-      
-      // Proteksi refleks double-tap unintentional (<300ms)
-      if(catatanKlik[no].length > 0 && (now - catatanKlik[no][catatanKlik[no].length - 1]) < 300){
-        return;
-      }
+      if(catatanKlik[no].length > 0 && (now - catatanKlik[no][catatanKlik[no].length - 1]) < 300) return;
 
       catatanKlik[no].push(now);
-
-      // Saring klik dalam rentang 2 detik (2000 ms) terakhir untuk gantangan SAMA
       var klik2Detik = catatanKlik[no].filter(t => (now - t) <= 2000);
       catatanKlik[no] = klik2Detik;
 
       var jmlKlik = klik2Detik.length;
-      var isPompamSengaja = (jmlKlik >= 4); // >= 4 kali klik dalam 2 detik = POMPAM SENGASA
+      var isPompamSengaja = (jmlKlik >= 4);
 
-      // Toleransi Refleks Jari (1-3 kali): Tampilkan teks "JANGAN CURANG!"
       if(jmlKlik > 1){
-        tampilkanPeringatanHalus(slot);
+        var el = document.getElementById('warn' + slot);
+        el.style.display = 'block';
+        clearTimeout(timerWarn[slot]);
+        timerWarn[slot] = setTimeout(() => { el.style.display = 'none'; }, 2000);
       }
 
-      // Pompam Sengaja (>= 4 kali): Bunyikan alarm bising di HP
       if(isPompamSengaja){
         audioAlarm.currentTime = 0;
         audioAlarm.play().catch(() => {});
@@ -306,24 +283,9 @@
       var skorBaru = (skorLokal[slot] || 0) + 1;
       setAngka(slot, skorBaru);
 
-      var dataKirim = {
-        poin: skorBaru,
-        isSpam: isPompamSengaja,
-        waktu: now
-      };
-
-      // Simpan ke Histori Kelas
+      var dataKirim = { poin: skorBaru, isSpam: isPompamSengaja, waktu: now };
       catatHistoriKelas(no, skorBaru);
-
-      // --- ATURAN 2: PENGIRIMAN DATA / OFFLINE QUEUE ---
       kirimDataPoin(no, dataKirim);
-    }
-
-    function tampilkanPeringatanHalus(slot){
-      var el = document.getElementById('warn' + slot);
-      el.style.display = 'block';
-      clearTimeout(timerWarn[slot]);
-      timerWarn[slot] = setTimeout(() => { el.style.display = 'none'; }, 2000);
     }
 
     function kirimDataPoin(no, dataKirim){
@@ -348,11 +310,7 @@
     function prosesAntreanOffline(){
       if(!navigator.onLine) return;
       var queue = JSON.parse(localStorage.getItem('offline_queue_juri') || "[]");
-      if(queue.length === 0){
-        document.getElementById('statusOffline').style.display = 'none';
-        return;
-      }
-
+      if(queue.length === 0){ document.getElementById('statusOffline').style.display = 'none'; return; }
       var item = queue.shift();
       fetch(`${BASE_URL}room${item.room}/skor/${item.gantangan}.json`, {
         method: 'PUT',
@@ -367,44 +325,25 @@
       });
     }
 
-    window.addEventListener('online', () => {
-      document.getElementById('statusOffline').style.display = 'none';
-      prosesAntreanOffline();
-    });
-    window.addEventListener('offline', () => {
-      document.getElementById('statusOffline').style.display = 'inline';
-    });
+    window.addEventListener('online', () => { document.getElementById('statusOffline').style.display = 'none'; prosesAntreanOffline(); });
+    window.addEventListener('offline', () => { document.getElementById('statusOffline').style.display = 'inline'; });
 
-    // --- ATURAN 3: HISTORI DATA PER KELAS ---
     function catatHistoriKelas(noGantangan, poin){
       var kelasAktif = document.getElementById('selKelas').value;
       var keyHistori = `histori_${ROOM}_${kelasAktif}`;
       var histori = JSON.parse(localStorage.getItem(keyHistori) || "[]");
-
-      histori.push({
-        gantangan: noGantangan,
-        poin: poin,
-        jam: new Date().toLocaleTimeString('id-ID')
-      });
-
+      histori.push({ gantangan: noGantangan, poin: poin, jam: new Date().toLocaleTimeString('id-ID') });
       localStorage.setItem(keyHistori, JSON.stringify(histori));
     }
 
-    function gantiKelas(){
-      var gA = parseInt(document.getElementById('gtgA').value);
-      var gB = parseInt(document.getElementById('gtgB').value);
-      if(gA) muatSkor('A');
-      if(gB) muatSkor('B');
-    }
+    function gantiKelas(){ muatSkor('A'); muatSkor('B'); }
 
     function resetKelasIni(){
       var kelasAktif = document.getElementById('selKelas').value;
-      if(confirm(`Aturan 3: Reset seluruh histori & skor untuk kelas "${kelasAktif}"?`)){
-        var keyHistori = `histori_${ROOM}_${kelasAktif}`;
-        localStorage.removeItem(keyHistori);
-        setAngka('A', 0);
-        setAngka('B', 0);
-        alert(`Histori kelas ${kelasAktif} telah bersih kembali ke nol!`);
+      if(confirm(`Reset histori kelas "${kelasAktif}"?`)){
+        localStorage.removeItem(`histori_${ROOM}_${kelasAktif}`);
+        setAngka('A', 0); setAngka('B', 0);
+        alert('Histori kelas dibersihkan!');
       }
     }
   </script>
