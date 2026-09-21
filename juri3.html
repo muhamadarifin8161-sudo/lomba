@@ -42,7 +42,7 @@
       align-items: center;
     }
     .btn-action-sm {
-      background: #334155;
+      background: #0284c7;
       color: #fff;
       border: none;
       font-size: 11px;
@@ -289,13 +289,15 @@
 
   <!-- HEADER ATAS -->
   <div class="header-bar">
-    <span class="badge-info" id="badgeRoom">ROOM 1</span>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <button class="btn-action-sm" onclick="toggleFullscreen()" id="btnFs" title="Layar Penuh">⛶ Full</button>
+      <span class="badge-info" id="badgeRoom">ROOM 1</span>
+    </div>
     <div style="text-align:center; display:flex; gap:6px; align-items:center;">
       <span style="font-size:11px; font-weight:bold; color:#cbd5e1;" id="txtLabelJuri">JURI 1</span>
       <span style="font-size:10px; color:#38bdf8;" id="txtInfoKelas">Kelas: -</span>
     </div>
     <div class="btn-header-group">
-      <button class="btn-action-sm" onclick="toggleFullscreen()" id="btnFs" title="Layar Penuh">⛶ Full</button>
       <button class="btn-history-menu" onclick="bukaHistory()">📋 Hist</button>
       <button class="btn-reset-block" onclick="bukaUlangSetup()">⚙️ Ganti</button>
     </div>
